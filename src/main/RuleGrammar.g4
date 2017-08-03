@@ -13,4 +13,15 @@ fragment LOWERCASE : 'a'..'z';
 
 WS : [ \n\t\r] -> channel(HIDDEN);
 
-program:    ID '.' EOF;
+program:    memory rules;
+
+memory:     (predicate '.')*;
+predicate:  ID;
+
+rules:      predicates '->' ('+' predicate)? ('-' predicate)* action alist goal '.';
+predicates: predicate  (',' predicate )*;
+
+goal:       NUMBER;
+alist:      '(' alistentry (',' alistentry)* ')';
+alistentry: NUMBER '-' NUMBER ':' NUMBER;
+action:     ID;
