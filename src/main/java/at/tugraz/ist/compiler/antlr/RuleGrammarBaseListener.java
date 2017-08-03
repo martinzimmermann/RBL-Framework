@@ -52,13 +52,25 @@ public class RuleGrammarBaseListener implements RuleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRules(RuleGrammarParser.RulesContext ctx) { }
+	@Override public void enterR_rules(RuleGrammarParser.R_rulesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRules(RuleGrammarParser.RulesContext ctx) { }
+	@Override public void exitR_rules(RuleGrammarParser.R_rulesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterR_rule(RuleGrammarParser.R_ruleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitR_rule(RuleGrammarParser.R_ruleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

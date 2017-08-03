@@ -38,15 +38,25 @@ public interface RuleGrammarListener extends ParseTreeListener {
 	 */
 	void exitPredicate(RuleGrammarParser.PredicateContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RuleGrammarParser#rules}.
+	 * Enter a parse tree produced by {@link RuleGrammarParser#r_rules}.
 	 * @param ctx the parse tree
 	 */
-	void enterRules(RuleGrammarParser.RulesContext ctx);
+	void enterR_rules(RuleGrammarParser.R_rulesContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RuleGrammarParser#rules}.
+	 * Exit a parse tree produced by {@link RuleGrammarParser#r_rules}.
 	 * @param ctx the parse tree
 	 */
-	void exitRules(RuleGrammarParser.RulesContext ctx);
+	void exitR_rules(RuleGrammarParser.R_rulesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RuleGrammarParser#r_rule}.
+	 * @param ctx the parse tree
+	 */
+	void enterR_rule(RuleGrammarParser.R_ruleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RuleGrammarParser#r_rule}.
+	 * @param ctx the parse tree
+	 */
+	void exitR_rule(RuleGrammarParser.R_ruleContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link RuleGrammarParser#predicates}.
 	 * @param ctx the parse tree

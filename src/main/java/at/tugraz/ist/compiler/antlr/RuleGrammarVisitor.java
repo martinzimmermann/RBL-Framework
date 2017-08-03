@@ -29,11 +29,17 @@ public interface RuleGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPredicate(RuleGrammarParser.PredicateContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RuleGrammarParser#rules}.
+	 * Visit a parse tree produced by {@link RuleGrammarParser#r_rules}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRules(RuleGrammarParser.RulesContext ctx);
+	T visitR_rules(RuleGrammarParser.R_rulesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RuleGrammarParser#r_rule}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitR_rule(RuleGrammarParser.R_ruleContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RuleGrammarParser#predicates}.
 	 * @param ctx the parse tree

@@ -1,9 +1,9 @@
 grammar RuleGrammar;
 
-NUMBER: DIGIT+;
+NUMBER: DIGIT+('.'DIGIT+)?;
 fragment DIGIT : '0'..'9';
 
-ID : LETTER (LETTER | NUMBER | '_')*;
+ID : LETTER (LETTER | DIGIT | '_')*;
 
 fragment LETTER : LOWERCASE | UPPERCASE;
 fragment UPPERCASE : 'A'..'Z';
@@ -12,12 +12,13 @@ fragment LOWERCASE : 'a'..'z';
 
 WS : [ \n\t\r] -> channel(HIDDEN);
 
-program:    memory rules;
+program:    memory? r_rules EOF;
 
-memory:     (predicate '.')*;
+memory:     (predicate '.')+;
 predicate:  ID;
 
-rules:      predicates '->' ('+' predicate | '!' predicate)? ('-' predicate)* action alist goal '.';
+r_rules:    (r_rule '.')+;
+r_rule:     predicates? '->' ('+' predicate | '!' predicate)? ('-' predicate)* action alist goal;
 predicates: predicate  (',' predicate )*;
 
 goal:       NUMBER;
