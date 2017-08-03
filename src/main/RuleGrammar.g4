@@ -1,6 +1,5 @@
 grammar RuleGrammar;
 
-/* A number: can be an integer value, or a decimal value */
 NUMBER: DIGIT+;
 fragment DIGIT : '0'..'9';
 
@@ -18,7 +17,7 @@ program:    memory rules;
 memory:     (predicate '.')*;
 predicate:  ID;
 
-rules:      predicates '->' ('+' predicate)? ('-' predicate)* action alist goal '.';
+rules:      predicates '->' ('+' predicate | '!' predicate)? ('-' predicate)* action alist goal '.';
 predicates: predicate  (',' predicate )*;
 
 goal:       NUMBER;
