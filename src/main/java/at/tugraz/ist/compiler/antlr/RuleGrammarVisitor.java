@@ -70,4 +70,28 @@ public interface RuleGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAction(RuleGrammarParser.ActionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RuleGrammarParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpr(RuleGrammarParser.ExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RuleGrammarParser#sign}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSign(RuleGrammarParser.SignContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RuleGrammarParser#mulop}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMulop(RuleGrammarParser.MulopContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RuleGrammarParser#value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValue(RuleGrammarParser.ValueContext ctx);
 }

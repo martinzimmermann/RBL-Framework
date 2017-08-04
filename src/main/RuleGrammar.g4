@@ -9,6 +9,8 @@ fragment LETTER : LOWERCASE | UPPERCASE;
 fragment UPPERCASE : 'A'..'Z';
 fragment LOWERCASE : 'a'..'z';
 
+LT: '<';
+LTE: '<=';
 
 WS : [ \n\t\r] -> channel(HIDDEN);
 
@@ -22,6 +24,20 @@ r_rule:     predicates? '->' ('+' predicate | '!' predicate)? ('-' predicate)* a
 predicates: predicate  (',' predicate )*;
 
 goal:       NUMBER;
-alist:      '(' alistentry (',' alistentry)* ')';
-alistentry: NUMBER '-' NUMBER ':' NUMBER;
+alist:      '(' alistentry (',' alistentry)* (',' expr)?')';
+alistentry: NUMBER (LT|LTE) 'a' (LT|LTE) NUMBER ':' expr;
 action:     ID;
+
+expr: sign value
+    | expr mulop expr
+    | expr sign expr
+    | value
+    ;
+
+sign: '+' | '-';
+mulop: '*' | '/';
+
+value: 'a'
+     | NUMBER
+     | '(' expr ')'
+     ;
