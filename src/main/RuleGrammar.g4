@@ -20,7 +20,7 @@ memory:     (predicate '.')+;
 predicate:  ID;
 
 r_rules:    (r_rule '.')+;
-r_rule:     predicates? '->' ('+' predicate | '!' predicate)? ('-' predicate)* action alist goal;
+r_rule:     predicates? '->' ('+' predicate | '#' predicate)? ('-' predicate)* action alist goal;
 predicates: predicate  (',' predicate )*;
 
 goal:       NUMBER;

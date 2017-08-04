@@ -29,7 +29,7 @@ public class RuleGrammarParser extends Parser {
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "'.'", "'->'", "'+'", "'!'", "'-'", "','", "'('", "')'", "'a'", 
+		null, "'.'", "'->'", "'+'", "'#'", "'-'", "','", "'('", "')'", "'a'", 
 		"':'", "'*'", "'/'", null, null, "'<'", "'<='"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
