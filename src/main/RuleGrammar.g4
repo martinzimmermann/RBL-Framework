@@ -20,11 +20,11 @@ memory:     (predicate '.')+;
 predicate:  ID;
 
 r_rules:    (r_rule '.')+;
-r_rule:     predicates? '->' ('+' predicate | '#' predicate)? ('-' predicate)* action alist goal;
+r_rule:     predicates? '->' ('+' predicate | '#' predicate)? ('-' predicate)* action alist? goal?;
 predicates: predicate  (',' predicate )*;
 
 goal:       NUMBER;
-alist:      '(' alistentry (',' alistentry)* (',' expr)?')';
+alist:      '('(( alistentry (',' alistentry)* (',' expr)?) | expr )')';
 alistentry: NUMBER (LT|LTE) 'a' (LT|LTE) NUMBER ':' expr;
 action:     ID;
 

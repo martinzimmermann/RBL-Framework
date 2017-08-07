@@ -1,7 +1,8 @@
--> +temperature_collected collectTemperature (0 <= a <= 1: 1) 1.
--> +hummidity_collected collectHumidity (0 <= a <= 1: 1) 1.
-temperature_collected, hummidity_collected -> +data_prepared -temperature_collected -hummidity_collected prepareData (0 <= a <= 1: 1) 1.
+-> +temperature_collected collectTemperature.
+-> +hummidity_collected collectHumidity.
+temperature_collected, hummidity_collected -> +data_prepared -temperature_collected
+ 					      -hummidity_collected prepareData.
 
--> +connected connectGSM (0 <= a <= 1: 1) 0.2.
--> +connected connectWifi (0 <= a <= 1: 1) 1.
-connected, data_prepared -> #send -temperature_collected -data_prepared sendData (0 <= a <= 1: 1) 1.
+-> +connected connectGSM 0.2.
+-> +connected connectWifi.
+connected, data_prepared -> #send -temperature_collected -data_prepared sendData.
