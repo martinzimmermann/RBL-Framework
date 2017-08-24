@@ -1,7 +1,7 @@
 -> +temperature_collected collectTemperature.
 -> +hummidity_collected collectHumidity.
-temperature_collected, hummidity_collected -> +data_prepared -temperature_collected
- 					      -hummidity_collected prepareData.
+temperature_collected, humidity_collected -> +data_prepared -temperature_collected
+ 					      -humidity_collected prepareData.
 
 -> +connected connectGSM 0.2.
 -> +connected connectWifi.

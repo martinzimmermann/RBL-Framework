@@ -4,18 +4,26 @@ import at.tugraz.ist.compiler.antlr.RuleGrammarLexer;
 import org.antlr.v4.runtime.*;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class RuleLexer {
-    String filepath;
+    final Path  filepath;
+    final String source;
 
 
-    public RuleLexer(String path) {
+    public RuleLexer(Path path) {
         filepath = path;
+        source = null;
+    }
+
+    public RuleLexer(String source) {
+        filepath = null;
+        this.source = source;
     }
 
     public int getErrorCount() throws IOException {
 
-        RuleGrammarLexer lexer = new RuleGrammarLexer(new ANTLRFileStream(filepath));
+        RuleGrammarLexer lexer = getLexer();
 
         lexer.removeErrorListeners();
         RuleErrorListner errorListner = new RuleErrorListner();
@@ -25,8 +33,14 @@ public class RuleLexer {
         return errorListner.getErrorCount();
     }
 
+    private RuleGrammarLexer getLexer() throws IOException {
+        return filepath == null ?
+                new RuleGrammarLexer(CharStreams.fromString(source)) :
+                new RuleGrammarLexer(CharStreams.fromPath(filepath));
+    }
+
     public TokenStream getTokenStream() throws IOException {
-        RuleGrammarLexer lexer = new RuleGrammarLexer(new ANTLRFileStream(filepath));
+        RuleGrammarLexer lexer = getLexer();
         lexer.removeErrorListeners();
 
         CommonTokenStream tokens = new CommonTokenStream(lexer);
