@@ -52,14 +52,21 @@ public class RuleGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPredicates(RuleGrammarParser.PredicatesContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPreconditions(RuleGrammarParser.PreconditionsContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitGoal(RuleGrammarParser.GoalContext ctx) { return visitChildren(ctx); }
+	@Override public T visitWorldDeletions(RuleGrammarParser.WorldDeletionsContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitRule_goal(RuleGrammarParser.Rule_goalContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

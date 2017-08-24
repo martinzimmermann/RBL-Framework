@@ -4,14 +4,32 @@ import java.util.List;
 
 public class Rule extends Atom {
 
-    private final List<String> preconditions = null;
-    private final String worldAddition = null;
-    private final String goal = null;
-    private final List<String> worldDeletions = null;
-    private final AlphaList alphaEntries = null;
-    private final float ruleGoal = 0;
+    private final List<Atom> preconditions;
+    private final String worldAddition;
+    private final String goal;
+    private final List<Atom> worldDeletions;
+    private final AlphaList alphaEntries ;
+    private final double ruleGoal;
+    private final String action;
 
-    public List<String> getPreconditions()
+    public Rule(String action, double ruleGoal, AlphaList alphaEntries,  List<Atom> worldDeletions, String goal, String worldAddition,  List<Atom> preconditions) {
+
+        if(action == null)
+            throw new IllegalArgumentException("action can not be null");
+
+        if(goal != null && worldAddition != null)
+            throw new IllegalArgumentException("goal and worldAddition can't be both not null");
+
+        this.action = action;
+        this.ruleGoal = ruleGoal;
+        this.alphaEntries = alphaEntries;
+        this.worldDeletions = worldDeletions;
+        this.goal = goal;
+        this.worldAddition = worldAddition;
+        this.preconditions = preconditions;
+    }
+
+    public List<Atom> getPreconditions()
     {
         return preconditions;
     }
@@ -36,7 +54,7 @@ public class Rule extends Atom {
         return goal != null;
     }
 
-    public List<String> getWorldDeletions()
+    public List<Atom> getWorldDeletions()
     {
         return worldDeletions;
     }
@@ -46,8 +64,12 @@ public class Rule extends Atom {
         return alphaEntries;
     }
 
-    public float getRuleGoal()
+    public double getRuleGoal()
     {
         return ruleGoal;
+    }
+
+    public String getAction() {
+        return action;
     }
 }

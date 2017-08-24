@@ -28,11 +28,13 @@ public class RuleGeneratorVisitorTests {
 
         List<Atom> atoms = gen.getRules();
         Assert.assertNotNull(atoms);
-        assertEquals(2, atoms.size());
+        assertEquals(3, atoms.size());
         Assert.assertTrue(atoms.get(0) instanceof Predicate);
         assertEquals(((Predicate)atoms.get(0)).getName(), "pre1");
 
         Assert.assertTrue(atoms.get(1) instanceof Predicate);
         assertEquals(((Predicate)atoms.get(1)).getName(), "pre2");
+
+        Assert.assertTrue(atoms.get(2) instanceof Rule);
     }
 }

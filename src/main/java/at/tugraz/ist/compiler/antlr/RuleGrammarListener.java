@@ -58,25 +58,35 @@ public interface RuleGrammarListener extends ParseTreeListener {
 	 */
 	void exitR_rule(RuleGrammarParser.R_ruleContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RuleGrammarParser#predicates}.
+	 * Enter a parse tree produced by {@link RuleGrammarParser#preconditions}.
 	 * @param ctx the parse tree
 	 */
-	void enterPredicates(RuleGrammarParser.PredicatesContext ctx);
+	void enterPreconditions(RuleGrammarParser.PreconditionsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RuleGrammarParser#predicates}.
+	 * Exit a parse tree produced by {@link RuleGrammarParser#preconditions}.
 	 * @param ctx the parse tree
 	 */
-	void exitPredicates(RuleGrammarParser.PredicatesContext ctx);
+	void exitPreconditions(RuleGrammarParser.PreconditionsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RuleGrammarParser#goal}.
+	 * Enter a parse tree produced by {@link RuleGrammarParser#worldDeletions}.
 	 * @param ctx the parse tree
 	 */
-	void enterGoal(RuleGrammarParser.GoalContext ctx);
+	void enterWorldDeletions(RuleGrammarParser.WorldDeletionsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RuleGrammarParser#goal}.
+	 * Exit a parse tree produced by {@link RuleGrammarParser#worldDeletions}.
 	 * @param ctx the parse tree
 	 */
-	void exitGoal(RuleGrammarParser.GoalContext ctx);
+	void exitWorldDeletions(RuleGrammarParser.WorldDeletionsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RuleGrammarParser#rule_goal}.
+	 * @param ctx the parse tree
+	 */
+	void enterRule_goal(RuleGrammarParser.Rule_goalContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RuleGrammarParser#rule_goal}.
+	 * @param ctx the parse tree
+	 */
+	void exitRule_goal(RuleGrammarParser.Rule_goalContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link RuleGrammarParser#alist}.
 	 * @param ctx the parse tree

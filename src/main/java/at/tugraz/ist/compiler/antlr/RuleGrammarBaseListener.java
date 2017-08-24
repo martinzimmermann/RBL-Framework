@@ -76,25 +76,37 @@ public class RuleGrammarBaseListener implements RuleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPredicates(RuleGrammarParser.PredicatesContext ctx) { }
+	@Override public void enterPreconditions(RuleGrammarParser.PreconditionsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPredicates(RuleGrammarParser.PredicatesContext ctx) { }
+	@Override public void exitPreconditions(RuleGrammarParser.PreconditionsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGoal(RuleGrammarParser.GoalContext ctx) { }
+	@Override public void enterWorldDeletions(RuleGrammarParser.WorldDeletionsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGoal(RuleGrammarParser.GoalContext ctx) { }
+	@Override public void exitWorldDeletions(RuleGrammarParser.WorldDeletionsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRule_goal(RuleGrammarParser.Rule_goalContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRule_goal(RuleGrammarParser.Rule_goalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

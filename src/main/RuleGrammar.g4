@@ -20,10 +20,10 @@ memory:     (predicate '.')+;
 predicate:  ID;
 
 r_rules:    (r_rule '.')+;
-r_rule:     predicates? '->' ('+' predicate | '#' predicate)? ('-' predicate)* action alist? goal?;
-predicates: predicate  (',' predicate )*;
-
-goal:       NUMBER;
+r_rule:     preconditions? '->' ('+' WorldAddtion=predicate | '#' Goal=predicate)? worldDeletions action alist? rule_goal?;
+preconditions: predicate  (',' predicate )*;
+worldDeletions: (('-' predicate)*);
+rule_goal:  NUMBER;
 alist:      '('(( alistentry (',' alistentry)* (',' expr)?) | expr )')';
 alistentry: NUMBER (LT|LTE) 'a' (LT|LTE) NUMBER ':' expr;
 action:     ID;
