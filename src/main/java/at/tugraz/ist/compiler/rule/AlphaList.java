@@ -5,7 +5,7 @@ import java.util.List;
 
 public class AlphaList {
 
-    private List<AlphaEntry> entries = new ArrayList<>();;
+    private final List<AlphaEntry> entries;
 
     public static AlphaList getDefaultAlphaList()
     {

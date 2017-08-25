@@ -40,7 +40,7 @@ public class RuleGeneratorVisitorTests {
 
         assertEquals(rule.getAction(), "action");
         assertEquals(rule.getRuleGoal(), 0.2);
-        assertEquals(rule.getWorldAdditon(), "post");
+        assertEquals(rule.getWorldAddition(), "post");
         assertEquals(rule.getGoal(), null);
         assertEquals(rule.hasGoal(), false);
         assertEquals(rule.hasWorldAddition(), true);
@@ -75,7 +75,7 @@ public class RuleGeneratorVisitorTests {
 
         assertEquals(rule.getAction(), "action");
         assertEquals(rule.getRuleGoal(), 1.0);
-        assertEquals(rule.getWorldAdditon(), null);
+        assertEquals(rule.getWorldAddition(), null);
         assertEquals(rule.getGoal(), "goal");
         assertEquals(rule.hasGoal(), true);
         assertEquals(rule.hasWorldAddition(), false);
@@ -106,7 +106,7 @@ public class RuleGeneratorVisitorTests {
 
         assertEquals(rule.getAction(), "action");
         assertEquals(rule.getRuleGoal(), 1.0);
-        assertEquals(rule.getWorldAdditon(), null);
+        assertEquals(rule.getWorldAddition(), null);
         assertEquals(rule.getGoal(), null);
         assertEquals(rule.hasGoal(), false);
         assertEquals(rule.hasWorldAddition(), false);
@@ -137,7 +137,7 @@ public class RuleGeneratorVisitorTests {
 
         assertEquals(rule.getAction(), "action");
         assertEquals(rule.getRuleGoal(), 1.0);
-        assertEquals(rule.getWorldAdditon(), null);
+        assertEquals(rule.getWorldAddition(), null);
         assertEquals(rule.getGoal(), null);
         assertEquals(rule.hasGoal(), false);
         assertEquals(rule.hasWorldAddition(), false);
@@ -173,7 +173,7 @@ public class RuleGeneratorVisitorTests {
 
         assertEquals(rule.getAction(), "action");
         assertEquals(rule.getRuleGoal(), 1.0);
-        assertEquals(rule.getWorldAdditon(), null);
+        assertEquals(rule.getWorldAddition(), null);
         assertEquals(rule.getGoal(), null);
         assertEquals(rule.hasGoal(), false);
         assertEquals(rule.hasWorldAddition(), false);

@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public class RuleParser {
-    TokenStream tokenstream;
+    private final TokenStream tokenstream;
 
     public RuleParser(TokenStream stream) {
         tokenstream = stream;

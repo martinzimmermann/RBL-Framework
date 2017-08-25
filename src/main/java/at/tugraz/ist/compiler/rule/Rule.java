@@ -34,14 +34,9 @@ public class Rule extends Atom {
         return preconditions;
     }
 
-    public String getWorldAdditon()
+    public String getWorldAddition()
     {
         return worldAddition;
-    }
-
-    public boolean hasWorldAdditon()
-    {
-        return worldAddition != null;
     }
 
     public String getGoal()
