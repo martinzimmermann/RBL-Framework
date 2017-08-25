@@ -19,13 +19,28 @@ public class AlphaEntry {
 
     public AlphaEntry(String function)
     {
-        this.expression = null;
+        this.expression = "0 <= a <= 1";
         this.function = function;
     }
 
-    public float calculateWeight(double alpha)
+    public double calculateWeight(double alpha)
     {
-        throw new NotImplementedException();
+
+        String eval = "a = " + alpha + "; " + function;
+
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+        Object result;
+        try {
+            result = engine.eval(eval);
+        } catch (ScriptException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("The function provided is not a valid function, function was: " + function);
+        }
+
+        if(result instanceof Number)
+            return ((Number)result).doubleValue();
+        else
+            throw new IllegalStateException("The function provided is not a valid function, function was: " + function);
     }
 
     public boolean isResponsible(double alpha)
@@ -49,10 +64,5 @@ public class AlphaEntry {
             return (Boolean)result;
         else
             return false;
-    }
-
-    public boolean isDefaultEntry()
-    {
-        throw new NotImplementedException();
     }
 }

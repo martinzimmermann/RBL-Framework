@@ -76,6 +76,9 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
             AlphaList aList = new AlphaListVisitor().visit(ctx.alist());
             rule = rule.setAlphaList(aList);
         }
+        else {
+            rule = rule.setAlphaList(AlphaList.getDefaultAlphaList());
+        }
 
         if(ctx.worldDeletions() != null){
             List<Atom> worldDeletions = visit(ctx.worldDeletions());

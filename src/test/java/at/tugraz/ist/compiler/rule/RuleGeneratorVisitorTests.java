@@ -7,8 +7,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
@@ -18,7 +16,7 @@ public class RuleGeneratorVisitorTests {
 
 
     @Test
-    public void predicate_test() throws IOException {
+    public void addition_rule_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer("pre1. " +
                 "pre2." +
                 "pre1, pre2 -> +post -pre1 -pre2 action 0.2.");
@@ -55,5 +53,38 @@ public class RuleGeneratorVisitorTests {
         assertEquals(rule.getWorldDeletions().size(), 2);
         assertEquals(((Predicate)rule.getWorldDeletions().get(0)).getName(), "pre1");
         assertEquals(((Predicate)rule.getWorldDeletions().get(1)).getName(), "pre2");
+
+        assertNotNull(rule.getAlphaList());
+        assertEquals(1.0, rule.getAlphaList().calculateWeight(0.5));
+    }
+
+    @Test
+    public void goal_rule_test() throws IOException {
+        RuleLexer ruleLexer = new RuleLexer("-> #goal action.");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+
+        List<Atom> atoms = gen.getRules();
+        Assert.assertNotNull(atoms);
+        assertEquals(1, atoms.size());
+        Assert.assertTrue(atoms.get(0) instanceof Rule);
+        Rule rule = (Rule)atoms.get(0);
+
+        assertEquals(rule.getAction(), "action");
+        assertEquals(rule.getWorldAdditon(), null);
+        assertEquals(rule.getRuleGoal(), 1.0);
+        assertEquals(rule.getGoal(), "goal");
+        assertEquals(rule.hasGoal(), true);
+
+        assertNotNull(rule.getPreconditions());
+        assertEquals(rule.getPreconditions().size(), 0);
+
+        assertNotNull(rule.getWorldDeletions());
+        assertEquals(rule.getWorldDeletions().size(), 0);
+
+        assertNotNull(rule.getAlphaList());
+        assertEquals(1.0, rule.getAlphaList().calculateWeight(0.5));
     }
 }

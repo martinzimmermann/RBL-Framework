@@ -9,7 +9,7 @@ public class AlphaList {
 
     private List<AlphaEntry> entries = new ArrayList<>();;
 
-    static AlphaList getDefaultAlphaList()
+    public static AlphaList getDefaultAlphaList()
     {
         List<AlphaEntry> entires = new ArrayList<>();
         entires.add(new AlphaEntry("1"));
@@ -17,6 +17,7 @@ public class AlphaList {
     }
 
     private void add(AlphaEntry alphaEntry) {
+        throw new NotImplementedException();
     }
 
 
@@ -25,8 +26,18 @@ public class AlphaList {
         this.entries = entries;
     }
 
-    public float calculateWeight( float alpha)
+    public double calculateWeight( double alpha)
     {
-        throw new NotImplementedException();
+        if(alpha < 0)
+            throw new IllegalArgumentException("alpha must be greater or equal than 0, was " + alpha);
+        if (alpha > 1)
+            throw new IllegalArgumentException("alpha must be smaller or equal than 1, was " + alpha);
+
+        for (AlphaEntry entry : entries) {
+            if(entry.isResponsible(alpha))
+                return entry.calculateWeight(alpha);
+        }
+
+        throw new IllegalArgumentException("This AlphaList has no entry for the provided alpha, alpha was " + alpha);
     }
 }
