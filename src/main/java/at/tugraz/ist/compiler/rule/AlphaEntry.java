@@ -1,7 +1,5 @@
 package at.tugraz.ist.compiler.rule;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;

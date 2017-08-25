@@ -54,6 +54,11 @@ public class Rule extends Atom {
         return goal != null;
     }
 
+    public boolean hasWorldAddition()
+    {
+        return worldAddition != null;
+    }
+
     public List<Atom> getWorldDeletions()
     {
         return worldDeletions;

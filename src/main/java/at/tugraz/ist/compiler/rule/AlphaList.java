@@ -1,7 +1,5 @@
 package at.tugraz.ist.compiler.rule;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +13,6 @@ public class AlphaList {
         entires.add(new AlphaEntry("1"));
         return new AlphaList(entires);
     }
-
-    private void add(AlphaEntry alphaEntry) {
-        throw new NotImplementedException();
-    }
-
 
     public AlphaList(List<AlphaEntry> entries)
     {
