@@ -1,5 +1,6 @@
 package at.tugraz.ist.compiler.rule;
 
+import at.tugraz.ist.compiler.interpreter.Memory;
 import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
 import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
@@ -25,35 +26,32 @@ public class RuleGeneratorVisitorTests {
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
-        List<Atom> atoms = gen.getRules();
-        Assert.assertNotNull(atoms);
-        assertEquals(3, atoms.size());
-        Assert.assertTrue(atoms.get(0) instanceof Predicate);
-        assertEquals(((Predicate)atoms.get(0)).getName(), "pre1");
+        Memory memory = gen.getMemory();
+        Assert.assertNotNull(memory);
+        Assert.assertTrue(memory.contains(new Predicate("pre1")));
+        Assert.assertTrue(memory.contains(new Predicate("pre2")));
 
-        Assert.assertTrue(atoms.get(1) instanceof Predicate);
-        assertEquals(((Predicate)atoms.get(1)).getName(), "pre2");
-
-        Assert.assertTrue(atoms.get(2) instanceof Rule);
-
-        Rule rule = (Rule)atoms.get(2);
+        List<Rule> rules = gen.getRules();
+        Assert.assertNotNull(rules);
+        assertEquals(1, rules.size());
+        Rule rule = rules.get(0);
 
         assertEquals(rule.getAction(), "action");
         assertEquals(rule.getRuleGoal(), 0.2);
-        assertEquals(rule.getWorldAddition(), "post");
+        assertEquals(rule.getWorldAddition(), new Predicate("post"));
         assertEquals(rule.getGoal(), null);
         assertEquals(rule.hasGoal(), false);
         assertEquals(rule.hasWorldAddition(), true);
 
         assertNotNull(rule.getPreconditions());
         assertEquals(rule.getPreconditions().size(), 2);
-        assertEquals(((Predicate)rule.getPreconditions().get(0)).getName(), "pre1");
-        assertEquals(((Predicate)rule.getPreconditions().get(1)).getName(), "pre2");
+        assertEquals(rule.getPreconditions().get(0), new Predicate("pre1"));
+        assertEquals(rule.getPreconditions().get(1), new Predicate("pre2"));
 
         assertNotNull(rule.getWorldDeletions());
         assertEquals(rule.getWorldDeletions().size(), 2);
-        assertEquals(((Predicate)rule.getWorldDeletions().get(0)).getName(), "pre1");
-        assertEquals(((Predicate)rule.getWorldDeletions().get(1)).getName(), "pre2");
+        assertEquals(rule.getWorldDeletions().get(0), new Predicate("pre1"));
+        assertEquals(rule.getWorldDeletions().get(1), new Predicate("pre2"));
 
         assertNotNull(rule.getAlphaList());
         assertEquals(1.0, rule.getAlphaList().calculateWeight(0.5));
@@ -67,11 +65,11 @@ public class RuleGeneratorVisitorTests {
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
-        List<Atom> atoms = gen.getRules();
+        List<Rule> atoms = gen.getRules();
         Assert.assertNotNull(atoms);
         assertEquals(1, atoms.size());
         Assert.assertTrue(atoms.get(0) instanceof Rule);
-        Rule rule = (Rule)atoms.get(0);
+        Rule rule = atoms.get(0);
 
         assertEquals(rule.getAction(), "action");
         assertEquals(rule.getRuleGoal(), 1.0);
@@ -98,11 +96,11 @@ public class RuleGeneratorVisitorTests {
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
-        List<Atom> atoms = gen.getRules();
-        Assert.assertNotNull(atoms);
-        assertEquals(1, atoms.size());
-        Assert.assertTrue(atoms.get(0) instanceof Rule);
-        Rule rule = (Rule)atoms.get(0);
+        List<Rule> rules = gen.getRules();
+        Assert.assertNotNull(rules);
+        assertEquals(1, rules.size());
+        Assert.assertTrue(rules.get(0) instanceof Rule);
+        Rule rule = rules.get(0);
 
         assertEquals(rule.getAction(), "action");
         assertEquals(rule.getRuleGoal(), 1.0);
@@ -129,11 +127,11 @@ public class RuleGeneratorVisitorTests {
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
-        List<Atom> atoms = gen.getRules();
+        List<Rule> atoms = gen.getRules();
         Assert.assertNotNull(atoms);
         assertEquals(1, atoms.size());
         Assert.assertTrue(atoms.get(0) instanceof Rule);
-        Rule rule = (Rule)atoms.get(0);
+        Rule rule = atoms.get(0);
 
         assertEquals(rule.getAction(), "action");
         assertEquals(rule.getRuleGoal(), 1.0);
@@ -165,11 +163,11 @@ public class RuleGeneratorVisitorTests {
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
-        List<Atom> atoms = gen.getRules();
+        List<Rule> atoms = gen.getRules();
         Assert.assertNotNull(atoms);
         assertEquals(1, atoms.size());
         Assert.assertTrue(atoms.get(0) instanceof Rule);
-        Rule rule = (Rule)atoms.get(0);
+        Rule rule = atoms.get(0);
 
         assertEquals(rule.getAction(), "action");
         assertEquals(rule.getRuleGoal(), 1.0);

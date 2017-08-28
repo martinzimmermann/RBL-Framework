@@ -11,6 +11,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
 
@@ -64,12 +65,12 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
         rule = rule.setAction(ctx.action().getText());
 
         if(ctx.Goal != null) rule = rule.setGoal(ctx.Goal.getText());
-        if(ctx.WorldAddtion != null) rule = rule.setWorldAddition(ctx.WorldAddtion.getText());
+        if(ctx.WorldAddtion != null) rule = rule.setWorldAddition(new Predicate(ctx.WorldAddtion.getText()));
         if(ctx.rule_goal() != null) rule = rule.setRuleGoal(Double.parseDouble(ctx.rule_goal().getText()));
 
         if(ctx.preconditions() != null) {
-            List<Atom> preconditions = visit(ctx.preconditions());
-            rule = rule.setPreconditions(preconditions);
+            List<Atom> preconditions  = visit(ctx.preconditions());
+            rule = rule.setPreconditions(preconditions.stream().map(obj -> (Predicate) obj).collect(Collectors.toList()));
         }
 
         if(ctx.alist() != null) {
@@ -82,7 +83,7 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
 
         if(ctx.worldDeletions() != null){
             List<Atom> worldDeletions = visit(ctx.worldDeletions());
-            rule = rule.setWorldDeletions(worldDeletions);
+            rule = rule.setWorldDeletions(worldDeletions.stream().map(obj -> (Predicate) obj).collect(Collectors.toList()));
         }
 
         atoms.add(rule.createRule());

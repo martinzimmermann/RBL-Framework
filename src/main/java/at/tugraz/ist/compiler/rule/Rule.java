@@ -4,15 +4,15 @@ import java.util.List;
 
 public class Rule extends Atom {
 
-    private final List<Atom> preconditions;
-    private final String worldAddition;
+    private final List<Predicate> preconditions;
+    private final Predicate worldAddition;
     private final String goal;
-    private final List<Atom> worldDeletions;
+    private final List<Predicate> worldDeletions;
     private final AlphaList alphaEntries ;
     private final double ruleGoal;
     private final String action;
 
-    public Rule(String action, double ruleGoal, AlphaList alphaEntries,  List<Atom> worldDeletions, String goal, String worldAddition,  List<Atom> preconditions) {
+    public Rule(String action, double ruleGoal, AlphaList alphaEntries,  List<Predicate> worldDeletions, String goal, Predicate worldAddition,  List<Predicate> preconditions) {
 
         if(action == null)
             throw new IllegalArgumentException("action can not be null");
@@ -29,12 +29,12 @@ public class Rule extends Atom {
         this.preconditions = preconditions;
     }
 
-    public List<Atom> getPreconditions()
+    public List<Predicate> getPreconditions()
     {
         return preconditions;
     }
 
-    public String getWorldAddition()
+    public Predicate getWorldAddition()
     {
         return worldAddition;
     }
@@ -54,7 +54,7 @@ public class Rule extends Atom {
         return worldAddition != null;
     }
 
-    public List<Atom> getWorldDeletions()
+    public List<Predicate> getWorldDeletions()
     {
         return worldDeletions;
     }

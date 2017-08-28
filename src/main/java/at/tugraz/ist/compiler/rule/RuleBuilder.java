@@ -7,10 +7,10 @@ public class RuleBuilder {
     private String action;
     private double ruleGoal = 1;
     private AlphaList alphaEntries = AlphaList.getDefaultAlphaList();
-    private List<Atom> worldDeletions = new ArrayList<>();
+    private List<Predicate> worldDeletions = new ArrayList<>();
     private String goal = null;
-    private String worldAddition = null;
-    private List<Atom> preconditions = new ArrayList<>();
+    private Predicate worldAddition = null;
+    private List<Predicate> preconditions = new ArrayList<>();
 
     public RuleBuilder setAction(String action) {
         this.action = action;
@@ -27,7 +27,7 @@ public class RuleBuilder {
         return this;
     }
 
-    public RuleBuilder setWorldDeletions(List<Atom> worldDeletions) {
+    public RuleBuilder setWorldDeletions(List<Predicate> worldDeletions) {
         this.worldDeletions = worldDeletions;
         return this;
     }
@@ -37,12 +37,12 @@ public class RuleBuilder {
         return this;
     }
 
-    public RuleBuilder setWorldAddition(String worldAddition) {
+    public RuleBuilder setWorldAddition(Predicate worldAddition) {
         this.worldAddition = worldAddition;
         return this;
     }
 
-    public RuleBuilder setPreconditions(List<Atom> preconditions) {
+    public RuleBuilder setPreconditions(List<Predicate> preconditions) {
         this.preconditions = preconditions;
         return this;
     }
