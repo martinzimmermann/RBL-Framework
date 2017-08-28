@@ -3,6 +3,7 @@ package at.tugraz.ist.compiler.interpreter;
 import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Memory {
@@ -12,6 +13,10 @@ public class Memory {
     public Memory(List<Predicate> predicates)
     {
         this.predicates = predicates;
+    }
+
+    public Memory(Memory another) {
+        this.predicates = new ArrayList<>(another.predicates);
     }
 
     public boolean contains(Predicate precondition) {
@@ -27,5 +32,14 @@ public class Memory {
             predicates.add(addition);
         predicates.removeAll(deletions);
 
+    }
+
+    public boolean containsAll(List<Predicate> preconditions) {
+        return predicates.containsAll(preconditions);
+    }
+
+    public void apply(Memory newMemory) {
+        predicates.clear();
+        predicates.addAll(newMemory.predicates);
     }
 }
