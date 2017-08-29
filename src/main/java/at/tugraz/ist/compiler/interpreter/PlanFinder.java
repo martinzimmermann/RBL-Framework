@@ -33,6 +33,7 @@ public class PlanFinder
 
         List<Rule> rules = new ArrayList<>(allRules);
         rules.remove(goal);
+        rules.sort(Rule::compareTo);
 
         for (Rule rule : rules) {
             if (!newPlan.needs(rule, memory))

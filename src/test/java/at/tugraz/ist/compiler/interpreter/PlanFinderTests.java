@@ -198,4 +198,54 @@ public class PlanFinderTests {
         List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNull(plan);
     }
+
+    @Test
+    public void find_rule_with_greater_weight_test() throws IOException {
+        // This is also not possible in the original algorithm, because it is not possible to delete predicates that you
+        // need later on, even thought you could add them again.
+        RuleLexer ruleLexer = new RuleLexer(
+                "-> +pre1 action (0.5)." +
+                        "-> +pre1 action (1)." +
+                        "pre1-> #goal action." +
+                        "");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+
+        Memory memory = gen.getMemory();
+        List<Rule> rules = gen.getRules();
+        List<Rule> goals = PlanFinder.getGoalRules(rules);
+
+        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        assertNotNull(plan);
+        assertEquals(2, plan.size());
+        assertEquals(rules.get(1), plan.get(0));
+        assertEquals(rules.get(2), plan.get(1));
+    }
+
+    @Test
+    public void find_rule_with_greater_weight2_test() throws IOException {
+        // This is also not possible in the original algorithm, because it is not possible to delete predicates that you
+        // need later on, even thought you could add them again.
+        RuleLexer ruleLexer = new RuleLexer(
+                        "-> +pre1 action (1)." +
+                        "-> +pre1 action (0.5)." +
+                        "pre1-> #goal action." +
+                        "");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+
+        Memory memory = gen.getMemory();
+        List<Rule> rules = gen.getRules();
+        List<Rule> goals = PlanFinder.getGoalRules(rules);
+
+        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        assertNotNull(plan);
+        assertEquals(2, plan.size());
+        assertEquals(rules.get(0), plan.get(0));
+        assertEquals(rules.get(2), plan.get(1));
+    }
 }
