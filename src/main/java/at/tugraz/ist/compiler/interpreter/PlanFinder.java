@@ -4,6 +4,7 @@ import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,10 +17,14 @@ public class PlanFinder
 
     public static List<Rule> getPlanForRule(Rule goal, Memory memory, List<Rule> allRules)
     {
-        return getPlanForRule(goal,memory, allRules, new Plan());
+        List<Rule> plan = getPlanForRule(goal,memory, allRules, new Plan());
+        if(plan == null)
+            return null;
+        Collections.reverse(plan);
+        return plan;
     }
 
-    public static List<Rule> getPlanForRule(Rule goal, Memory memory, List<Rule> allRules, Plan currentPlan)
+    private static List<Rule> getPlanForRule(Rule goal, Memory memory, List<Rule> allRules, Plan currentPlan)
     {
         Plan newPlan = new Plan(currentPlan);
         newPlan.add(goal);
@@ -45,13 +50,5 @@ public class PlanFinder
         }
 
         return null; // plan couldn't be fulfilled on this path
-    }
-
-    private static List<Rule> getRulesThatSatisfies(Predicate precondition, List<Rule> allRules) {
-        return null;
-    }
-
-    private static List<Rule> getRulesSortedRules( List<Rule> allRules){
-        return allRules;
     }
 }

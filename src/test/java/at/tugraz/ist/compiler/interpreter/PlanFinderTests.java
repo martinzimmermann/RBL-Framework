@@ -29,8 +29,8 @@ public class PlanFinderTests {
 
         List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
-        assertEquals(plan.size(), 1);
-        assertEquals(plan.get(0), rules.get(0));
+        assertEquals(1, plan.size());
+        assertEquals(rules.get(0), plan.get(0));
     }
 
     @Test
@@ -48,7 +48,8 @@ public class PlanFinderTests {
 
         List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
-        assertEquals(plan.size(), 1);
+        assertEquals(1, plan.size());
+        assertEquals(rules.get(0), plan.get(0));
     }
 
     @Test
@@ -67,7 +68,9 @@ public class PlanFinderTests {
 
         List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
-        assertEquals(plan.size(), 2);
+        assertEquals(2, plan.size());
+        assertEquals(rules.get(0), plan.get(0));
+        assertEquals(rules.get(1), plan.get(1));
     }
 
     @Test
@@ -87,7 +90,7 @@ public class PlanFinderTests {
 
         List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
-        assertEquals(plan.size(), 3);
+        assertEquals(3, plan.size());
     }
 
     @Test
@@ -108,7 +111,7 @@ public class PlanFinderTests {
 
         List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
-        assertEquals(plan.size(), 4);
+        assertEquals(4, plan.size());
     }
 
     @Test
@@ -132,7 +135,7 @@ public class PlanFinderTests {
 
         List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
-        assertEquals(plan.size(), 3);
+        assertEquals(3, plan.size());
     }
 
     @Test
@@ -152,7 +155,7 @@ public class PlanFinderTests {
 
         List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
-        assertEquals(plan.size(), 2);
+        assertEquals(2, plan.size());
     }
 
     @Test

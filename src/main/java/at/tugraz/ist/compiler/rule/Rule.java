@@ -72,4 +72,32 @@ public class Rule extends Atom {
     public String getAction() {
         return action;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+
+        for (Predicate precondition : getPreconditions()) {
+            string.append(precondition.getName() + ",");
+        }
+
+        string.deleteCharAt(string.length() - 1);
+        string.append(" -> ");
+
+        if (hasWorldAddition())
+            string.append("+" + getWorldAddition().getName() + " ");
+
+        if (hasGoal())
+            string.append("#" + getGoal() + " ");
+
+        for (Predicate deletion : getWorldDeletions()) {
+            string.append("-" + deletion.getName() + " ");
+        }
+
+        string.deleteCharAt(string.length() - 1);
+        string.append(".");
+
+        return string.toString();
+    }
+
 }
