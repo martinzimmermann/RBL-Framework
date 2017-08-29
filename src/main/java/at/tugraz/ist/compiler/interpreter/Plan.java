@@ -12,7 +12,15 @@ import java.util.stream.Collectors;
 
 public class Plan {
 
-    List<Rule> rules = new ArrayList<>();
+    private final List<Rule> rules;
+
+    public Plan() {
+        rules  = new ArrayList<>();
+    }
+
+    public Plan(Plan currentPlan) {
+        rules = new ArrayList<>(currentPlan.rules);
+    }
 
     public boolean ruleWouldRemoveNeededPrecondition(Rule rule) {
         return rules.stream().anyMatch(r -> r.getPreconditions().stream().anyMatch(p -> rule.getWorldDeletions().contains(p)));
@@ -33,7 +41,10 @@ public class Plan {
 
     public boolean needs(Rule rule, Memory memory) {
         if(!rule.hasWorldAddition()) return false;
-        return toReach().contains(rule.getWorldAddition());
+
+        List<Predicate> toReach = toReach();
+        toReach.removeAll(memory.getAllPredicates());
+        return toReach.contains(rule.getWorldAddition());
     }
 
     private List<Predicate> toReach() {
@@ -42,5 +53,9 @@ public class Plan {
 
         preconditions.removeAll(posEffects);
         return new ArrayList<>(preconditions);
+    }
+
+    public void addAll(List<Rule> newPlan) {
+        rules.addAll(newPlan);
     }
 }

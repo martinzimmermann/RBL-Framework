@@ -31,11 +31,15 @@ public class Memory {
         if(addition != null)
             predicates.add(addition);
         predicates.removeAll(deletions);
-
     }
 
     public boolean containsAll(List<Predicate> preconditions) {
         return predicates.containsAll(preconditions);
+    }
+
+    public List<Predicate> getAllPredicates()
+    {
+        return predicates;
     }
 
     public void apply(Memory newMemory) {

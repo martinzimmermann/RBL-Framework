@@ -14,80 +14,37 @@ public class PlanFinder
         return allRules.stream().filter(rule -> rule.hasGoal()).collect(Collectors.toList());
     }
 
-    public static List<Rule> getPlanForGoal(Rule goal, Memory memory, List<Rule> allRules)
+    public static List<Rule> getPlanForRule(Rule goal, Memory memory, List<Rule> allRules)
     {
-        Plan plan = new Plan();
-        plan.add(goal);
+        return getPlanForRule(goal,memory, allRules, new Plan());
+    }
+
+    public static List<Rule> getPlanForRule(Rule goal, Memory memory, List<Rule> allRules, Plan currentPlan)
+    {
+        Plan newPlan = new Plan(currentPlan);
+        newPlan.add(goal);
+
+        if (newPlan.isComplete(memory))
+            return newPlan.getRules();
 
         List<Rule> rules = new ArrayList<>(allRules);
         rules.remove(goal);
 
-        for (; ; ) {
-            boolean planChanged = false;
+        for (Rule rule : rules) {
+            if (!newPlan.needs(rule, memory))
+                continue;
 
-            for (Rule rule : rules) {
-                if (!plan.needs(rule, memory))
-                    continue;
+            if (newPlan.ruleWouldRemoveNeededPrecondition(rule))
+                continue;
 
-                if (plan.ruleWouldRemoveNeededPrecondition(rule))
-                    continue;
-
-                planChanged = true;
-                plan.add(rule);
-            }
-
-            if (!planChanged)
-                if (plan.isComplete(memory))
-                    return plan.getRules();
-                else
-                    return null;
-        }
-
-    }
-
-    public static List<Rule> searchPlan(Rule currentRule, Memory memory, List<Rule> allRules) {
-
-        List<Rule> plan = new ArrayList<>();
-
-        List<Predicate> preconditions = currentRule.getPreconditions();
-
-        for( Predicate precondition : preconditions)
-        {
-            if(memory.contains(precondition))
+            List<Rule> newRules = getPlanForRule(rule, memory, rules, newPlan);
+            if(newRules == null) // this path didn't yield a valid plan, try other rule
                 continue;
             else
-            {
-                List<Rule> ruleCandidates = getRulesThatSatisfies(precondition, allRules);
-                if (ruleCandidates.size() == 0)
-                    return null;
-
-                boolean ruleFound = false;
-                for(Rule newRule: ruleCandidates)
-                {
-                    Memory newMemory = new Memory(memory);
-                    List<Rule> newPlan = searchPlan(newRule, newMemory, allRules);
-
-                    if(newPlan == null ||
-                            !newMemory.containsAll(currentRule.getPreconditions())) {
-                        continue;
-                    }
-
-                    memory.apply(newMemory);
-                    plan.addAll(newPlan);
-                    ruleFound = true;
-                    break;
-                }
-
-                if(ruleFound == false)
-                    return null;
-            }
-
+                return newRules;
         }
 
-        plan.add(currentRule);
-        memory.update(currentRule);
-
-        return plan;
+        return null; // plan couldn't be fulfilled on this path
     }
 
     private static List<Rule> getRulesThatSatisfies(Predicate precondition, List<Rule> allRules) {
