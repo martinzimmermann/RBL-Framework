@@ -1,9 +1,6 @@
 package at.tugraz.ist.compiler.parser;
 
 import at.tugraz.ist.compiler.antlr.RuleGrammarParser;
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -18,13 +15,13 @@ public class RuleParser {
         RuleGrammarParser parser = new RuleGrammarParser(tokenstream);
 
         parser.removeErrorListeners();
-        RuleErrorListner errorListner = new RuleErrorListner();
-        parser.addErrorListener(errorListner);
+        RuleErrorListener errorListener = new RuleErrorListener();
+        parser.addErrorListener(errorListener);
         parser.program();
 
         tokenstream.seek(0);
 
-        return errorListner.getErrorCount();
+        return errorListener.getErrorCount();
     }
 
     public ParseTree getParseTree() {

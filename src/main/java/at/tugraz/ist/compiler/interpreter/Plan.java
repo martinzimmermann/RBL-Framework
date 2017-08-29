@@ -48,7 +48,7 @@ public class Plan {
 
     private List<Predicate> toReach() {
         Set<Predicate> preconditions = new HashSet<>(rules.stream().flatMap(r -> r.getPreconditions().stream()).collect(Collectors.toList()));
-        Set<Predicate> posEffects = new HashSet<>(rules.stream().filter(r -> r.hasWorldAddition()).map(r -> r.getWorldAddition()).collect(Collectors.toList()));
+        Set<Predicate> posEffects = new HashSet<>(rules.stream().filter(Rule::hasWorldAddition).map(Rule::getWorldAddition).collect(Collectors.toList()));
 
         preconditions.removeAll(posEffects);
         return new ArrayList<>(preconditions);

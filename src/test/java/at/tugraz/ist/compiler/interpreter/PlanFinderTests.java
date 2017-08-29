@@ -139,7 +139,7 @@ public class PlanFinderTests {
     }
 
     @Test
-    public void withDelitions_test() throws IOException {
+    public void withDeletions_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer("pre1." +
                 "pre1 -> +pre2 action." +
                 "pre1 -> +pre2 -pre1 action." +

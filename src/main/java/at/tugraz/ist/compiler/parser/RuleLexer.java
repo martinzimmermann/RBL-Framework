@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class RuleLexer {
-    final Path  filepath;
-    final String source;
+    private final Path  filepath;
+    private final String source;
 
 
     public RuleLexer(Path path) {
@@ -26,11 +26,11 @@ public class RuleLexer {
         RuleGrammarLexer lexer = getLexer();
 
         lexer.removeErrorListeners();
-        RuleErrorListner errorListner = new RuleErrorListner();
-        lexer.addErrorListener(errorListner);
+        RuleErrorListener errorListener = new RuleErrorListener();
+        lexer.addErrorListener(errorListener);
         lexer.getAllTokens();
 
-        return errorListner.getErrorCount();
+        return errorListener.getErrorCount();
     }
 
     private RuleGrammarLexer getLexer() throws IOException {
@@ -43,7 +43,6 @@ public class RuleLexer {
         RuleGrammarLexer lexer = getLexer();
         lexer.removeErrorListeners();
 
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        return tokens;
+        return new CommonTokenStream(lexer);
     }
 }

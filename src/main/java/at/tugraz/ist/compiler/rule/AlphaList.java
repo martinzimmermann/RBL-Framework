@@ -9,9 +9,9 @@ public class AlphaList {
 
     public static AlphaList getDefaultAlphaList()
     {
-        List<AlphaEntry> entires = new ArrayList<>();
-        entires.add(new AlphaEntry("1"));
-        return new AlphaList(entires);
+        List<AlphaEntry> entries = new ArrayList<>();
+        entries.add(new AlphaEntry("1"));
+        return new AlphaList(entries);
     }
 
     public AlphaList(List<AlphaEntry> entries)

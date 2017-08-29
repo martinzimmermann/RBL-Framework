@@ -78,20 +78,20 @@ public class Rule extends Atom {
         StringBuilder string = new StringBuilder();
 
         for (Predicate precondition : getPreconditions()) {
-            string.append(precondition.getName() + ",");
+            string.append(precondition.getName()).append(",");
         }
 
         string.deleteCharAt(string.length() - 1);
         string.append(" -> ");
 
         if (hasWorldAddition())
-            string.append("+" + getWorldAddition().getName() + " ");
+            string.append("+").append(getWorldAddition().getName()).append(" ");
 
         if (hasGoal())
-            string.append("#" + getGoal() + " ");
+            string.append("#").append(getGoal()).append(" ");
 
         for (Predicate deletion : getWorldDeletions()) {
-            string.append("-" + deletion.getName() + " ");
+            string.append("-").append(deletion.getName()).append(" ");
         }
 
         string.deleteCharAt(string.length() - 1);

@@ -16,16 +16,15 @@ import static junit.framework.TestCase.assertEquals;
 
 @RunWith(Parameterized.class)
 public class ParserFailTests {
-    private static String folderPath = "src/test/resources/compiler/parser/input/fail";
+    private final static String folderPath = "src/test/resources/compiler/parser/input/fail";
 
     @Parameterized.Parameters(name = "{1}")
     public static Iterable<Object[]> data() {
         List<String> paths = TestHelper.getAllFilesInPath(folderPath);
-        List<Object[]> data = paths.stream().map(x -> new Object[]{x, TestHelper.shortPath(x)}).collect(Collectors.toList());
-        return data;
+        return paths.stream().map(x -> new Object[]{x, TestHelper.shortPath(x)}).collect(Collectors.toList());
     }
 
-    private String path;
+    private final String path;
 
     public ParserFailTests(String path, String name) {
         this.path = path;

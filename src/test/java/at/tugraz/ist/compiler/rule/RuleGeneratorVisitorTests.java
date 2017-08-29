@@ -68,7 +68,6 @@ public class RuleGeneratorVisitorTests {
         List<Rule> atoms = gen.getRules();
         Assert.assertNotNull(atoms);
         assertEquals(1, atoms.size());
-        Assert.assertTrue(atoms.get(0) instanceof Rule);
         Rule rule = atoms.get(0);
 
         assertEquals(rule.getAction(), "action");
@@ -99,7 +98,6 @@ public class RuleGeneratorVisitorTests {
         List<Rule> rules = gen.getRules();
         Assert.assertNotNull(rules);
         assertEquals(1, rules.size());
-        Assert.assertTrue(rules.get(0) instanceof Rule);
         Rule rule = rules.get(0);
 
         assertEquals(rule.getAction(), "action");
@@ -130,7 +128,6 @@ public class RuleGeneratorVisitorTests {
         List<Rule> atoms = gen.getRules();
         Assert.assertNotNull(atoms);
         assertEquals(1, atoms.size());
-        Assert.assertTrue(atoms.get(0) instanceof Rule);
         Rule rule = atoms.get(0);
 
         assertEquals(rule.getAction(), "action");
@@ -166,7 +163,6 @@ public class RuleGeneratorVisitorTests {
         List<Rule> atoms = gen.getRules();
         Assert.assertNotNull(atoms);
         assertEquals(1, atoms.size());
-        Assert.assertTrue(atoms.get(0) instanceof Rule);
         Rule rule = atoms.get(0);
 
         assertEquals(rule.getAction(), "action");

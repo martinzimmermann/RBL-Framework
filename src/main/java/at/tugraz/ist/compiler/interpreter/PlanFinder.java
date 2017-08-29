@@ -1,6 +1,5 @@
 package at.tugraz.ist.compiler.interpreter;
 
-import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ public class PlanFinder
 {
     public static List<Rule> getGoalRules(List<Rule> allRules)
     {
-        return allRules.stream().filter(rule -> rule.hasGoal()).collect(Collectors.toList());
+        return allRules.stream().filter(Rule::hasGoal).collect(Collectors.toList());
     }
 
     public static List<Rule> getPlanForRule(Rule goal, Memory memory, List<Rule> allRules)
@@ -45,8 +44,8 @@ public class PlanFinder
             List<Rule> newRules = getPlanForRule(rule, memory, rules, newPlan);
             if(newRules == null) // this path didn't yield a valid plan, try other rule
                 continue;
-            else
-                return newRules;
+
+            return newRules;
         }
 
         return null; // plan couldn't be fulfilled on this path
