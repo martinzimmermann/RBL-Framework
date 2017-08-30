@@ -1,6 +1,7 @@
 package at.tugraz.ist.compiler.interpreter;
 
 import at.tugraz.ist.compiler.rule.Predicate;
+import at.tugraz.ist.compiler.rule.Rule;
 import java.util.List;
 
 public class Memory {
@@ -23,5 +24,11 @@ public class Memory {
     public List<Predicate> getAllPredicates()
     {
         return predicates;
+    }
+
+    public void update(Rule rule) {
+        predicates.removeAll(rule.getWorldDeletions());
+        if(rule.hasWorldAddition())
+            predicates.add(rule.getWorldAddition());
     }
 }

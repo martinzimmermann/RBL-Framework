@@ -1,4 +1,7 @@
 package at.tugraz.ist.compiler.rule;
+import at.tugraz.ist.compiler.interpreter.ExecutionFailedException;
+import at.tugraz.ist.compiler.interpreter.Memory;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 
@@ -12,7 +15,7 @@ public class Rule extends Atom  implements Comparable<Rule> {
     private final double ruleGoal;
     private final String action;
     private double currentActivity = 0;
-    private double damping = 0;
+    private double damping = 0.5;
 
     public Rule(String action, double ruleGoal, AlphaList alphaEntries,  List<Predicate> worldDeletions, String goal, Predicate worldAddition,  List<Predicate> preconditions) {
 
@@ -155,5 +158,31 @@ public class Rule extends Atom  implements Comparable<Rule> {
         double thisWeight = alphaEntries.calculateWeight(currentActivity) * (ruleGoal - currentActivity) * (1-damping);
 
         return otherWeight == thisWeight ? 0 : thisWeight > otherWeight ? -1 : 1;
+    }
+
+    public void execute(Memory memory) throws ExecutionFailedException{
+        if (!memory.containsAll(this.getPreconditions()))
+            throw new PreConditionsNotMetException();
+
+        // TODO: implement actual logic
+        System.out.println("Executing " + action);
+    }
+
+    public void decreaseDamping() {
+        damping = damping - 0.1;
+        damping = damping < 0.1 ? 0.1 : damping;
+    }
+
+    public void increaseDamping() {
+        damping = damping + 0.1;
+        damping = damping > 0.9 ? 0.9 : damping;
+    }
+
+    public void increaseActivity() {
+        currentActivity = (currentActivity + ruleGoal) / 2;
+    }
+
+    public void repairMemory(Memory memory) {
+        throw new NotImplementedException();
     }
 }
