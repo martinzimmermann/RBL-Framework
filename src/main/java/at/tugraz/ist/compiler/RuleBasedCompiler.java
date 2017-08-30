@@ -1,5 +1,6 @@
+package at.tugraz.ist.compiler;
 
-class HelloWorldApp {
+class RuleBasedCompiler {
     public static void main(String[] args) {
         System.out.println("Hello World!");
     }

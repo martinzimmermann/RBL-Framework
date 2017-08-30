@@ -2,10 +2,7 @@ package at.tugraz.ist.compiler.ruleGenerator;
 
 import at.tugraz.ist.compiler.antlr.RuleGrammarBaseVisitor;
 import at.tugraz.ist.compiler.antlr.RuleGrammarParser.*;
-import at.tugraz.ist.compiler.rule.AlphaList;
-import at.tugraz.ist.compiler.rule.Atom;
-import at.tugraz.ist.compiler.rule.Predicate;
-import at.tugraz.ist.compiler.rule.RuleBuilder;
+import at.tugraz.ist.compiler.rule.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.ArrayList;
@@ -85,7 +82,15 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
             rule = rule.setWorldDeletions(worldDeletions.stream().map(obj -> (Predicate) obj).collect(Collectors.toList()));
         }
 
-        atoms.add(rule.createRule());
+        Rule concreteRule = null;
+        try {
+            concreteRule = rule.createRule();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            //TODO: report error
+        }
+
+        atoms.add(concreteRule);
         return atoms;
     }
 

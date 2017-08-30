@@ -47,7 +47,7 @@ public class RuleBuilder {
         return this;
     }
 
-    public Rule createRule() {
+    public Rule createRule() throws ClassNotFoundException {
         return new Rule(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions);
     }
 }

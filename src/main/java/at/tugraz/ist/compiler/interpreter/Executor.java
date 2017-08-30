@@ -10,9 +10,13 @@ public class Executor {
 
     public void executeOnce(Model model) throws ExecutionFailedException
     {
-        Rule goal = PlanFinder.getGoalRules(model.getRules()).get(0);
+        List<Rule> rules = model.getRules();
+        List<Rule> goals = PlanFinder.getGoalRules(rules);
+        goals.sort(Rule::compareTo);
+        Rule goal = goals.get(0);
+
         Memory memory = model.getMemory();
-        List<Rule> plan = PlanFinder.getPlanForRule(goal, memory, model.getRules());
+        List<Rule> plan = PlanFinder.getPlanForRule(goal, memory, rules);
 
         for (Rule rule : plan) {
             try {

@@ -1,8 +1,9 @@
 package at.tugraz.ist.compiler.rule;
 import at.tugraz.ist.compiler.interpreter.ExecutionFailedException;
 import at.tugraz.ist.compiler.interpreter.Memory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class Rule extends Atom  implements Comparable<Rule> {
@@ -13,11 +14,11 @@ public class Rule extends Atom  implements Comparable<Rule> {
     private final List<Predicate> worldDeletions;
     private final AlphaList alphaEntries ;
     private final double ruleGoal;
-    private final String action;
+    private final RuleAction action;
     private double currentActivity = 0;
     private double damping = 0.5;
 
-    public Rule(String action, double ruleGoal, AlphaList alphaEntries,  List<Predicate> worldDeletions, String goal, Predicate worldAddition,  List<Predicate> preconditions) {
+    public Rule(String action, double ruleGoal, AlphaList alphaEntries,  List<Predicate> worldDeletions, String goal, Predicate worldAddition,  List<Predicate> preconditions) throws ClassNotFoundException {
 
         if(action == null)
             throw new IllegalArgumentException("action can not be null");
@@ -34,13 +35,24 @@ public class Rule extends Atom  implements Comparable<Rule> {
         if(preconditions == null)
             throw new IllegalArgumentException("preconditions can not be null");
 
-        this.action = action;
         this.ruleGoal = ruleGoal;
         this.alphaEntries = alphaEntries;
         this.worldDeletions = worldDeletions;
         this.goal = goal;
         this.worldAddition = worldAddition;
         this.preconditions = preconditions;
+
+        //oh boy, some dangerous stuff ahead
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            Class actionClass = Class.forName(action);
+            Constructor constructor = actionClass.getConstructor(new Class[0]);
+            this.action = (RuleAction) constructor.newInstance(new Object[0]);
+        }
+        catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |  InvocationTargetException | InstantiationException e)
+        {
+            throw new ClassNotFoundException();
+        }
     }
 
     public List<Predicate> getPreconditions()
@@ -84,7 +96,7 @@ public class Rule extends Atom  implements Comparable<Rule> {
     }
 
     public String getAction() {
-        return action;
+        return action.getClass().getName();
     }
 
     @Override
@@ -164,7 +176,7 @@ public class Rule extends Atom  implements Comparable<Rule> {
         if (!memory.containsAll(this.getPreconditions()))
             throw new PreConditionsNotMetException();
 
-        // TODO: implement actual logic
+        action.execute(memory);
         System.out.println("Executing " + action);
     }
 
@@ -183,6 +195,6 @@ public class Rule extends Atom  implements Comparable<Rule> {
     }
 
     public void repairMemory(Memory memory) {
-        throw new NotImplementedException();
+        action.repair(memory);
     }
 }
