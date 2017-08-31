@@ -2,8 +2,19 @@ package at.tugraz.ist.compiler.rule;
 import at.tugraz.ist.compiler.interpreter.ExecutionFailedException;
 import at.tugraz.ist.compiler.interpreter.Memory;
 
+import javax.tools.JavaCompiler;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 
 public class Rule extends Atom  implements Comparable<Rule> {
@@ -44,12 +55,26 @@ public class Rule extends Atom  implements Comparable<Rule> {
 
         //oh boy, some dangerous stuff ahead
         try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            Class actionClass = Class.forName(action);
+            JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
+            StandardJavaFileManager sjfm = jc.getStandardFileManager(null, null, null);
+            String path = getClass().getClassLoader().getResource("Actions/" + action + ".java").getPath();
+            File javaFile = new File(path);
+            Iterable fileObjects = sjfm.getJavaFileObjects(javaFile);
+
+            Path path2 = Files.createTempDirectory("temp" );
+            String folderPath = path2.normalize().toString();
+            String[] options = new String[]{"-d", folderPath};
+            jc.getTask(null, null, null, Arrays.asList(options), null, fileObjects).call();
+            sjfm.close();
+
+            URL[] urls = new URL[]{ path2.toUri().toURL()};
+            URLClassLoader ucl = new URLClassLoader(urls);
+
+            Class actionClass = ucl.loadClass(action);
             Constructor constructor = actionClass.getConstructor(new Class[0]);
             this.action = (RuleAction) constructor.newInstance(new Object[0]);
         }
-        catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |  InvocationTargetException | InstantiationException e)
+        catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |  InvocationTargetException | InstantiationException | IOException e)
         {
             throw new ClassNotFoundException();
         }
