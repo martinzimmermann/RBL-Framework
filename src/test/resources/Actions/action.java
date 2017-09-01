@@ -7,12 +7,10 @@ public class action implements RuleAction {
 
     @Override
     public void execute(Memory model) throws ActionFailedException {
-        System.out.println("Hello from action");
-
+        System.out.println("Hello from action.");
     }
 
     @Override
     public void repair(Memory model) {
-
     }
 }
