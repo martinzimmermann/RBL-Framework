@@ -1,16 +1,24 @@
 package at.tugraz.ist.compiler.rule;
 
+import at.tugraz.ist.compiler.Setting;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class RuleBuilder {
     private String action;
+    private Setting setting;
     private double ruleGoal = 1;
     private AlphaList alphaEntries = AlphaList.getDefaultAlphaList();
     private List<Predicate> worldDeletions = new ArrayList<>();
     private String goal = null;
     private Predicate worldAddition = null;
     private List<Predicate> preconditions = new ArrayList<>();
+
+    public RuleBuilder setSetting(Setting setting) {
+        this.setting = setting;
+        return this;
+    }
 
     public RuleBuilder setAction(String action) {
         this.action = action;
@@ -48,6 +56,6 @@ public class RuleBuilder {
     }
 
     public Rule createRule() throws ClassNotFoundException {
-        return new Rule(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions);
+        return new Rule(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions, setting);
     }
 }

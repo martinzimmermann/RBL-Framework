@@ -1,4 +1,5 @@
 package at.tugraz.ist.compiler.rule;
+import at.tugraz.ist.compiler.Setting;
 import at.tugraz.ist.compiler.interpreter.ExecutionFailedException;
 import at.tugraz.ist.compiler.interpreter.Memory;
 
@@ -7,7 +8,6 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -29,7 +29,7 @@ public class Rule extends Atom  implements Comparable<Rule> {
     private double currentActivity = 0;
     private double damping = 0.5;
 
-    public Rule(String action, double ruleGoal, AlphaList alphaEntries,  List<Predicate> worldDeletions, String goal, Predicate worldAddition,  List<Predicate> preconditions) throws ClassNotFoundException {
+    public Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions, Setting setting) throws ClassNotFoundException {
 
         if(action == null)
             throw new IllegalArgumentException("action can not be null");
@@ -57,7 +57,7 @@ public class Rule extends Atom  implements Comparable<Rule> {
         try {
             JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
             StandardJavaFileManager sjfm = jc.getStandardFileManager(null, null, null);
-            String path = getClass().getClassLoader().getResource("Actions/" + action + ".java").getPath();
+            String path = setting.getPathToJavaFiles() + "\\"  + action + ".java";
             File javaFile = new File(path);
             Iterable fileObjects = sjfm.getJavaFileObjects(javaFile);
 
@@ -202,7 +202,6 @@ public class Rule extends Atom  implements Comparable<Rule> {
             throw new PreConditionsNotMetException();
 
         action.execute(memory);
-        System.out.println("Executing " + action);
     }
 
     public void decreaseDamping() {

@@ -49,3 +49,20 @@ compileJava {
     dependsOn generateGrammarSource
     source antlr.destinationDir
 }
+
+jar {
+    manifest {
+        attributes('Main-Class': 'at.tugraz.ist.compiler.RuleBasedCompiler')
+    }
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Rule Based Compiler',
+                'Implementation-Version': version,
+                'Main-Class': 'at.tugraz.ist.compiler.RuleBasedCompiler'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
