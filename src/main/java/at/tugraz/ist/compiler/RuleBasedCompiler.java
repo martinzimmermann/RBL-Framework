@@ -1,6 +1,6 @@
 package at.tugraz.ist.compiler;
 
-import at.tugraz.ist.compiler.interpreter.Compiler;
+import at.tugraz.ist.compiler.interpreter.ClassCompiler;
 import at.tugraz.ist.compiler.interpreter.ExecutionFailedException;
 import at.tugraz.ist.compiler.interpreter.Executor;
 import at.tugraz.ist.compiler.interpreter.Model;
@@ -9,7 +9,6 @@ import at.tugraz.ist.compiler.parser.RuleParser;
 import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -21,7 +20,7 @@ class RuleBasedCompiler {
 
         try {
             if(!setting.isCompiling())
-                Compiler.compileClasses(setting);
+                ClassCompiler.compileClasses(setting);
 
             RuleLexer ruleLexer = new RuleLexer(Paths.get(setting.getPathToRuleFile()));
             RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -50,10 +49,10 @@ class RuleBasedCompiler {
             return null;
         }
 
-        if (args[0].equals("interprete")) {
-            JavaCompiler c = ToolProvider.getSystemJavaCompiler();
+        if (args[0].equals("interpret")) {
+            javax.tools.JavaCompiler c = ToolProvider.getSystemJavaCompiler();
             if (c == null) {
-                System.out.println("Error: if you want to interprete the rules, please make sure to run this program with the JDK rather than the JRE ");
+                System.out.println("Error: if you want to interpret the rules, please make sure to run this program with the JDK rather than the JRE ");
                 System.exit(1);
             }
 
@@ -93,7 +92,7 @@ class RuleBasedCompiler {
 
     private static void printHelp() {
         System.out.println("Usage:\n" +
-                "   rule interprete [-times n] PATHTOJAVAFILES PATHTORULEFILE           interprets the rules n times, where n must be >= 0\n" +
+                "   rule interpret [-times n] PATHTOJAVAFILES PATHTORULEFILE           interprets the rules n times, where n must be >= 0\n" +
                 "   rule compile [-o outputpath] PATHTOJAVAFILES PATHTORULEFILE     compiles th rules to Java source\n" +
                 "   rule (-h | --help)                                              shows this help");
     }

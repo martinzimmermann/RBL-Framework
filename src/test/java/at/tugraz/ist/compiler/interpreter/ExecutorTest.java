@@ -5,6 +5,7 @@ import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
 import at.tugraz.ist.compiler.rule.Rule;
 import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -15,10 +16,10 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
 public class ExecutorTest {
-
+    
     @Test
     public void simple_test() throws IOException, ExecutionFailedException {
-        RuleLexer ruleLexer = new RuleLexer("-> #goal action.");
+        RuleLexer ruleLexer = new RuleLexer("-> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
@@ -34,11 +35,12 @@ public class ExecutorTest {
     @Test
     public void with_1precondition_test() throws IOException, ExecutionFailedException {
         RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> #goal action.");
+                "pre1 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 1);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
         Model model = new Model(gen.getMemory(), gen.getRules());
 
@@ -49,8 +51,8 @@ public class ExecutorTest {
     @Test
     public void with_2steps_test() throws IOException, ExecutionFailedException {
         RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> +pre2 action." +
-                "pre2 -> #goal action.");
+                "pre1 -> +pre2 Actions.action." +
+                "pre2 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
@@ -66,9 +68,9 @@ public class ExecutorTest {
     @Test
     public void with_2preconditions_test() throws IOException, ExecutionFailedException {
         RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> +pre2 action." +
-                "pre1 -> +pre3 action." +
-                "pre2, pre3 -> #goal action.");
+                "pre1 -> +pre2 Actions.action." +
+                "pre1 -> +pre3 Actions.action." +
+                "pre2, pre3 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
@@ -83,10 +85,10 @@ public class ExecutorTest {
     @Test
     public void rules_out_of_order_test() throws IOException, ExecutionFailedException {
         RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre2 -> +pre4 action." +
-                "pre1 -> +pre2 action." +
-                "pre1 -> +pre3 action." +
-                "pre3, pre4 -> #goal action.");
+                "pre2 -> +pre4 Actions.action." +
+                "pre1 -> +pre2 Actions.action." +
+                "pre1 -> +pre3 Actions.action." +
+                "pre3, pre4 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
@@ -101,13 +103,13 @@ public class ExecutorTest {
     @Test
     public void dead_end_test() throws IOException, ExecutionFailedException {
         RuleLexer ruleLexer = new RuleLexer("pre7." +
-                "pre2 -> +pre1 action." +
-                "pre4 -> +pre2 action." +
-                "pre7 -> +pre3 action." +
-                "pre6 -> +pre3 action." +
-                "pre3 -> +pre1 action." +
-                "pre1 -> #goal action." +
-                "pre5 -> +pre2 action.");
+                "pre2 -> +pre1 Actions.action." +
+                "pre4 -> +pre2 Actions.action." +
+                "pre7 -> +pre3 Actions.action." +
+                "pre6 -> +pre3 Actions.action." +
+                "pre3 -> +pre1 Actions.action." +
+                "pre1 -> #goal Actions.action." +
+                "pre5 -> +pre2 Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
@@ -122,9 +124,9 @@ public class ExecutorTest {
     @Test
     public void withDeletions_test() throws IOException, ExecutionFailedException {
         RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> +pre2 action." +
-                "pre1 -> +pre2 -pre1 action." +
-                "pre1, pre2 -> #goal action.");
+                "pre1 -> +pre2 Actions.action." +
+                "pre1 -> +pre2 -pre1 Actions.action." +
+                "pre1, pre2 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
@@ -139,9 +141,9 @@ public class ExecutorTest {
     @Test
     public void find_rule_with_greater_weight_test() throws IOException, ExecutionFailedException {
         RuleLexer ruleLexer = new RuleLexer(
-                "-> +pre1 action (0.5)." +
-                        "-> +pre1 action (1)." +
-                        "pre1-> #goal action." +
+                "-> +pre1 Actions.action (0.5)." +
+                        "-> +pre1 Actions.action (1)." +
+                        "pre1-> #goal Actions.action." +
                         "");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -157,9 +159,9 @@ public class ExecutorTest {
     @Test
     public void find_rule_with_greater_weight2_test() throws IOException, ExecutionFailedException {
         RuleLexer ruleLexer = new RuleLexer(
-                        "-> +pre1 action (1)." +
-                        "-> +pre1 action (0.5)." +
-                        "pre1-> #goal action." +
+                        "-> +pre1 Actions.action (1)." +
+                        "-> +pre1 Actions.action (0.5)." +
+                        "pre1-> #goal Actions.action." +
                         "");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -177,9 +179,9 @@ public class ExecutorTest {
         // This is also not possible in the original algorithm, because it is not possible to delete predicates that you
         // need later on, even thought you could add them again.
         RuleLexer ruleLexer = new RuleLexer(
-                "-> +pre1 action (0.5)." +
-                        "-> +pre1 action (0.6)." +
-                        "pre1-> #goal -pre1 action." +
+                "-> +pre1 Actions.action (0.5)." +
+                        "-> +pre1 Actions.action (0.6)." +
+                        "pre1-> #goal -pre1 Actions.action." +
                         "");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());

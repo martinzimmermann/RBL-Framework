@@ -1,6 +1,7 @@
 package at.tugraz.ist.compiler.rule;
 
 import at.tugraz.ist.compiler.Setting;
+import at.tugraz.ist.compiler.interpreter.ClassCompiler;
 import at.tugraz.ist.compiler.interpreter.Memory;
 import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
@@ -21,11 +22,12 @@ public class RuleGeneratorVisitorTests {
     public void addition_rule_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer("pre1. " +
                 "pre2." +
-                "pre1, pre2 -> +post -pre1 -pre2 action 0.2.");
+                "pre1, pre2 -> +post -pre1 -pre2 Actions.action 0.2.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         Memory memory = gen.getMemory();
@@ -38,7 +40,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals(1, rules.size());
         Rule rule = rules.get(0);
 
-        assertEquals(rule.getAction(), "action");
+        assertEquals(rule.getAction(), "Actions.action");
         assertEquals(rule.getRuleGoal(), 0.2);
         assertEquals(rule.getWorldAddition(), new Predicate("post"));
         assertEquals(rule.getGoal(), null);
@@ -61,11 +63,12 @@ public class RuleGeneratorVisitorTests {
 
     @Test
     public void goal_rule_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("-> #goal action.");
+        RuleLexer ruleLexer = new RuleLexer("-> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         List<Rule> atoms = gen.getRules();
@@ -73,7 +76,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals(1, atoms.size());
         Rule rule = atoms.get(0);
 
-        assertEquals(rule.getAction(), "action");
+        assertEquals(rule.getAction(), "Actions.action");
         assertEquals(rule.getRuleGoal(), 1.0);
         assertEquals(rule.getWorldAddition(), null);
         assertEquals(rule.getGoal(), "goal");
@@ -92,11 +95,12 @@ public class RuleGeneratorVisitorTests {
 
     @Test
     public void alphaList_std_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("-> action (1/2).");
+        RuleLexer ruleLexer = new RuleLexer("-> Actions.action (1/2).");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         List<Rule> rules = gen.getRules();
@@ -104,7 +108,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals(1, rules.size());
         Rule rule = rules.get(0);
 
-        assertEquals(rule.getAction(), "action");
+        assertEquals(rule.getAction(), "Actions.action");
         assertEquals(rule.getRuleGoal(), 1.0);
         assertEquals(rule.getWorldAddition(), null);
         assertEquals(rule.getGoal(), null);
@@ -123,11 +127,12 @@ public class RuleGeneratorVisitorTests {
 
     @Test
     public void alphaList_list_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("-> action (0 <= a <= 0.5: a*2, 0.5 < a <= 1: a).");
+        RuleLexer ruleLexer = new RuleLexer("-> Actions.action (0 <= a <= 0.5: a*2, 0.5 < a <= 1: a).");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         List<Rule> atoms = gen.getRules();
@@ -135,7 +140,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals(1, atoms.size());
         Rule rule = atoms.get(0);
 
-        assertEquals(rule.getAction(), "action");
+        assertEquals(rule.getAction(), "Actions.action");
         assertEquals(rule.getRuleGoal(), 1.0);
         assertEquals(rule.getWorldAddition(), null);
         assertEquals(rule.getGoal(), null);
@@ -159,11 +164,12 @@ public class RuleGeneratorVisitorTests {
 
     @Test
     public void alphaList_list_with_std_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("-> action (0 <= a <= 0.25: a*2, 0.5 < a <= 0.75: a, 1).");
+        RuleLexer ruleLexer = new RuleLexer("-> Actions.action (0 <= a <= 0.25: a*2, 0.5 < a <= 0.75: a, 1).");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         List<Rule> atoms = gen.getRules();
@@ -171,7 +177,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals(1, atoms.size());
         Rule rule = atoms.get(0);
 
-        assertEquals(rule.getAction(), "action");
+        assertEquals(rule.getAction(), "Actions.action");
         assertEquals(rule.getRuleGoal(), 1.0);
         assertEquals(rule.getWorldAddition(), null);
         assertEquals(rule.getGoal(), null);

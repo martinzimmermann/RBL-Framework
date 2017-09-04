@@ -2,7 +2,6 @@ package at.tugraz.ist.compiler.interpreter;
 
 import at.tugraz.ist.compiler.Setting;
 
-import javax.tools.JavaCompiler;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.IOException;
@@ -18,9 +17,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Compiler {
+public class ClassCompiler {
     public static void compileClasses(Setting setting) throws IOException {
-        JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
+        javax.tools.JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
         StandardJavaFileManager sjfm = jc.getStandardFileManager(null, null, null);
         String path = setting.getPathToJavaFiles();
         List<String> files;

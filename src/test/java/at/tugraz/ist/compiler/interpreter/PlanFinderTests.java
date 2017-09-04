@@ -20,11 +20,12 @@ public class PlanFinderTests {
 
     @Test
     public void simple_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("-> #goal action.");
+        RuleLexer ruleLexer = new RuleLexer("-> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         Memory memory = gen.getMemory();
@@ -40,11 +41,12 @@ public class PlanFinderTests {
     @Test
     public void with_1precondition_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> #goal action.");
+                "pre1 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         Memory memory = gen.getMemory();
@@ -60,12 +62,13 @@ public class PlanFinderTests {
     @Test
     public void with_2steps_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> +pre2 action." +
-                "pre2 -> #goal action.");
+                "pre1 -> +pre2 Actions.action." +
+                "pre2 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         Memory memory = gen.getMemory();
@@ -82,13 +85,14 @@ public class PlanFinderTests {
     @Test
     public void with_2preconditions_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> +pre2 action." +
-                "pre1 -> +pre3 action." +
-                "pre2, pre3 -> #goal action.");
+                "pre1 -> +pre2 Actions.action." +
+                "pre1 -> +pre3 Actions.action." +
+                "pre2, pre3 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         Memory memory = gen.getMemory();
@@ -103,14 +107,15 @@ public class PlanFinderTests {
     @Test
     public void rules_out_of_order_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre2 -> +pre4 action." +
-                "pre1 -> +pre2 action." +
-                "pre1 -> +pre3 action." +
-                "pre3, pre4 -> #goal action.");
+                "pre2 -> +pre4 Actions.action." +
+                "pre1 -> +pre2 Actions.action." +
+                "pre1 -> +pre3 Actions.action." +
+                "pre3, pre4 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         Memory memory = gen.getMemory();
@@ -125,17 +130,18 @@ public class PlanFinderTests {
     @Test
     public void dead_end_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer("pre7." +
-                "pre2 -> +pre1 action." +
-                "pre4 -> +pre2 action." +
-                "pre7 -> +pre3 action." +
-                "pre6 -> +pre3 action." +
-                "pre3 -> +pre1 action." +
-                "pre1 -> #goal action." +
-                "pre5 -> +pre2 action.");
+                "pre2 -> +pre1 Actions.action." +
+                "pre4 -> +pre2 Actions.action." +
+                "pre7 -> +pre3 Actions.action." +
+                "pre6 -> +pre3 Actions.action." +
+                "pre3 -> +pre1 Actions.action." +
+                "pre1 -> #goal Actions.action." +
+                "pre5 -> +pre2 Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         Memory memory = gen.getMemory();
@@ -150,13 +156,14 @@ public class PlanFinderTests {
     @Test
     public void withDeletions_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> +pre2 action." +
-                "pre1 -> +pre2 -pre1 action." +
-                "pre1, pre2 -> #goal action.");
+                "pre1 -> +pre2 Actions.action." +
+                "pre1 -> +pre2 -pre1 Actions.action." +
+                "pre1, pre2 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         Memory memory = gen.getMemory();
@@ -171,13 +178,14 @@ public class PlanFinderTests {
     @Test
     public void not_fulfillable_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "fail -> +pre2 -pre1 action." +
-                "fail -> +pre2 action." +
-                "pre1, pre2 -> #goal action.");
+                "fail -> +pre2 -pre1 Actions.action." +
+                "fail -> +pre2 Actions.action." +
+                "pre1, pre2 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         Memory memory = gen.getMemory();
@@ -193,14 +201,15 @@ public class PlanFinderTests {
         // This is also not possible in the original algorithm, because it is not possible to delete predicates that you
         // need later on, even thought you could add them again.
         RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> +pre2 -pre1 action." +
-                "pre2 -> +pre1 action." +
-                "pre1, pre2 -> #goal action." +
+                "pre1 -> +pre2 -pre1 Actions.action." +
+                "pre2 -> +pre1 Actions.action." +
+                "pre1, pre2 -> #goal Actions.action." +
                 "");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         Memory memory = gen.getMemory();
@@ -214,14 +223,15 @@ public class PlanFinderTests {
     @Test
     public void find_rule_with_greater_weight_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer(
-                "-> +pre1 action (0.5)." +
-                        "-> +pre1 action (1)." +
-                        "pre1-> #goal action." +
+                "-> +pre1 Actions.action (0.5)." +
+                        "-> +pre1 Actions.action (1)." +
+                        "pre1-> #goal Actions.action." +
                         "");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
                 Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         Memory memory = gen.getMemory();
@@ -243,6 +253,7 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
 
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         Memory memory = gen.getMemory();
@@ -261,6 +272,7 @@ public class PlanFinderTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
         Memory memory = gen.getMemory();
