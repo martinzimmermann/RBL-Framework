@@ -54,9 +54,14 @@ class RuleBasedCompiler {
             }
 
             compile = false;
-            if (args.length == 5 && args[1].equals("-n")) {
+            if (args.length == 5 && args[1].equals("-times")) {
                 try {
                     numberOfRuns = Integer.parseInt(args[2]);
+                    if(numberOfRuns < 0)
+                    {
+                        printHelp();
+                        return null;
+                    }
                 } catch (NumberFormatException e) {
                     printHelp();
                     return null;
@@ -84,7 +89,7 @@ class RuleBasedCompiler {
 
     private static void printHelp() {
         System.out.println("Usage:\n" +
-                "   rule interprete [-n n] PATHTOJAVAFILES PATHTORULEFILE           interprets the rules n times\n" +
+                "   rule interprete [-times n] PATHTOJAVAFILES PATHTORULEFILE           interprets the rules n times, where n must be >= 0\n" +
                 "   rule compile [-o outputpath] PATHTOJAVAFILES PATHTORULEFILE     compiles th rules to Java source\n" +
                 "   rule (-h | --help)                                              shows this help");
     }

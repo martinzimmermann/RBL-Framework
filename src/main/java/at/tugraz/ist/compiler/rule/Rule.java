@@ -53,7 +53,8 @@ public class Rule extends Atom  implements Comparable<Rule> {
         this.worldAddition = worldAddition;
         this.preconditions = preconditions;
 
-        //oh boy, some dangerous stuff ahead
+        // oh boy, some dangerous stuff ahead
+        // TODO: also compile other classes
         try {
             JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
             StandardJavaFileManager sjfm = jc.getStandardFileManager(null, null, null);
