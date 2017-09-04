@@ -1,8 +1,3 @@
-package at.tugraz.ist.compiler.interpreter;
-
-import at.tugraz.ist.compiler.rule.InterpreterRule;
-import at.tugraz.ist.compiler.rule.Rule;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

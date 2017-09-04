@@ -1,8 +1,3 @@
-package at.tugraz.ist.compiler.rule;
-
-import at.tugraz.ist.compiler.Setting;
-import at.tugraz.ist.compiler.interpreter.Memory;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -10,8 +5,8 @@ import java.util.List;
 public class InterpreterRule extends Rule {
     private final RuleAction action;
 
-    public InterpreterRule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions, Setting setting) throws ClassNotFoundException {
-        super(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions, setting);
+    public InterpreterRule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions) throws ClassNotFoundException {
+        super(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions);
         try {
             Class actionClass = Class.forName(getAction());
             Constructor constructor = actionClass.getConstructor(new Class[0]);

@@ -1,8 +1,3 @@
-package at.tugraz.ist.compiler.interpreter;
-
-import at.tugraz.ist.compiler.rule.Predicate;
-import at.tugraz.ist.compiler.rule.Rule;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -3,12 +3,12 @@ package at.tugraz.ist.compiler.interpreter;
 import at.tugraz.ist.compiler.Setting;
 import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
+import at.tugraz.ist.compiler.rule.InterpreterRule;
 import at.tugraz.ist.compiler.rule.Rule;
 import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -32,7 +32,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
         assertEquals(1, plan.size());
         assertEquals(rules.get(0), plan.get(0));
@@ -45,7 +45,7 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -53,7 +53,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
         assertEquals(1, plan.size());
         assertEquals(rules.get(0), plan.get(0));
@@ -67,7 +67,7 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -75,7 +75,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
         assertEquals(2, plan.size());
         assertEquals(rules.get(0), plan.get(0));
@@ -91,7 +91,7 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -99,7 +99,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
         assertEquals(3, plan.size());
     }
@@ -114,7 +114,7 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -122,7 +122,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
         assertEquals(4, plan.size());
     }
@@ -140,7 +140,7 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -148,7 +148,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
         assertEquals(3, plan.size());
     }
@@ -162,7 +162,7 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -170,7 +170,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
         assertEquals(2, plan.size());
     }
@@ -184,7 +184,7 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -192,7 +192,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNull(plan);
     }
 
@@ -208,7 +208,7 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -216,7 +216,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNull(plan);
     }
 
@@ -230,7 +230,7 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-                Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
+                Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -238,7 +238,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
         assertEquals(2, plan.size());
         assertEquals(rules.get(1), plan.get(0));
@@ -252,7 +252,7 @@ public class PlanFinderTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
 
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -260,7 +260,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
         assertEquals(2, plan.size());
     }
@@ -271,7 +271,7 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -279,7 +279,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
         assertNotNull(plan);
         assertEquals(5, plan.size());
     }

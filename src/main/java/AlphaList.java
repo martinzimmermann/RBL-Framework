@@ -1,8 +1,6 @@
-package at.tugraz.ist.compiler.rule;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AlphaList {
 
@@ -33,10 +31,5 @@ public class AlphaList {
         }
 
         throw new IllegalArgumentException("This AlphaList has no entry for the provided alpha, alpha was " + alpha);
-    }
-
-    public String getConstructorParameter() {
-        String params = entries.stream().map(e -> "new AlphaEntry(" + e.getConstructorParameter() + ")").collect(Collectors.joining(", "));
-        return "new ArrayList<AlphaEntry>(Arrays.asList(new AlphaEntry[]{" + params + "}))";
     }
 }

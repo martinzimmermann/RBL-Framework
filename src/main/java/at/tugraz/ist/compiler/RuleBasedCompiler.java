@@ -1,13 +1,13 @@
 package at.tugraz.ist.compiler;
 
+import at.tugraz.ist.compiler.compiler.SourceWriter;
 import at.tugraz.ist.compiler.interpreter.ClassCompiler;
-import at.tugraz.ist.compiler.interpreter.ExecutionFailedException;
 import at.tugraz.ist.compiler.interpreter.Executor;
 import at.tugraz.ist.compiler.interpreter.Model;
 import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
+import at.tugraz.ist.compiler.rule.ActionFailedException;
 import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.tools.ToolProvider;
 import java.io.IOException;
@@ -19,7 +19,7 @@ class RuleBasedCompiler {
         if (setting == null) return;
 
         try {
-            if(!setting.isCompiling())
+            if (!setting.isCompiling())
                 ClassCompiler.compileClasses(setting);
 
             RuleLexer ruleLexer = new RuleLexer(Paths.get(setting.getPathToRuleFile()));
@@ -28,19 +28,26 @@ class RuleBasedCompiler {
 
             Model model = new Model(gen.getMemory(), gen.getRules());
 
-            Executor executor = new Executor();
-            executor.executeNTimes(model, setting.getNumberOfRuns());
+            if (setting.isCompiling()) {
+                SourceWriter writer = new SourceWriter(setting.getOutputPath(), setting.getPackageName());
+                writer.writeSource(model);
+
+            } else {
+                Executor executor = new Executor();
+                executor.executeNTimes(model, setting.getNumberOfRuns());
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ExecutionFailedException e) {
+        } catch (ActionFailedException e) {
             e.printStackTrace();
         }
     }
 
     private static Setting generateSetting(String[] args) {
-        String javaFiles;
+        String javaFiles = null;
         String ruleFile;
+        String outputpath = null;
         boolean compile;
         int numberOfRuns = 1;
 
@@ -60,8 +67,7 @@ class RuleBasedCompiler {
             if (args.length == 5 && args[1].equals("-times")) {
                 try {
                     numberOfRuns = Integer.parseInt(args[2]);
-                    if(numberOfRuns < 0)
-                    {
+                    if (numberOfRuns < 0) {
                         printHelp();
                         return null;
                     }
@@ -80,20 +86,29 @@ class RuleBasedCompiler {
             }
 
         } else if (args[0].equals("compile")) {
-            throw new NotImplementedException();
+            compile = true;
+            if (args.length == 4 && args[1].equals("-o")) {
+                outputpath = args[2];
+                ruleFile = args[3];
+            } else if (args.length == 2) {
+                ruleFile = args[1];
+            } else {
+                printHelp();
+                return null;
+            }
         } else {
             printHelp();
             return null;
         }
 
-        Setting setting = new Setting(javaFiles, ruleFile, compile, numberOfRuns);
+        Setting setting = new Setting(javaFiles, ruleFile, compile, numberOfRuns, outputpath);
         return setting;
     }
 
     private static void printHelp() {
         System.out.println("Usage:\n" +
                 "   rule interpret [-times n] PATHTOJAVAFILES PATHTORULEFILE           interprets the rules n times, where n must be >= 0\n" +
-                "   rule compile [-o outputpath] PATHTOJAVAFILES PATHTORULEFILE     compiles th rules to Java source\n" +
-                "   rule (-h | --help)                                              shows this help");
+                "   rule compile [-o outputpath] [-p PACKAGENAME] PATHTORULEFILE       compiles th rules to Java source\n" +
+                "   rule (-h | --help)                                                 shows this help");
     }
 }

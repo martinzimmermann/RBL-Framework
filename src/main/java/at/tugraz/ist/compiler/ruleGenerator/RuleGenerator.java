@@ -8,7 +8,6 @@ import at.tugraz.ist.compiler.rule.Rule;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class RuleGenerator {

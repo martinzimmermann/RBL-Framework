@@ -1,14 +1,14 @@
 package at.tugraz.ist.compiler.interpreter;
 
 import at.tugraz.ist.compiler.rule.ActionFailedException;
-import at.tugraz.ist.compiler.rule.PreConditionsNotMetException;
+import at.tugraz.ist.compiler.rule.InterpreterRule;
 import at.tugraz.ist.compiler.rule.Rule;
 
 import java.util.List;
 
 public class Executor {
 
-    public void executeOnce(Model model) throws ExecutionFailedException
+    public void executeOnce(Model model) throws ActionFailedException
     {
         List<Rule> rules = model.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
@@ -16,9 +16,9 @@ public class Executor {
         Rule goal = goals.get(0);
 
         Memory memory = model.getMemory();
-        List<Rule> plan = PlanFinder.getPlanForRule(goal, memory, rules);
+        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goal, memory, rules);
 
-        for (Rule rule : plan) {
+        for (InterpreterRule rule : plan) {
             try {
                 rule.execute(memory);
                 memory.update(rule);
@@ -31,14 +31,10 @@ public class Executor {
                 rule.increaseDamping();
                 throw e;
             }
-            catch (PreConditionsNotMetException e)
-            {
-                assert (false);
-            }
         }
     }
 
-    public void executeNTimes(Model model, int n) throws ExecutionFailedException
+    public void executeNTimes(Model model, int n) throws ActionFailedException
     {
         for(int i = 0; i < n; i ++)
         {
