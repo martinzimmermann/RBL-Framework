@@ -26,7 +26,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -67,7 +67,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -99,7 +99,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -131,7 +131,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 
@@ -168,7 +168,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", true, 0);
+        Setting setting = new Setting("src/test/resources/Actions", "", false, 0);
         ClassCompiler.compileClasses(setting);
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
 

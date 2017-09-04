@@ -3,11 +3,9 @@ import at.tugraz.ist.compiler.Setting;
 import at.tugraz.ist.compiler.interpreter.ExecutionFailedException;
 import at.tugraz.ist.compiler.interpreter.Memory;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public class Rule extends Atom  implements Comparable<Rule> {
+public abstract class Rule extends Atom implements Comparable<Rule> {
 
     private final List<Predicate> preconditions;
     private final Predicate worldAddition;
@@ -16,9 +14,11 @@ public class Rule extends Atom  implements Comparable<Rule> {
     private final AlphaList alphaEntries ;
     private final double ruleGoal;
     private final String actionName;
-    private final RuleAction action;
     private double currentActivity = 0;
     private double damping = 0.5;
+
+    public abstract void execute(Memory memory) throws ExecutionFailedException;
+    public abstract void repairMemory(Memory memory);
 
     public Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions, Setting setting) throws ClassNotFoundException {
         if(action == null)
@@ -43,17 +43,6 @@ public class Rule extends Atom  implements Comparable<Rule> {
         this.worldAddition = worldAddition;
         this.preconditions = preconditions;
         this.actionName = action;
-
-
-        try {
-            Class actionClass = Class.forName(actionName);
-            Constructor constructor = actionClass.getConstructor(new Class[0]);
-            this.action = (RuleAction) constructor.newInstance(new Object[0]);
-        }
-        catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |  InvocationTargetException | InstantiationException e)
-        {
-            throw new ClassNotFoundException();
-        }
     }
 
     public List<Predicate> getPreconditions()
@@ -97,7 +86,7 @@ public class Rule extends Atom  implements Comparable<Rule> {
     }
 
     public String getAction() {
-        return action.getClass().getName();
+        return actionName;
     }
 
     @Override
@@ -147,7 +136,7 @@ public class Rule extends Atom  implements Comparable<Rule> {
         if (goal != null ? !goal.equals(rule.goal) : rule.goal != null) return false;
         if (!worldDeletions.equals(rule.worldDeletions)) return false;
         if (!alphaEntries.equals(rule.alphaEntries)) return false;
-        return action.equals(rule.action);
+        return actionName.equals(rule.actionName);
     }
 
     @Override
@@ -161,7 +150,7 @@ public class Rule extends Atom  implements Comparable<Rule> {
         result = 31 * result + alphaEntries.hashCode();
         temp = Double.doubleToLongBits(ruleGoal);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + action.hashCode();
+        result = 31 * result + actionName.hashCode();
         return result;
     }
 
@@ -172,13 +161,6 @@ public class Rule extends Atom  implements Comparable<Rule> {
         double thisWeight = alphaEntries.calculateWeight(currentActivity) * (ruleGoal - currentActivity) * (1-damping);
 
         return otherWeight == thisWeight ? 0 : thisWeight > otherWeight ? -1 : 1;
-    }
-
-    public void execute(Memory memory) throws ExecutionFailedException{
-        if (!memory.containsAll(this.getPreconditions()))
-            throw new PreConditionsNotMetException();
-
-        action.execute(memory);
     }
 
     public void decreaseDamping() {
@@ -193,9 +175,5 @@ public class Rule extends Atom  implements Comparable<Rule> {
 
     public void increaseActivity() {
         currentActivity = (currentActivity + ruleGoal) / 2;
-    }
-
-    public void repairMemory(Memory memory) {
-        action.repair(memory);
     }
 }
