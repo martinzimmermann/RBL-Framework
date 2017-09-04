@@ -28,6 +28,7 @@ public class Rule extends Atom  implements Comparable<Rule> {
     private final List<Predicate> worldDeletions;
     private final AlphaList alphaEntries ;
     private final double ruleGoal;
+    private final String actionName;
     private final RuleAction action;
     private double currentActivity = 0;
     private double damping = 0.5;
@@ -54,35 +55,15 @@ public class Rule extends Atom  implements Comparable<Rule> {
         this.goal = goal;
         this.worldAddition = worldAddition;
         this.preconditions = preconditions;
+        this.actionName = action;
 
-        // oh boy, some dangerous stuff ahead
-        // TODO: also compile other classes
+
         try {
-            JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
-            StandardJavaFileManager sjfm = jc.getStandardFileManager(null, null, null);
-            String path = setting.getPathToJavaFiles();
-            List<String> files;
-
-            try (Stream<Path> paths = Files.walk(Paths.get(path))) {
-                files = paths.filter(Files::isRegularFile).map(Path::toString).collect(Collectors.toList());
-            }
-
-            Iterable fileObjects = sjfm.getJavaFileObjects(files.toArray(new String[]{}));
-
-            Path path2 = Files.createTempDirectory("temp" );
-            String folderPath = path2.normalize().toString();
-            String[] options = new String[]{"-d", folderPath};
-            jc.getTask(null, null, null, Arrays.asList(options), null, fileObjects).call();
-            sjfm.close();
-
-            URL[] urls = new URL[]{ path2.toUri().toURL()};
-            URLClassLoader ucl = new URLClassLoader(urls);
-
-            Class actionClass = ucl.loadClass(action);
+            Class actionClass = Class.forName(actionName);
             Constructor constructor = actionClass.getConstructor(new Class[0]);
             this.action = (RuleAction) constructor.newInstance(new Object[0]);
         }
-        catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |  InvocationTargetException | InstantiationException | IOException e)
+        catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |  InvocationTargetException | InstantiationException e)
         {
             throw new ClassNotFoundException();
         }
@@ -158,7 +139,8 @@ public class Rule extends Atom  implements Comparable<Rule> {
         if(getWorldDeletions().size() != 0)
             string.deleteCharAt(string.length() - 1);
 
-        string.deleteCharAt(string.length() - 1);
+        string.append(" " + actionName);
+
         string.append(".");
 
         return string.toString();

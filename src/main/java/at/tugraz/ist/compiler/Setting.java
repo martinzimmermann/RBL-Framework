@@ -1,10 +1,13 @@
 package at.tugraz.ist.compiler;
 
+import java.net.URL;
+
 public class Setting {
     private final String pathToJavaFiles;
     private final String pathToRuleFile;
     private final boolean compiling;
     private final int numberOfRuns;
+    private URL classPath;
 
     public Setting(String pathToJavaFiles, String pathToRuleFile, boolean compiling, int numberOfRuns) {
         this.pathToJavaFiles = pathToJavaFiles;
@@ -27,5 +30,13 @@ public class Setting {
 
     public int getNumberOfRuns() {
         return numberOfRuns;
+    }
+
+    public void setClassPath(URL classPath) {
+        this.classPath = classPath;
+    }
+
+    public URL getClassPath() {
+        return classPath;
     }
 }

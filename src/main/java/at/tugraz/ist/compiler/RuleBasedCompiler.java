@@ -1,5 +1,6 @@
 package at.tugraz.ist.compiler;
 
+import at.tugraz.ist.compiler.interpreter.Compiler;
 import at.tugraz.ist.compiler.interpreter.ExecutionFailedException;
 import at.tugraz.ist.compiler.interpreter.Executor;
 import at.tugraz.ist.compiler.interpreter.Model;
@@ -19,6 +20,9 @@ class RuleBasedCompiler {
         if (setting == null) return;
 
         try {
+            if(!setting.isCompiling())
+                Compiler.compileClasses(setting);
+
             RuleLexer ruleLexer = new RuleLexer(Paths.get(setting.getPathToRuleFile()));
             RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
             RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
