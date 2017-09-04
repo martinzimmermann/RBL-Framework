@@ -14,8 +14,11 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Rule extends Atom  implements Comparable<Rule> {
 
@@ -30,7 +33,6 @@ public class Rule extends Atom  implements Comparable<Rule> {
     private double damping = 0.5;
 
     public Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions, Setting setting) throws ClassNotFoundException {
-
         if(action == null)
             throw new IllegalArgumentException("action can not be null");
 
@@ -58,9 +60,14 @@ public class Rule extends Atom  implements Comparable<Rule> {
         try {
             JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
             StandardJavaFileManager sjfm = jc.getStandardFileManager(null, null, null);
-            String path = setting.getPathToJavaFiles() + "\\"  + action + ".java";
-            File javaFile = new File(path);
-            Iterable fileObjects = sjfm.getJavaFileObjects(javaFile);
+            String path = setting.getPathToJavaFiles();
+            List<String> files;
+
+            try (Stream<Path> paths = Files.walk(Paths.get(path))) {
+                files = paths.filter(Files::isRegularFile).map(Path::toString).collect(Collectors.toList());
+            }
+
+            Iterable fileObjects = sjfm.getJavaFileObjects(files.toArray(new String[]{}));
 
             Path path2 = Files.createTempDirectory("temp" );
             String folderPath = path2.normalize().toString();

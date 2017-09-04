@@ -26,7 +26,7 @@ worldDeletions: (('-' predicate)*);
 rule_goal:  NUMBER;
 alist:      '('(( alistentry (',' alistentry)* (',' expr)?) | expr )')';
 alistentry: NUMBER (LT|LTE) 'a' (LT|LTE) NUMBER ':' expr;
-action:     ID;
+action:     ID('.'ID)*;
 
 expr: sign value
     | expr mulop expr
