@@ -24,9 +24,8 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
-        ClassCompiler.compileClasses(setting);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();
@@ -45,9 +44,8 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
-        ClassCompiler.compileClasses(setting);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();
@@ -67,9 +65,8 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
-        ClassCompiler.compileClasses(setting);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();
@@ -91,9 +88,8 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
-        ClassCompiler.compileClasses(setting);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();
@@ -114,9 +110,8 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
-        ClassCompiler.compileClasses(setting);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();
@@ -140,9 +135,8 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
-        ClassCompiler.compileClasses(setting);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();
@@ -162,9 +156,8 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
-        ClassCompiler.compileClasses(setting);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();
@@ -184,9 +177,8 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
-        ClassCompiler.compileClasses(setting);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();
@@ -208,9 +200,8 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
-        ClassCompiler.compileClasses(setting);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();
@@ -230,9 +221,8 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-                Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
-        ClassCompiler.compileClasses(setting);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+                ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();
@@ -252,9 +242,8 @@ public class PlanFinderTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
 
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
-        ClassCompiler.compileClasses(setting);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();
@@ -271,9 +260,8 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 0, null);
-        ClassCompiler.compileClasses(setting);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();

@@ -10,8 +10,8 @@ import java.util.List;
 public class InterpreterRule extends Rule {
     private final RuleAction action;
 
-    public InterpreterRule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions, Setting setting) throws ClassNotFoundException {
-        super(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions, setting);
+    public InterpreterRule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions) throws ClassNotFoundException {
+        super(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions);
         try {
             Class actionClass = Class.forName(getAction());
             Constructor constructor = actionClass.getConstructor(new Class[0]);

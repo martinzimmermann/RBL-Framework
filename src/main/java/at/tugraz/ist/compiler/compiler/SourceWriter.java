@@ -759,8 +759,8 @@ public class SourceWriter {
                 "            return false;\n" +
                 "        }\n" +
                 "\n" +
-                "        if(result instanceof Boolean)\n" +
-                "            return (Boolean)result;\n" +
+                "        if(result instanceof Setting)\n" +
+                "            return (Setting)result;\n" +
                 "        else\n" +
                 "            return false;\n" +
                 "    }\n" +

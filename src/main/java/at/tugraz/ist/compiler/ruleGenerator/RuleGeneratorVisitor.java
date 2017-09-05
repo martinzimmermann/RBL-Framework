@@ -1,6 +1,5 @@
 package at.tugraz.ist.compiler.ruleGenerator;
 
-import at.tugraz.ist.compiler.Setting;
 import at.tugraz.ist.compiler.antlr.RuleGrammarBaseVisitor;
 import at.tugraz.ist.compiler.antlr.RuleGrammarParser.*;
 import at.tugraz.ist.compiler.rule.*;
@@ -12,10 +11,10 @@ import java.util.stream.Collectors;
 
 public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
 
-    private Setting setting;
+    private boolean interpret;
 
-    public RuleGeneratorVisitor(Setting setting) {
-        this.setting = setting;
+    public RuleGeneratorVisitor(boolean interpret) {
+        this.interpret = interpret;
     }
 
     @Override
@@ -65,7 +64,7 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
         List<Atom> atoms = new ArrayList<>();
 
         RuleBuilder rule = new RuleBuilder();
-        rule = rule.setSetting(setting)
+        rule = rule.setInterpret(interpret)
                 .setAction(ctx.action().getText());
 
         if(ctx.Goal != null) rule = rule.setGoal(ctx.Goal.getText());

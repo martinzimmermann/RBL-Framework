@@ -1,10 +1,7 @@
 package at.tugraz.ist.compiler.rule;
 import at.tugraz.ist.compiler.Setting;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Rule extends Atom implements Comparable<Rule> {
@@ -19,7 +16,7 @@ public class Rule extends Atom implements Comparable<Rule> {
     private double currentActivity = 0;
     private double damping = 0.5;
 
-    public Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions, Setting setting) throws ClassNotFoundException {
+    public Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions) throws ClassNotFoundException {
         if(action == null)
             throw new IllegalArgumentException("action can not be null");
 

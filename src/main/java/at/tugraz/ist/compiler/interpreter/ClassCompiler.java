@@ -1,7 +1,5 @@
 package at.tugraz.ist.compiler.interpreter;
 
-import at.tugraz.ist.compiler.Setting;
-
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.IOException;
@@ -18,13 +16,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ClassCompiler {
-    public static void compileClasses(Setting setting) throws IOException {
+    public static void compileClasses(String pathToJavaFiles) throws IOException {
         javax.tools.JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
         StandardJavaFileManager sjfm = jc.getStandardFileManager(null, null, null);
-        String path = setting.getPathToJavaFiles();
         List<String> files;
 
-        try (Stream<Path> paths = Files.walk(Paths.get(path))) {
+        try (Stream<Path> paths = Files.walk(Paths.get(pathToJavaFiles))) {
             files = paths.filter(Files::isRegularFile).map(Path::toString).collect(Collectors.toList());
         }
 

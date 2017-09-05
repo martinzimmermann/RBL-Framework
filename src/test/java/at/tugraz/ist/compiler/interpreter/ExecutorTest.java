@@ -21,8 +21,8 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 1, null);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+                RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
         Executor executor = new Executor();
@@ -37,9 +37,8 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 1, null);
-        ClassCompiler.compileClasses(setting);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
         Model model = new Model(gen.getMemory(), gen.getRules());
 
         Executor executor = new Executor();
@@ -54,8 +53,7 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 1, null);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+                RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Model model = new Model(gen.getMemory(), gen.getRules());
 
@@ -72,8 +70,8 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 1, null);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
         Executor executor = new Executor();
@@ -90,8 +88,8 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 1, null);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
         Executor executor = new Executor();
@@ -111,8 +109,8 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 1, null);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
         Executor executor = new Executor();
@@ -128,8 +126,8 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 1, null);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
         Executor executor = new Executor();
@@ -146,8 +144,8 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 1, null);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
         Executor executor = new Executor();
@@ -164,8 +162,8 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 1, null);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
         Executor executor = new Executor();
@@ -184,8 +182,8 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 1, null);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
         Executor executor = new Executor();
@@ -199,8 +197,7 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 1, null);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+                RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Model model = new Model(gen.getMemory(), gen.getRules());
 
@@ -214,8 +211,7 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        Setting setting = new Setting("src/test/resources/Actions", "", false, 1, null);
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+                RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         Model model = new Model(gen.getMemory(), gen.getRules());
 

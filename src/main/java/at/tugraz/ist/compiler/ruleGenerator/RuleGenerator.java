@@ -12,19 +12,19 @@ import java.util.stream.Collectors;
 
 public class RuleGenerator {
     private final ParseTree parseTree;
-    private  final Setting setting;
+    private  final boolean interpret;
     private List<Atom> atoms = null;
 
-    public RuleGenerator(ParseTree parseTree, Setting setting)
+    public RuleGenerator(ParseTree parseTree, boolean interpret)
     {
         this.parseTree = parseTree;
-        this.setting = setting;
+        this.interpret = interpret;
     }
 
     public List<Rule> getRules()
     {
         if(atoms == null)
-            atoms = new RuleGeneratorVisitor(setting).visit(parseTree);
+            atoms = new RuleGeneratorVisitor(interpret).visit(parseTree);
 
         return atoms.stream().filter(atom -> atom instanceof Rule).map(atom -> (Rule) atom).collect(Collectors.toList());
     }
@@ -32,7 +32,7 @@ public class RuleGenerator {
     public Memory getMemory()
     {
         if(atoms == null)
-            atoms = new RuleGeneratorVisitor(setting).visit(parseTree);
+            atoms = new RuleGeneratorVisitor(interpret).visit(parseTree);
 
         List<Predicate> predicates = atoms.stream().filter(atom -> atom instanceof Predicate).map(atom -> (Predicate) atom).collect(Collectors.toList());
         return new Memory(predicates);

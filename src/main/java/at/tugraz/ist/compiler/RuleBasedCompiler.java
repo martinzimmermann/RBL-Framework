@@ -20,11 +20,11 @@ class RuleBasedCompiler {
 
         try {
             if (!setting.isCompiling())
-                ClassCompiler.compileClasses(setting);
+                ClassCompiler.compileClasses(setting.getPathToJavaFiles());
 
             RuleLexer ruleLexer = new RuleLexer(Paths.get(setting.getPathToRuleFile()));
             RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
-            RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), setting);
+            RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), !setting.isCompiling());
 
             Model model = new Model(gen.getMemory(), gen.getRules());
 
