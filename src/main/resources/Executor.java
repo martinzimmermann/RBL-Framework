@@ -20,8 +20,8 @@ public class Executor {
         model = new Model(memory, rules);
     }
 
-    public void executesTillGoalReached() throws NoPlanFoundException {
-        executesTillGoalReached(10);
+    public boolean executesTillGoalReached() throws NoPlanFoundException {
+        return executesTillGoalReached(10);
     }
 
     private boolean executesTillGoalReached(int limit) throws NoPlanFoundException {
