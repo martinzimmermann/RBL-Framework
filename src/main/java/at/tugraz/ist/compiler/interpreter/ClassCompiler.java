@@ -35,11 +35,11 @@ public class ClassCompiler {
 
         URLClassLoader urlClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
         Class<URLClassLoader> urlClass = URLClassLoader.class;
-        Method method = null;
+        Method method;
         try {
-            method = urlClass.getDeclaredMethod("addURL", new Class[]{URL.class});
+            method = urlClass.getDeclaredMethod("addURL", URL.class);
             method.setAccessible(true);
-            method.invoke(urlClassLoader, new Object[]{path2.toUri().toURL()});
+            method.invoke(urlClassLoader, path2.toUri().toURL());
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }

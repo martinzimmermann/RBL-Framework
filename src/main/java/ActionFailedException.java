@@ -1,2 +1,2 @@
-public class ActionFailedException extends Exception{
+class ActionFailedException extends Exception{
 }

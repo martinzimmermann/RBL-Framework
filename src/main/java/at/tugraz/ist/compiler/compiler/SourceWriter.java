@@ -8,14 +8,12 @@ import java.io.*;
 
 public class SourceWriter {
 
-    private final String outputPath;
-    private String packageName;
-    private String packagePath;
+    private final String packageName;
+    private final String packagePath;
 
     public SourceWriter(String outputPath, String packageName) {
-        this.outputPath = outputPath;
         this.packageName = packageName;
-        packagePath = this.outputPath + (this.outputPath.endsWith("\\") ? "" : "\\") + (this.packageName == null ? "" : this.packageName.replace(".", "\\"));
+        packagePath = outputPath + (outputPath.endsWith("\\") ? "" : "\\") + (this.packageName == null ? "" : this.packageName.replace(".", "\\"));
 
     }
 
@@ -34,10 +32,10 @@ public class SourceWriter {
         File file = new File(packagePath, "Executor.java");
         if (file.exists())
             file.delete();
-        boolean succes = file.createNewFile();
+        boolean success = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
-        if (packageName != null) if (packageName != null) writer.write("package " + packageName + ";\n");
+        if (packageName != null) writer.write("package " + packageName + ";\n");
 
         writer.write(
                 "import java.util.ArrayList;\n" +
@@ -136,7 +134,7 @@ public class SourceWriter {
         File file = new File(packagePath, "RuleAction.java");
         if (file.exists())
             file.delete();
-        boolean succes = file.createNewFile();
+        boolean success = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
         if (packageName != null) writer.write("package " + packageName + ";\n");
@@ -152,7 +150,7 @@ public class SourceWriter {
         File file = new File(packagePath, "Rule.java");
         if (file.exists())
             file.delete();
-        boolean succes = file.createNewFile();
+        boolean success = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
         if (packageName != null) writer.write("package " + packageName + ";\n");
@@ -335,7 +333,7 @@ public class SourceWriter {
         File file = new File(packagePath, "Predicate.java");
         if (file.exists())
             file.delete();
-        boolean succes = file.createNewFile();
+        boolean success = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
         if (packageName != null) writer.write("package " + packageName + ";\n");
@@ -385,7 +383,7 @@ public class SourceWriter {
         File file = new File(packagePath, "PlanFinder.java");
         if (file.exists())
             file.delete();
-        boolean succes = file.createNewFile();
+        boolean success = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
         if (packageName != null) writer.write("package " + packageName + ";\n");
@@ -447,7 +445,7 @@ public class SourceWriter {
         File file = new File(packagePath, "Plan.java");
         if (file.exists())
             file.delete();
-        boolean succes = file.createNewFile();
+        boolean success = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
         if (packageName != null) writer.write("package " + packageName + ";\n");
@@ -510,7 +508,7 @@ public class SourceWriter {
         File file = new File(packagePath, "Model.java");
         if (file.exists())
             file.delete();
-        boolean succes = file.createNewFile();
+        boolean success = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
         if (packageName != null) writer.write("package " + packageName + ";\n");
@@ -542,7 +540,7 @@ public class SourceWriter {
         File file = new File(packagePath, "Memory.java");
         if (file.exists())
             file.delete();
-        boolean succes = file.createNewFile();
+        boolean success = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
         if (packageName != null) writer.write("package " + packageName + ";\n");
@@ -592,7 +590,7 @@ public class SourceWriter {
         File file = new File(packagePath, "InterpreterRule.java");
         if (file.exists())
             file.delete();
-        boolean succes = file.createNewFile();
+        boolean success = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
         if (packageName != null) writer.write("package " + packageName + ";\n");
@@ -635,7 +633,7 @@ public class SourceWriter {
         File file = new File(packagePath, "Atom.java");
         if (file.exists())
             file.delete();
-        boolean succes = file.createNewFile();
+        boolean success = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
         if (packageName != null) writer.write("package " + packageName + ";\n");
@@ -649,7 +647,7 @@ public class SourceWriter {
         File file = new File(packagePath, "AlphaList.java");
         if (file.exists())
             file.delete();
-        boolean succes = file.createNewFile();
+        boolean success = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
         if (packageName != null) writer.write("package " + packageName + ";\n");
@@ -696,7 +694,7 @@ public class SourceWriter {
         File file = new File(packagePath, "AlphaEntry.java");
         if (file.exists())
             file.delete();
-        boolean succes = file.createNewFile();
+        boolean success = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
         if (packageName != null) writer.write("package " + packageName + ";\n");
@@ -772,7 +770,7 @@ public class SourceWriter {
         File file = new File(packagePath, "ActionFailedException.java");
         if (file.exists())
             file.delete();
-        boolean succes = file.createNewFile();
+        boolean success = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
         if (packageName != null) writer.write("package " + packageName + ";\n");

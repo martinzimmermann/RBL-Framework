@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class Rule extends Atom implements Comparable<Rule> {
+class Rule extends Atom implements Comparable<Rule> {
 
     private final List<Predicate> preconditions;
     private final Predicate worldAddition;
@@ -12,7 +12,7 @@ public class Rule extends Atom implements Comparable<Rule> {
     private double currentActivity = 0;
     private double damping = 0.5;
 
-    public Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions) throws ClassNotFoundException {
+    Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions) {
         if(action == null)
             throw new IllegalArgumentException("action can not be null");
 
@@ -47,7 +47,7 @@ public class Rule extends Atom implements Comparable<Rule> {
         return worldAddition;
     }
 
-    public String getGoal()
+    private String getGoal()
     {
         return goal;
     }
@@ -77,7 +77,7 @@ public class Rule extends Atom implements Comparable<Rule> {
         return ruleGoal;
     }
 
-    public String getAction() {
+    String getAction() {
         return actionName;
     }
 
@@ -152,7 +152,7 @@ public class Rule extends Atom implements Comparable<Rule> {
         double otherWeight = o.alphaEntries.calculateWeight(o.currentActivity) * (o.ruleGoal - o.currentActivity) * (1-o.damping);
         double thisWeight = alphaEntries.calculateWeight(currentActivity) * (ruleGoal - currentActivity) * (1-damping);
 
-        return otherWeight == thisWeight ? 0 : thisWeight > otherWeight ? -1 : 1;
+        return Double.compare(otherWeight, thisWeight);
     }
 
     public void decreaseDamping() {

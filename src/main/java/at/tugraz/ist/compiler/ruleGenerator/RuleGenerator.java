@@ -1,6 +1,5 @@
 package at.tugraz.ist.compiler.ruleGenerator;
 
-import at.tugraz.ist.compiler.Setting;
 import at.tugraz.ist.compiler.interpreter.Memory;
 import at.tugraz.ist.compiler.rule.Atom;
 import at.tugraz.ist.compiler.rule.Predicate;

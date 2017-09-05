@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class Model {
+class Model {
 
     private final Memory memory;
     private final List<Rule> rules;

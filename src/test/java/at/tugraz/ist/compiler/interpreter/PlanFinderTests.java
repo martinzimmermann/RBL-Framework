@@ -1,6 +1,5 @@
 package at.tugraz.ist.compiler.interpreter;
 
-import at.tugraz.ist.compiler.Setting;
 import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
 import at.tugraz.ist.compiler.rule.InterpreterRule;

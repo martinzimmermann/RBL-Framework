@@ -8,8 +8,7 @@ import java.util.List;
 
 public class Executor {
 
-    public void executeOnce(Model model) throws ActionFailedException
-    {
+    public void executeOnce(Model model) throws ActionFailedException, NoPlanFoundException {
         List<Rule> rules = model.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
         goals.sort(Rule::compareTo);
@@ -17,6 +16,8 @@ public class Executor {
 
         Memory memory = model.getMemory();
         List<InterpreterRule> plan = PlanFinder.getPlanForRule(goal, memory, rules);
+        if(plan == null)
+            throw new NoPlanFoundException();
 
         for (InterpreterRule rule : plan) {
             try {
@@ -34,8 +35,7 @@ public class Executor {
         }
     }
 
-    public void executeNTimes(Model model, int n) throws ActionFailedException
-    {
+    public void executeNTimes(Model model, int n) throws ActionFailedException, NoPlanFoundException {
         for(int i = 0; i < n; i ++)
         {
             try {

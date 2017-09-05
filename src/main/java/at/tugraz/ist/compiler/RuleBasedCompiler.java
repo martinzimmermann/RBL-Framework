@@ -4,6 +4,7 @@ import at.tugraz.ist.compiler.compiler.SourceWriter;
 import at.tugraz.ist.compiler.interpreter.ClassCompiler;
 import at.tugraz.ist.compiler.interpreter.Executor;
 import at.tugraz.ist.compiler.interpreter.Model;
+import at.tugraz.ist.compiler.interpreter.NoPlanFoundException;
 import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
 import at.tugraz.ist.compiler.rule.ActionFailedException;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 class RuleBasedCompiler {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoPlanFoundException {
         Setting setting = generateSetting(args);
         if (setting == null) return;
 
@@ -37,9 +38,7 @@ class RuleBasedCompiler {
                 executor.executeNTimes(model, setting.getNumberOfRuns());
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ActionFailedException e) {
+        } catch (IOException | ActionFailedException e) {
             e.printStackTrace();
         }
     }
@@ -111,12 +110,11 @@ class RuleBasedCompiler {
             return null;
         }
 
-        Setting setting = new Setting(javaFiles, ruleFile, compile, numberOfRuns, outputPath, packageName);
-        return setting;
+        return new Setting(javaFiles, ruleFile, compile, numberOfRuns, outputPath, packageName);
     }
 
     private static void checkPackageName(String packageName) {
-        if(!packageName.equals(packageName.toLowerCase()))
+        if (!packageName.equals(packageName.toLowerCase()))
             ErrorHandler.Instance().reportWarning(ErrorHandler.Type.Input, 0, 0, "Java package name should be in lower case letters.");
     }
 

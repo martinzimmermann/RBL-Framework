@@ -1,2 +1,2 @@
-public abstract class Atom {
+abstract class Atom {
 }

@@ -13,7 +13,7 @@ public class AlphaList {
         return new AlphaList(entries);
     }
 
-    public AlphaList(List<AlphaEntry> entries)
+    private AlphaList(List<AlphaEntry> entries)
     {
         this.entries = entries;
     }

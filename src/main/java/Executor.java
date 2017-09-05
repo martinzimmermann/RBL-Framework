@@ -1,10 +1,12 @@
+import at.tugraz.ist.compiler.interpreter.NoPlanFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Executor {
+class Executor {
 
-    Model model;
+    private Model model;
 
     public Executor() throws ClassNotFoundException {
         List<Rule> rules = new ArrayList<>();
@@ -19,11 +21,11 @@ public class Executor {
         model = new Model(memory, rules);
     }
 
-    public void executesTillGoalReached() {
+    public void executesTillGoalReached() throws NoPlanFoundException {
         executesTillGoalReached(10);
     }
 
-    public boolean executesTillGoalReached(int limit) {
+    private boolean executesTillGoalReached(int limit) throws NoPlanFoundException {
         for (int i = 0; i < limit; i++) {
             if(executeOnce())
                 return true;
@@ -31,7 +33,7 @@ public class Executor {
         return false;
     }
 
-    public boolean executeOnce() {
+    private boolean executeOnce() throws NoPlanFoundException {
         List<Rule> rules = model.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
         goals.sort(Rule::compareTo);
@@ -39,6 +41,8 @@ public class Executor {
 
         Memory memory = model.getMemory();
         List<InterpreterRule> plan = PlanFinder.getPlanForRule(goal, memory, rules);
+        if(plan == null)
+            throw new NoPlanFoundException();
 
         for (InterpreterRule rule : plan) {
             try {
@@ -55,7 +59,7 @@ public class Executor {
         return true;
     }
 
-    public void executesNTimes(int n) {
+    public void executesNTimes(int n) throws NoPlanFoundException {
         for (int i = 0; i < n; i++) {
             executeOnce();
         }
@@ -66,7 +70,7 @@ public class Executor {
     }
 
     public List<String> getMemory() {
-        return new ArrayList<String>(model.getMemory().getAllPredicates().stream().map(Predicate::toString).collect(Collectors.toList()));
+        return new ArrayList<>(model.getMemory().getAllPredicates().stream().map(Predicate::toString).collect(Collectors.toList()));
     }
 
 }

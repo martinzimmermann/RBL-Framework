@@ -8,8 +8,7 @@ public class Setting {
     private final boolean compiling;
     private final int numberOfRuns;
     private final String packageName;
-    private String outputPath;
-    private URL classPath;
+    private final String outputPath;
 
     public Setting(String pathToJavaFiles, String pathToRuleFile, boolean compiling, int numberOfRuns, String outputPath, String packageName) {
         this.pathToJavaFiles = pathToJavaFiles;
@@ -34,14 +33,6 @@ public class Setting {
 
     public int getNumberOfRuns() {
         return numberOfRuns;
-    }
-
-    public void setClassPath(URL classPath) {
-        this.classPath = classPath;
-    }
-
-    public URL getClassPath() {
-        return classPath;
     }
 
     public String getPackageName() {

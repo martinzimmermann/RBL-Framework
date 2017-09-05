@@ -2,7 +2,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-public class AlphaEntry {
+class AlphaEntry {
 
     private final String expression;
     private final String function;
