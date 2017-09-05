@@ -1,17 +1,16 @@
-import at.tugraz.ist.compiler.interpreter.NoPlanFoundException;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class Executor {
+public class Executor {
 
     private Model model;
 
     public Executor() throws ClassNotFoundException {
         List<Rule> rules = new ArrayList<>();
         // replace with rules
-        rules.add(new InterpreterRule(null, 0, null, null, null, null, null));
+        rules.add(new InterpreterRule("actions.collectTemperature", 1.0, new AlphaList(new ArrayList<AlphaEntry>(Arrays.asList(new AlphaEntry[]{new AlphaEntry("0 <= a <= 1","1")}))), new ArrayList<Predicate>(Arrays.asList(new Predicate[]{})), null, new Predicate("temperature_collected"), new ArrayList<Predicate>(Arrays.asList(new Predicate[]{}))));
 
         List<Predicate> predicates = new ArrayList<>();
         // replace with predicates
@@ -61,6 +60,12 @@ class Executor {
 
     public void executesNTimes(int n) throws NoPlanFoundException {
         for (int i = 0; i < n; i++) {
+            executeOnce();
+        }
+    }
+
+    public void executesForever(int n) throws NoPlanFoundException {
+        while (true) {
             executeOnce();
         }
     }

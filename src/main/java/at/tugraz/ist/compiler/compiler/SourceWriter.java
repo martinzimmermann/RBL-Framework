@@ -39,13 +39,16 @@ public class SourceWriter {
 
         writer.write(
                 "import java.util.ArrayList;\n" +
-                        "import java.util.List;\n" +
                         "import java.util.Arrays;\n" +
+                        "import java.util.List;\n" +
                         "import java.util.stream.Collectors;\n" +
+                        "\n" +
                         "public class Executor {\n" +
-                        "   Model model;\n" +
-                        "       public Executor() throws ClassNotFoundException {\n" +
-                        "          List<Rule> rules = new ArrayList<>();\n");
+                        "\n" +
+                        "    private Model model;\n" +
+                        "\n" +
+                        "    public Executor() throws ClassNotFoundException {\n" +
+                        "        List<Rule> rules = new ArrayList<>();\n");
         for (Rule rule : model.getRules()) {
             writer.write("          rules.add(new InterpreterRule(" + rule.getConstructorParameters() + "));\n");
         }
@@ -55,15 +58,15 @@ public class SourceWriter {
         }
 
         writer.write(
-                "       Memory memory = new Memory(predicates);\n" +
+                "        Memory memory = new Memory(predicates);\n" +
                         "        model = new Model(memory, rules);\n" +
                         "    }\n" +
                         "\n" +
-                        "    public void executesTillGoalReached() {\n" +
+                        "    public void executesTillGoalReached() throws NoPlanFoundException {\n" +
                         "        executesTillGoalReached(10);\n" +
                         "    }\n" +
                         "\n" +
-                        "    public boolean executesTillGoalReached(int limit) {\n" +
+                        "    private boolean executesTillGoalReached(int limit) throws NoPlanFoundException {\n" +
                         "        for (int i = 0; i < limit; i++) {\n" +
                         "            if(executeOnce())\n" +
                         "                return true;\n" +
@@ -71,7 +74,7 @@ public class SourceWriter {
                         "        return false;\n" +
                         "    }\n" +
                         "\n" +
-                        "    public boolean executeOnce() {\n" +
+                        "    private boolean executeOnce() throws NoPlanFoundException {\n" +
                         "        List<Rule> rules = model.getRules();\n" +
                         "        List<Rule> goals = PlanFinder.getGoalRules(rules);\n" +
                         "        goals.sort(Rule::compareTo);\n" +
@@ -79,6 +82,8 @@ public class SourceWriter {
                         "\n" +
                         "        Memory memory = model.getMemory();\n" +
                         "        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goal, memory, rules);\n" +
+                        "        if(plan == null)\n" +
+                        "            throw new NoPlanFoundException();\n" +
                         "\n" +
                         "        for (InterpreterRule rule : plan) {\n" +
                         "            try {\n" +
@@ -95,8 +100,14 @@ public class SourceWriter {
                         "        return true;\n" +
                         "    }\n" +
                         "\n" +
-                        "    public void executesNTimes(int n) {\n" +
+                        "    public void executesNTimes(int n) throws NoPlanFoundException {\n" +
                         "        for (int i = 0; i < n; i++) {\n" +
+                        "            executeOnce();\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "\n" +
+                        "    public void executesForever(int n) throws NoPlanFoundException {\n" +
+                        "        while (true) {\n" +
                         "            executeOnce();\n" +
                         "        }\n" +
                         "    }\n" +
@@ -106,7 +117,7 @@ public class SourceWriter {
                         "    }\n" +
                         "\n" +
                         "    public List<String> getMemory() {\n" +
-                        "        return new ArrayList<String>(model.getMemory().getAllPredicates().stream().map(Predicate::toString).collect(Collectors.toList()));\n" +
+                        "        return new ArrayList<>(model.getMemory().getAllPredicates().stream().map(Predicate::toString).collect(Collectors.toList()));\n" +
                         "    }\n" +
                         "\n" +
                         "}\n");
@@ -123,6 +134,7 @@ public class SourceWriter {
         writeInterpreterRule();
         writeMemory();
         writeModel();
+        writeNoPlanFoundException();
         writePlan();
         writePlanFinder();
         writePredicate();
@@ -169,7 +181,7 @@ public class SourceWriter {
                 "    private double currentActivity = 0;\n" +
                 "    private double damping = 0.5;\n" +
                 "\n" +
-                "    public Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions) throws ClassNotFoundException {\n" +
+                "    Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions) {\n" +
                 "        if(action == null)\n" +
                 "            throw new IllegalArgumentException(\"action can not be null\");\n" +
                 "\n" +
@@ -204,7 +216,7 @@ public class SourceWriter {
                 "        return worldAddition;\n" +
                 "    }\n" +
                 "\n" +
-                "    public String getGoal()\n" +
+                "    private String getGoal()\n" +
                 "    {\n" +
                 "        return goal;\n" +
                 "    }\n" +
@@ -234,7 +246,7 @@ public class SourceWriter {
                 "        return ruleGoal;\n" +
                 "    }\n" +
                 "\n" +
-                "    public String getAction() {\n" +
+                "    String getAction() {\n" +
                 "        return actionName;\n" +
                 "    }\n" +
                 "\n" +
@@ -309,7 +321,7 @@ public class SourceWriter {
                 "        double otherWeight = o.alphaEntries.calculateWeight(o.currentActivity) * (o.ruleGoal - o.currentActivity) * (1-o.damping);\n" +
                 "        double thisWeight = alphaEntries.calculateWeight(currentActivity) * (ruleGoal - currentActivity) * (1-damping);\n" +
                 "\n" +
-                "        return otherWeight == thisWeight ? 0 : thisWeight > otherWeight ? -1 : 1;\n" +
+                "        return Double.compare(otherWeight, thisWeight);\n" +
                 "    }\n" +
                 "\n" +
                 "    public void decreaseDamping() {\n" +
@@ -338,7 +350,7 @@ public class SourceWriter {
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
         if (packageName != null) writer.write("package " + packageName + ";\n");
 
-        writer.write("class Predicate extends Atom {\n" +
+        writer.write("public class Predicate extends Atom {\n" +
                 "\n" +
                 "    private final String name;\n" +
                 "\n" +
@@ -536,6 +548,20 @@ public class SourceWriter {
         writer.close();
     }
 
+    private void writeNoPlanFoundException() throws IOException {
+        File file = new File(packagePath, "NoPlanFoundException.java");
+        if (file.exists())
+            file.delete();
+        boolean success = file.createNewFile();
+        OutputStream stream = new FileOutputStream(file);
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
+        if (packageName != null) writer.write("package " + packageName + ";\n");
+
+        writer.write("public class NoPlanFoundException extends Throwable {\n" +
+                "}\n");
+        writer.close();
+    }
+
     private void writeMemory() throws IOException {
         File file = new File(packagePath, "Memory.java");
         if (file.exists())
@@ -582,6 +608,10 @@ public class SourceWriter {
                 "    public void reset() {\n" +
                 "        this.predicates = new ArrayList<>(start_predicates);\n" +
                 "    }\n" +
+                "\n" +
+                "    public void remove(String predicate) {\n" +
+                "        predicates.remove(new Predicate(predicate));\n" +
+                "    }\n" +
                 "}\n");
         writer.close();
     }
@@ -606,7 +636,7 @@ public class SourceWriter {
                 "        super(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions);\n" +
                 "        try {\n" +
                 "            Class actionClass = Class.forName(getAction());\n" +
-                "            Constructor constructor = actionClass.getConstructor(new Class[0]);\n" +
+                "            Constructor constructor = actionClass.getConstructor();\n" +
                 "            this.action = (RuleAction) constructor.newInstance(new Object[0]);\n" +
                 "        }\n" +
                 "        catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e)\n" +
@@ -656,7 +686,7 @@ public class SourceWriter {
                 "import java.util.ArrayList;\n" +
                 "import java.util.List;\n" +
                 "\n" +
-                "class AlphaList {\n" +
+                "public class AlphaList {\n" +
                 "\n" +
                 "    private final List<AlphaEntry> entries;\n" +
                 "\n" +
@@ -757,8 +787,8 @@ public class SourceWriter {
                 "            return false;\n" +
                 "        }\n" +
                 "\n" +
-                "        if(result instanceof Setting)\n" +
-                "            return (Setting)result;\n" +
+                "        if(result instanceof Boolean)\n" +
+                "            return (Boolean)result;\n" +
                 "        else\n" +
                 "            return false;\n" +
                 "    }\n" +

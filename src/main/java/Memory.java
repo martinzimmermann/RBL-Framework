@@ -35,4 +35,8 @@ public class Memory {
     public void reset() {
         this.predicates = new ArrayList<>(start_predicates);
     }
+
+    public void remove(String predicate) {
+        predicates.remove(new Predicate(predicate));
+    }
 }

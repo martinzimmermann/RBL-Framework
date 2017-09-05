@@ -1,0 +1,8 @@
+window_open.
+door_closed.
+
+window_closed -> +window_open -window_closed actions.openWindow (0 <= a < 0.5: 1, 0.5 <= a <= 1: 0.5) 0.2.
+door_closed -> +door_open -door_closed actions.openDoor 0.2.
+
+door_open -> #exit actions.goThroughDoor (0 <= a <= 1: a/2).
+window_open -> #exit actions.goThroughWindow 0.2.
