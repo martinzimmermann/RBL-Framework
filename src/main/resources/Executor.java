@@ -9,12 +9,10 @@ public class Executor {
 
     public Executor() throws ClassNotFoundException {
         List<Rule> rules = new ArrayList<>();
-        // replace with rules
-        rules.add(new InterpreterRule("actions.collectTemperature", 1.0, new AlphaList(new ArrayList<AlphaEntry>(Arrays.asList(new AlphaEntry[]{new AlphaEntry("0 <= a <= 1","1")}))), new ArrayList<Predicate>(Arrays.asList(new Predicate[]{})), null, new Predicate("temperature_collected"), new ArrayList<Predicate>(Arrays.asList(new Predicate[]{}))));
+// <replace with rules>
 
         List<Predicate> predicates = new ArrayList<>();
-        // replace with predicates
-        predicates.add(null);
+// <replace with predicates>
 
         Memory memory = new Memory(predicates);
         model = new Model(memory, rules);
