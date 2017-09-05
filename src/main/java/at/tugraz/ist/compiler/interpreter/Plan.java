@@ -14,7 +14,7 @@ class Plan {
     private final List<Rule> rules;
 
     public Plan() {
-        rules  = new ArrayList<>();
+        rules = new ArrayList<>();
     }
 
     public Plan(Plan currentPlan) {
@@ -39,7 +39,7 @@ class Plan {
     }
 
     public boolean needs(Rule rule, Memory memory) {
-        if(!rule.hasWorldAddition()) return false;
+        if (!rule.hasWorldAddition()) return false;
 
         List<Predicate> toReach = toReach();
         toReach.removeAll(memory.getAllPredicates());

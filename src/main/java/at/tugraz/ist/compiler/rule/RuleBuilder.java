@@ -54,7 +54,7 @@ public class RuleBuilder {
     }
 
     public Rule createRule() throws ClassNotFoundException {
-        if(interpret)
+        if (interpret)
             return new InterpreterRule(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions);
         else
             return new Rule(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions);

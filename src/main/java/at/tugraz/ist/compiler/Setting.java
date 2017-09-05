@@ -1,7 +1,5 @@
 package at.tugraz.ist.compiler;
 
-import java.net.URL;
-
 public class Setting {
     private final String pathToJavaFiles;
     private final String pathToRuleFile;

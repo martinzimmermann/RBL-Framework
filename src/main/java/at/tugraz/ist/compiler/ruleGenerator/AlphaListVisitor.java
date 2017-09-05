@@ -19,7 +19,7 @@ public class AlphaListVisitor extends RuleGrammarBaseVisitor<AlphaList> {
             list.add(new AlphaEntry(parts[0], parts[1]));
         }
 
-        if(ctx.expr() != null)
+        if (ctx.expr() != null)
             list.add(new AlphaEntry(ctx.expr().getText()));
 
         return new AlphaList(list);

@@ -16,7 +16,7 @@ public class Executor {
 
         Memory memory = model.getMemory();
         List<InterpreterRule> plan = PlanFinder.getPlanForRule(goal, memory, rules);
-        if(plan == null)
+        if (plan == null)
             throw new NoPlanFoundException();
 
         for (InterpreterRule rule : plan) {
@@ -25,9 +25,7 @@ public class Executor {
                 memory.update(rule);
                 rule.decreaseDamping();
                 rule.increaseActivity();
-            }
-            catch (ActionFailedException e)
-            {
+            } catch (ActionFailedException e) {
                 rule.repairMemory(memory);
                 rule.increaseDamping();
                 throw e;
@@ -36,18 +34,14 @@ public class Executor {
     }
 
     public void executeNTimes(Model model, int n) throws ActionFailedException, NoPlanFoundException {
-        for(int i = 0; i < n; i ++)
-        {
+        for (int i = 0; i < n; i++) {
             try {
                 executeOnce(model);
-            }
-            catch (ActionFailedException e)
-            {
+            } catch (ActionFailedException e) {
                 // Do nothing
             }
         }
     }
-
 
 
 }

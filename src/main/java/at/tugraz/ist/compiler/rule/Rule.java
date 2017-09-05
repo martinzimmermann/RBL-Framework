@@ -9,26 +9,26 @@ public class Rule extends Atom implements Comparable<Rule> {
     private final Predicate worldAddition;
     private final String goal;
     private final List<Predicate> worldDeletions;
-    private final AlphaList alphaEntries ;
+    private final AlphaList alphaEntries;
     private final double ruleGoal;
     private final String actionName;
     private double currentActivity = 0;
     private double damping = 0.5;
 
     public Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions) {
-        if(action == null)
+        if (action == null)
             throw new IllegalArgumentException("action can not be null");
 
-        if(goal != null && worldAddition != null)
+        if (goal != null && worldAddition != null)
             throw new IllegalArgumentException("goal and worldAddition can't be both not null");
 
-        if(alphaEntries == null)
+        if (alphaEntries == null)
             throw new IllegalArgumentException("alphaEntries can not be null");
 
-        if(worldDeletions == null)
+        if (worldDeletions == null)
             throw new IllegalArgumentException("worldDeletions can not be null");
 
-        if(preconditions == null)
+        if (preconditions == null)
             throw new IllegalArgumentException("preconditions can not be null");
 
         this.ruleGoal = ruleGoal;
@@ -40,43 +40,35 @@ public class Rule extends Atom implements Comparable<Rule> {
         this.actionName = action;
     }
 
-    public List<Predicate> getPreconditions()
-    {
+    public List<Predicate> getPreconditions() {
         return preconditions;
     }
 
-    public Predicate getWorldAddition()
-    {
+    public Predicate getWorldAddition() {
         return worldAddition;
     }
 
-    public String getGoal()
-    {
+    public String getGoal() {
         return goal;
     }
 
-    public boolean hasGoal()
-    {
+    public boolean hasGoal() {
         return goal != null;
     }
 
-    public boolean hasWorldAddition()
-    {
+    public boolean hasWorldAddition() {
         return worldAddition != null;
     }
 
-    public List<Predicate> getWorldDeletions()
-    {
+    public List<Predicate> getWorldDeletions() {
         return worldDeletions;
     }
 
-    public AlphaList getAlphaList()
-    {
+    public AlphaList getAlphaList() {
         return alphaEntries;
     }
 
-    public double getRuleGoal()
-    {
+    public double getRuleGoal() {
         return ruleGoal;
     }
 
@@ -92,7 +84,7 @@ public class Rule extends Atom implements Comparable<Rule> {
             string.append(precondition.getName()).append(",");
         }
 
-        if(getPreconditions().size() != 0)
+        if (getPreconditions().size() != 0)
             string.deleteCharAt(string.length() - 1);
 
         string.append(" -> ");
@@ -107,7 +99,7 @@ public class Rule extends Atom implements Comparable<Rule> {
             string.append("-").append(deletion.getName()).append(" ");
         }
 
-        if(getWorldDeletions().size() != 0)
+        if (getWorldDeletions().size() != 0)
             string.deleteCharAt(string.length() - 1);
 
         string.append(" " + actionName);
@@ -152,8 +144,8 @@ public class Rule extends Atom implements Comparable<Rule> {
     @Override
     public int compareTo(Rule o) {
 
-        double otherWeight = o.alphaEntries.calculateWeight(o.currentActivity) * (o.ruleGoal - o.currentActivity) * (1-o.damping);
-        double thisWeight = alphaEntries.calculateWeight(currentActivity) * (ruleGoal - currentActivity) * (1-damping);
+        double otherWeight = o.alphaEntries.calculateWeight(o.currentActivity) * (o.ruleGoal - o.currentActivity) * (1 - o.damping);
+        double thisWeight = alphaEntries.calculateWeight(currentActivity) * (ruleGoal - currentActivity) * (1 - damping);
 
         return Double.compare(otherWeight, thisWeight);
     }

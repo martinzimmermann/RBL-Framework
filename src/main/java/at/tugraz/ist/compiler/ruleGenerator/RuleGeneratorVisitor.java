@@ -21,9 +21,9 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
     public List<Atom> visitProgram(ProgramContext ctx) {
         List<Atom> atoms = new ArrayList<>();
 
-        for (ParseTree tree : ctx.children ) {
+        for (ParseTree tree : ctx.children) {
             List<Atom> atom = visit(tree);
-            if(atom != null)
+            if (atom != null)
                 atoms.addAll(atom);
         }
         return atoms;
@@ -33,7 +33,7 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
     public List<Atom> visitMemory(MemoryContext ctx) {
         List<Atom> atoms = new ArrayList<>();
 
-        for (PredicateContext predicate : ctx.predicate() ) {
+        for (PredicateContext predicate : ctx.predicate()) {
             List<Atom> atom = visit(predicate);
             atoms.addAll(atom);
         }
@@ -52,7 +52,7 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
     public List<Atom> visitR_rules(R_rulesContext ctx) {
         List<Atom> atoms = new ArrayList<>();
 
-        for (R_ruleContext rule : ctx.r_rule() ) {
+        for (R_ruleContext rule : ctx.r_rule()) {
             List<Atom> atom = visit(rule);
             atoms.addAll(atom);
         }
@@ -67,24 +67,23 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
         rule = rule.setInterpret(interpret)
                 .setAction(ctx.action().getText());
 
-        if(ctx.Goal != null) rule = rule.setGoal(ctx.Goal.getText());
-        if(ctx.WorldAddtion != null) rule = rule.setWorldAddition(new Predicate(ctx.WorldAddtion.getText()));
-        if(ctx.rule_goal() != null) rule = rule.setRuleGoal(Double.parseDouble(ctx.rule_goal().getText()));
+        if (ctx.Goal != null) rule = rule.setGoal(ctx.Goal.getText());
+        if (ctx.WorldAddtion != null) rule = rule.setWorldAddition(new Predicate(ctx.WorldAddtion.getText()));
+        if (ctx.rule_goal() != null) rule = rule.setRuleGoal(Double.parseDouble(ctx.rule_goal().getText()));
 
-        if(ctx.preconditions() != null) {
-            List<Atom> preconditions  = visit(ctx.preconditions());
+        if (ctx.preconditions() != null) {
+            List<Atom> preconditions = visit(ctx.preconditions());
             rule = rule.setPreconditions(preconditions.stream().map(obj -> (Predicate) obj).collect(Collectors.toList()));
         }
 
-        if(ctx.alist() != null) {
+        if (ctx.alist() != null) {
             AlphaList aList = new AlphaListVisitor().visit(ctx.alist());
             rule = rule.setAlphaList(aList);
-        }
-        else {
+        } else {
             rule = rule.setAlphaList(AlphaList.getDefaultAlphaList());
         }
 
-        if(ctx.worldDeletions() != null){
+        if (ctx.worldDeletions() != null) {
             List<Atom> worldDeletions = visit(ctx.worldDeletions());
             rule = rule.setWorldDeletions(worldDeletions.stream().map(obj -> (Predicate) obj).collect(Collectors.toList()));
         }
@@ -105,7 +104,7 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
     public List<Atom> visitPreconditions(PreconditionsContext ctx) {
         List<Atom> atoms = new ArrayList<>();
 
-        for (PredicateContext predicate : ctx.predicate() ) {
+        for (PredicateContext predicate : ctx.predicate()) {
             List<Atom> atom = visit(predicate);
             atoms.addAll(atom);
         }
@@ -116,7 +115,7 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
     public List<Atom> visitWorldDeletions(WorldDeletionsContext ctx) {
         List<Atom> atoms = new ArrayList<>();
 
-        for (PredicateContext predicate : ctx.predicate() ) {
+        for (PredicateContext predicate : ctx.predicate()) {
             List<Atom> atom = visit(predicate);
             atoms.addAll(atom);
         }

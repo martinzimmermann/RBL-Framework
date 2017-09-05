@@ -8,6 +8,7 @@ public class Executor {
     private Model model;
 
     public Executor() throws ClassNotFoundException {
+        Arrays.asList(); // Just so the import won't get removed at a code cleanup
         List<Rule> rules = new ArrayList<>();
 // <replace with rules>
 
@@ -24,7 +25,7 @@ public class Executor {
 
     private boolean executesTillGoalReached(int limit) throws NoPlanFoundException {
         for (int i = 0; i < limit; i++) {
-            if(executeOnce())
+            if (executeOnce())
                 return true;
         }
         return false;
@@ -38,7 +39,7 @@ public class Executor {
 
         Memory memory = model.getMemory();
         List<InterpreterRule> plan = PlanFinder.getPlanForRule(goal, memory, rules);
-        if(plan == null)
+        if (plan == null)
             throw new NoPlanFoundException();
 
         for (InterpreterRule rule : plan) {

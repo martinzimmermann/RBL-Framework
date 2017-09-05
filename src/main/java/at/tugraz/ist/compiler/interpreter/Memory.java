@@ -8,11 +8,10 @@ import java.util.List;
 
 public class Memory {
 
-    private List<Predicate> predicates;
     private final List<Predicate> start_predicates;
+    private List<Predicate> predicates;
 
-    public Memory(List<Predicate> predicates)
-    {
+    public Memory(List<Predicate> predicates) {
 
         this.predicates = new ArrayList<>(predicates);
         this.start_predicates = new ArrayList<>(predicates);
@@ -26,14 +25,13 @@ public class Memory {
         return predicates.containsAll(preconditions);
     }
 
-    public List<Predicate> getAllPredicates()
-    {
+    public List<Predicate> getAllPredicates() {
         return predicates;
     }
 
     public void update(Rule rule) {
         predicates.removeAll(rule.getWorldDeletions());
-        if(rule.hasWorldAddition())
+        if (rule.hasWorldAddition())
             predicates.add(rule.getWorldAddition());
     }
 

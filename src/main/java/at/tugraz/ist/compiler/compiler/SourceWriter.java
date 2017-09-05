@@ -10,7 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 public class SourceWriter {
 
@@ -20,7 +19,6 @@ public class SourceWriter {
     public SourceWriter(String outputPath, String packageName) {
         this.packageName = packageName;
         packagePath = outputPath + (outputPath.endsWith("\\") ? "" : "\\") + (this.packageName == null ? "" : this.packageName.replace(".", "\\"));
-
     }
 
     public void writeSource(Model model) throws IOException {

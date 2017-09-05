@@ -1,13 +1,15 @@
 package at.tugraz.ist.compiler.parser;
 
 import at.tugraz.ist.compiler.antlr.RuleGrammarLexer;
-import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.TokenStream;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
 public class RuleLexer {
-    private final Path  filepath;
+    private final Path filepath;
     private final String source;
 
 

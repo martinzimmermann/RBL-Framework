@@ -11,26 +11,23 @@ import java.util.stream.Collectors;
 
 public class RuleGenerator {
     private final ParseTree parseTree;
-    private  final boolean interpret;
+    private final boolean interpret;
     private List<Atom> atoms = null;
 
-    public RuleGenerator(ParseTree parseTree, boolean interpret)
-    {
+    public RuleGenerator(ParseTree parseTree, boolean interpret) {
         this.parseTree = parseTree;
         this.interpret = interpret;
     }
 
-    public List<Rule> getRules()
-    {
-        if(atoms == null)
+    public List<Rule> getRules() {
+        if (atoms == null)
             atoms = new RuleGeneratorVisitor(interpret).visit(parseTree);
 
         return atoms.stream().filter(atom -> atom instanceof Rule).map(atom -> (Rule) atom).collect(Collectors.toList());
     }
 
-    public Memory getMemory()
-    {
-        if(atoms == null)
+    public Memory getMemory() {
+        if (atoms == null)
             atoms = new RuleGeneratorVisitor(interpret).visit(parseTree);
 
         List<Predicate> predicates = atoms.stream().filter(atom -> atom instanceof Predicate).map(atom -> (Predicate) atom).collect(Collectors.toList());

@@ -15,9 +15,7 @@ public class InterpreterRule extends Rule {
             Class actionClass = Class.forName(getAction());
             Constructor constructor = actionClass.getConstructor();
             this.action = (RuleAction) constructor.newInstance(new Object[0]);
-        }
-        catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e)
-        {
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             throw new ClassNotFoundException();
         }
     }
@@ -28,8 +26,7 @@ public class InterpreterRule extends Rule {
         action.execute(memory);
     }
 
-    public void repairMemory(Memory memory)
-    {
+    public void repairMemory(Memory memory) {
         action.repair(memory);
     }
 }

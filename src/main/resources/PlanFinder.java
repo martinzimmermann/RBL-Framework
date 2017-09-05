@@ -3,24 +3,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class PlanFinder
-{
-    public static List<Rule> getGoalRules(List<Rule> allRules)
-    {
+class PlanFinder {
+    public static List<Rule> getGoalRules(List<Rule> allRules) {
         return allRules.stream().filter(Rule::hasGoal).collect(Collectors.toList());
     }
 
-    public static List<InterpreterRule> getPlanForRule(Rule goal, Memory memory, List<Rule> allRules)
-    {
-        List<Rule> plan = getPlanForRule(goal,memory, allRules, new Plan());
-        if(plan == null)
+    public static List<InterpreterRule> getPlanForRule(Rule goal, Memory memory, List<Rule> allRules) {
+        List<Rule> plan = getPlanForRule(goal, memory, allRules, new Plan());
+        if (plan == null)
             return null;
         Collections.reverse(plan);
         return plan.stream().map(r -> (InterpreterRule) r).collect(Collectors.toList());
     }
 
-    private static List<Rule> getPlanForRule(Rule goal, Memory memory, List<Rule> allRules, Plan currentPlan)
-    {
+    private static List<Rule> getPlanForRule(Rule goal, Memory memory, List<Rule> allRules, Plan currentPlan) {
         Plan newPlan = new Plan(currentPlan);
         newPlan.add(goal);
 
@@ -39,7 +35,7 @@ class PlanFinder
                 continue;
 
             List<Rule> newRules = getPlanForRule(rule, memory, rules, newPlan);
-            if(newRules == null) // this path didn't yield a valid plan, try other rule
+            if (newRules == null) // this path didn't yield a valid plan, try other rule
                 continue;
 
             return newRules;

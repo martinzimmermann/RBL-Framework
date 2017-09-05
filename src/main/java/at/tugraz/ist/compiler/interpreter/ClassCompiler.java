@@ -27,7 +27,7 @@ public class ClassCompiler {
 
         Iterable fileObjects = sjfm.getJavaFileObjects(files.toArray(new String[]{}));
 
-        Path path2 = Files.createTempDirectory("temp" );
+        Path path2 = Files.createTempDirectory("temp");
         String folderPath = path2.normalize().toString();
         String[] options = new String[]{"-d", folderPath};
         jc.getTask(null, null, null, Arrays.asList(options), null, fileObjects).call();
