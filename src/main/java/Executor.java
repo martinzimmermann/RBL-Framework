@@ -64,7 +64,7 @@ public class Executor {
         }
     }
 
-    public void executesForever(int n) throws NoPlanFoundException {
+    public void executesForever() throws NoPlanFoundException {
         while (true) {
             executeOnce();
         }

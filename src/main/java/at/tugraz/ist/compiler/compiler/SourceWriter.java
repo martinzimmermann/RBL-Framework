@@ -106,7 +106,7 @@ public class SourceWriter {
                         "        }\n" +
                         "    }\n" +
                         "\n" +
-                        "    public void executesForever(int n) throws NoPlanFoundException {\n" +
+                        "    public void executesForever() throws NoPlanFoundException {\n" +
                         "        while (true) {\n" +
                         "            executeOnce();\n" +
                         "        }\n" +
