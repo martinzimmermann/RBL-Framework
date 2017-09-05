@@ -7,15 +7,17 @@ public class Setting {
     private final String pathToRuleFile;
     private final boolean compiling;
     private final int numberOfRuns;
+    private final String packageName;
     private String outputPath;
     private URL classPath;
 
-    public Setting(String pathToJavaFiles, String pathToRuleFile, boolean compiling, int numberOfRuns, String outputPath) {
+    public Setting(String pathToJavaFiles, String pathToRuleFile, boolean compiling, int numberOfRuns, String outputPath, String packageName) {
         this.pathToJavaFiles = pathToJavaFiles;
         this.pathToRuleFile = pathToRuleFile;
         this.compiling = compiling;
         this.numberOfRuns = numberOfRuns;
         this.outputPath = outputPath;
+        this.packageName = packageName;
     }
 
     public String getPathToJavaFiles() {
@@ -43,7 +45,7 @@ public class Setting {
     }
 
     public String getPackageName() {
-        return "compiler";
+        return packageName;
     }
 
     public String getOutputPath() {

@@ -13,7 +13,7 @@ public class SourceWriter {
     private String packagePath;
 
     public SourceWriter(String outputPath, String packageName) {
-        this.outputPath = outputPath == null ? ".\\" : outputPath;
+        this.outputPath = outputPath;
         this.packageName = packageName;
         packagePath = this.outputPath + (this.outputPath.endsWith("\\") ? "" : "\\") + (this.packageName == null ? "" : this.packageName.replace(".", "\\"));
 
@@ -37,7 +37,7 @@ public class SourceWriter {
         boolean succes = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
-        writer.write("package " + packageName + ";\n");
+        if (packageName != null) if (packageName != null) writer.write("package " + packageName + ";\n");
 
         writer.write(
                 "import java.util.ArrayList;\n" +
@@ -139,7 +139,7 @@ public class SourceWriter {
         boolean succes = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
-        writer.write("package " + packageName + ";\n");
+        if (packageName != null) writer.write("package " + packageName + ";\n");
 
         writer.write("public interface RuleAction {\n" +
                 "    void execute(Memory model) throws ActionFailedException;\n" +
@@ -155,11 +155,11 @@ public class SourceWriter {
         boolean succes = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
-        writer.write("package " + packageName + ";\n");
+        if (packageName != null) writer.write("package " + packageName + ";\n");
 
         writer.write("import java.util.List;\n" +
                 "\n" +
-                "public class Rule extends Atom implements Comparable<Rule> {\n" +
+                "class Rule extends Atom implements Comparable<Rule> {\n" +
                 "\n" +
                 "    private final List<Predicate> preconditions;\n" +
                 "    private final Predicate worldAddition;\n" +
@@ -338,9 +338,9 @@ public class SourceWriter {
         boolean succes = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
-        writer.write("package " + packageName + ";\n");
+        if (packageName != null) writer.write("package " + packageName + ";\n");
 
-        writer.write("public class Predicate extends Atom {\n" +
+        writer.write("class Predicate extends Atom {\n" +
                 "\n" +
                 "    private final String name;\n" +
                 "\n" +
@@ -388,14 +388,14 @@ public class SourceWriter {
         boolean succes = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
-        writer.write("package " + packageName + ";\n");
+        if (packageName != null) writer.write("package " + packageName + ";\n");
 
         writer.write("import java.util.ArrayList;\n" +
                 "import java.util.Collections;\n" +
                 "import java.util.List;\n" +
                 "import java.util.stream.Collectors;\n" +
                 "\n" +
-                "public class PlanFinder\n" +
+                "class PlanFinder\n" +
                 "{\n" +
                 "    public static List<Rule> getGoalRules(List<Rule> allRules)\n" +
                 "    {\n" +
@@ -450,7 +450,7 @@ public class SourceWriter {
         boolean succes = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
-        writer.write("package " + packageName + ";\n");
+        if (packageName != null) writer.write("package " + packageName + ";\n");
 
         writer.write("import java.util.ArrayList;\n" +
                 "import java.util.HashSet;\n" +
@@ -458,7 +458,7 @@ public class SourceWriter {
                 "import java.util.Set;\n" +
                 "import java.util.stream.Collectors;\n" +
                 "\n" +
-                "public class Plan {\n" +
+                "class Plan {\n" +
                 "\n" +
                 "    private final List<Rule> rules;\n" +
                 "\n" +
@@ -513,11 +513,11 @@ public class SourceWriter {
         boolean succes = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
-        writer.write("package " + packageName + ";\n");
+        if (packageName != null) writer.write("package " + packageName + ";\n");
 
         writer.write("import java.util.List;\n" +
                 "\n" +
-                "public class Model {\n" +
+                "class Model {\n" +
                 "\n" +
                 "    private final Memory memory;\n" +
                 "    private final List<Rule> rules;\n" +
@@ -545,7 +545,7 @@ public class SourceWriter {
         boolean succes = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
-        writer.write("package " + packageName + ";\n");
+        if (packageName != null) writer.write("package " + packageName + ";\n");
 
         writer.write("import java.util.ArrayList;\n" +
                 "import java.util.List;\n" +
@@ -595,13 +595,13 @@ public class SourceWriter {
         boolean succes = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
-        writer.write("package " + packageName + ";\n");
+        if (packageName != null) writer.write("package " + packageName + ";\n");
 
         writer.write("import java.lang.reflect.Constructor;\n" +
                 "import java.lang.reflect.InvocationTargetException;\n" +
                 "import java.util.List;\n" +
                 "\n" +
-                "public class InterpreterRule extends Rule {\n" +
+                "class InterpreterRule extends Rule {\n" +
                 "    private final RuleAction action;\n" +
                 "\n" +
                 "    public InterpreterRule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions) throws ClassNotFoundException {\n" +
@@ -638,9 +638,9 @@ public class SourceWriter {
         boolean succes = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
-        writer.write("package " + packageName + ";\n");
+        if (packageName != null) writer.write("package " + packageName + ";\n");
 
-        writer.write("public abstract class Atom {\n" +
+        writer.write("abstract class Atom {\n" +
                 "}\n");
         writer.close();
     }
@@ -652,13 +652,13 @@ public class SourceWriter {
         boolean succes = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
-        writer.write("package " + packageName + ";\n");
+        if (packageName != null) writer.write("package " + packageName + ";\n");
 
         writer.write("\n" +
                 "import java.util.ArrayList;\n" +
                 "import java.util.List;\n" +
                 "\n" +
-                "public class AlphaList {\n" +
+                "class AlphaList {\n" +
                 "\n" +
                 "    private final List<AlphaEntry> entries;\n" +
                 "\n" +
@@ -699,13 +699,13 @@ public class SourceWriter {
         boolean succes = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
-        writer.write("package " + packageName + ";\n");
+        if (packageName != null) writer.write("package " + packageName + ";\n");
 
         writer.write("import javax.script.ScriptEngine;\n" +
                 "import javax.script.ScriptEngineManager;\n" +
                 "import javax.script.ScriptException;\n" +
                 "\n" +
-                "public class AlphaEntry {\n" +
+                "class AlphaEntry {\n" +
                 "\n" +
                 "    private final String expression;\n" +
                 "    private final String function;\n" +
@@ -775,7 +775,7 @@ public class SourceWriter {
         boolean succes = file.createNewFile();
         OutputStream stream = new FileOutputStream(file);
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getPath()));
-        writer.write("package " + packageName + ";\n");
+        if (packageName != null) writer.write("package " + packageName + ";\n");
 
         writer.write("public class ActionFailedException extends Exception{\n" +
                 "}\n");

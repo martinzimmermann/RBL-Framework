@@ -47,7 +47,8 @@ class RuleBasedCompiler {
     private static Setting generateSetting(String[] args) {
         String javaFiles = null;
         String ruleFile;
-        String outputpath = null;
+        String outputPath = ".\\";
+        String packageName = null;
         boolean compile;
         int numberOfRuns = 1;
 
@@ -87,11 +88,18 @@ class RuleBasedCompiler {
 
         } else if (args[0].equals("compile")) {
             compile = true;
-            if (args.length == 4 && args[1].equals("-o")) {
-                outputpath = args[2];
-                ruleFile = args[3];
-            } else if (args.length == 2) {
+            if (args.length == 2) {
                 ruleFile = args[1];
+            } else if (args.length == 4 && args[1].equals("-o")) {
+                outputPath = args[2];
+                ruleFile = args[3];
+            } else if (args.length == 4 && args[1].equals("-p")) {
+                packageName = args[2];
+                ruleFile = args[3];
+            } else if (args.length == 6 && args[1].equals("-o") && args[3].equals("-p")) {
+                outputPath = args[2];
+                packageName = args[4];
+                ruleFile = args[5];
             } else {
                 printHelp();
                 return null;
@@ -101,14 +109,14 @@ class RuleBasedCompiler {
             return null;
         }
 
-        Setting setting = new Setting(javaFiles, ruleFile, compile, numberOfRuns, outputpath);
+        Setting setting = new Setting(javaFiles, ruleFile, compile, numberOfRuns, outputPath, packageName);
         return setting;
     }
 
     private static void printHelp() {
         System.out.println("Usage:\n" +
                 "   rule interpret [-times n] PATHTOJAVAFILES PATHTORULEFILE           interprets the rules n times, where n must be >= 0\n" +
-                "   rule compile [-o outputpath] [-p PACKAGENAME] PATHTORULEFILE       compiles th rules to Java source\n" +
+                "   rule compile [-o OUTPUTPATH] [-p PACKAGENAME] PATHTORULEFILE       compiles th rules to Java source\n" +
                 "   rule (-h | --help)                                                 shows this help");
     }
 }
