@@ -95,10 +95,12 @@ class RuleBasedCompiler {
                 ruleFile = args[3];
             } else if (args.length == 4 && args[1].equals("-p")) {
                 packageName = args[2];
+                checkPackageName(packageName);
                 ruleFile = args[3];
             } else if (args.length == 6 && args[1].equals("-o") && args[3].equals("-p")) {
                 outputPath = args[2];
                 packageName = args[4];
+                checkPackageName(packageName);
                 ruleFile = args[5];
             } else {
                 printHelp();
@@ -111,6 +113,11 @@ class RuleBasedCompiler {
 
         Setting setting = new Setting(javaFiles, ruleFile, compile, numberOfRuns, outputPath, packageName);
         return setting;
+    }
+
+    private static void checkPackageName(String packageName) {
+        if(!packageName.equals(packageName.toLowerCase()))
+            ErrorHandler.Instance().reportWarning(ErrorHandler.Type.Input, 0, 0, "Java package name should be in lower case letters.");
     }
 
     private static void printHelp() {
