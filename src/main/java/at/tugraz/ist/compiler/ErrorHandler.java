@@ -14,7 +14,7 @@ public class ErrorHandler {
     public static final String ANSI_WHITE = "\u001B[37m";
     private static final String ANSI_YELLOW = "\u001B[33m";
     private static ErrorHandler instance;
-    private static boolean hasErrors = false;
+    private int errorCount = 0;
 
     private ErrorHandler() {
     }
@@ -36,21 +36,25 @@ public class ErrorHandler {
     }
 
     public void reportError(Type type, DiagnosticPosition diagnosticPosition, String Message) {
-        hasErrors = true;
+        errorCount++;
         System.out.println(ANSI_RED + Message);
         System.out.println(diagnosticPosition.getPrettyPrint() + ANSI_RESET);
     }
 
     public boolean hasErrors() {
-        return hasErrors;
+        return errorCount != 0;
     }
 
     public enum Type {
         Input, Lexical, Syntactical, Interpreter
     }
 
+    public void printErrorCount() {
+        System.out.println(ANSI_RED + errorCount + " Errors found" + ANSI_RESET);
+    }
+
     public void reset()
     {
-        hasErrors = false;
+        errorCount = 0;
     }
 }

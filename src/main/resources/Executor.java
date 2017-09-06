@@ -17,8 +17,10 @@ public class Executor {
 
         Memory memory = new Memory(predicates);
         model = new Model(memory, rules);
-        if (ErrorHandler.Instance().hasErrors())
+        if(ErrorHandler.Instance().hasErrors()) {
+            ErrorHandler.Instance().printErrorCount();
             throw new ClassNotFoundException();
+        }
     }
 
     public boolean executesTillGoalReached() throws NoPlanFoundException {

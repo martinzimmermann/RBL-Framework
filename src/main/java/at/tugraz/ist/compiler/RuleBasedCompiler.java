@@ -26,8 +26,10 @@ class RuleBasedCompiler {
             RuleLexer ruleLexer = new RuleLexer(Paths.get(setting.getPathToRuleFile()));
             RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
             RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), !setting.isCompiling());
-            if(ErrorHandler.Instance().hasErrors())
+            if(ErrorHandler.Instance().hasErrors()) {
                 System.exit(1);
+                ErrorHandler.Instance().printErrorCount();
+            }
 
             if (setting.isCompiling()) {
                 SourceWriter writer = new SourceWriter(setting.getOutputPath(), setting.getPackageName());
@@ -35,8 +37,10 @@ class RuleBasedCompiler {
 
             } else {
                 Model model = new Model(gen.getMemory(), gen.getRules());
-                if (ErrorHandler.Instance().hasErrors())
+                if(ErrorHandler.Instance().hasErrors()) {
                     System.exit(1);
+                    ErrorHandler.Instance().printErrorCount();
+                }
                 Executor executor = new Executor();
                 executor.executeNTimes(model, setting.getNumberOfRuns());
             }
