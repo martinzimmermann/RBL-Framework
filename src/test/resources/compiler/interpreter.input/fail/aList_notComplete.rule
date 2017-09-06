@@ -1,0 +1,4 @@
+-> +pre actions.action1 1.
+-> +pre actions.action2 0.6.
+
+pre -> #goal -pre actions.goal (0 <= a <= 0.5).

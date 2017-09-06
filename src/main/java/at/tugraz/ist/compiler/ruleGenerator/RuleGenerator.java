@@ -17,19 +17,14 @@ public class RuleGenerator {
     public RuleGenerator(ParseTree parseTree, boolean interpret) {
         this.parseTree = parseTree;
         this.interpret = interpret;
+        atoms = new RuleGeneratorVisitor(interpret).visit(parseTree);
     }
 
     public List<Rule> getRules() {
-        if (atoms == null)
-            atoms = new RuleGeneratorVisitor(interpret).visit(parseTree);
-
         return atoms.stream().filter(atom -> atom instanceof Rule).map(atom -> (Rule) atom).collect(Collectors.toList());
     }
 
     public Memory getMemory() {
-        if (atoms == null)
-            atoms = new RuleGeneratorVisitor(interpret).visit(parseTree);
-
         List<Predicate> predicates = atoms.stream().filter(atom -> atom instanceof Predicate).map(atom -> (Predicate) atom).collect(Collectors.toList());
         return new Memory(predicates);
     }

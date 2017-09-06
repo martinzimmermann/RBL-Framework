@@ -26,7 +26,8 @@ class RuleBasedCompiler {
             RuleLexer ruleLexer = new RuleLexer(Paths.get(setting.getPathToRuleFile()));
             RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
             RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), !setting.isCompiling());
-
+            if(ErrorHandler.Instance().hasErrors())
+                System.exit(1);
 
             if (setting.isCompiling()) {
                 SourceWriter writer = new SourceWriter(setting.getOutputPath(), setting.getPackageName());

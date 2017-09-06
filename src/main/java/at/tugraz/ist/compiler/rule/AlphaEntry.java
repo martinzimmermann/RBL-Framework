@@ -3,6 +3,8 @@ package at.tugraz.ist.compiler.rule;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AlphaEntry {
 
@@ -17,6 +19,43 @@ public class AlphaEntry {
     public AlphaEntry(String function) {
         this.expression = "0 <= a <= 1";
         this.function = function;
+    }
+
+    public double getStart() {
+        String patternString = "(\\d+(\\.\\d+)?)";
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(expression);
+        matcher.find();
+        String start = matcher.group();
+        return Double.parseDouble(start);
+    }
+
+    public boolean isStartSmallerEquals() {
+        int indexOfA = expression.indexOf("a");
+        String les = expression.substring(0, indexOfA + 1);
+        String patternString = "(<=)";
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(les);
+        return matcher.find();
+    }
+
+    public boolean isEndSmallerEquals() {
+        int indexOfA = expression.indexOf("a");
+        String greater = expression.substring(indexOfA, expression.length());
+        String patternString = "(<=)";
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(greater);
+        return matcher.find();
+    }
+
+    public double getEnd() {
+        String patternString = "(\\d+(\\.\\d+)?)";
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(expression);
+        matcher.find();
+        matcher.find();
+        String end = matcher.group();
+        return Double.parseDouble(end);
     }
 
     public double calculateWeight(double alpha) {

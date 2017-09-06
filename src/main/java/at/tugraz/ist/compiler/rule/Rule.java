@@ -180,7 +180,6 @@ public class Rule extends Atom implements Comparable<Rule> {
         currentActivity = (currentActivity + ruleGoal) / 2;
     }
 
-
     public String getConstructor() {
         StringBuilder builder = new StringBuilder();
         builder.append("new Rule(");

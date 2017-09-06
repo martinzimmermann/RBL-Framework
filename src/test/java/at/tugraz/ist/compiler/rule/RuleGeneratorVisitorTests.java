@@ -1,5 +1,6 @@
 package at.tugraz.ist.compiler.rule;
 
+import at.tugraz.ist.compiler.ErrorHandler;
 import at.tugraz.ist.compiler.interpreter.ClassCompiler;
 import at.tugraz.ist.compiler.interpreter.Memory;
 import at.tugraz.ist.compiler.parser.RuleLexer;
@@ -11,11 +12,25 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.*;
 
 public class RuleGeneratorVisitorTests {
 
+
+    @Test
+    public void aListNotComplete_test() throws IOException {
+        RuleLexer ruleLexer = new RuleLexer("-> +pre actions.action1 1.\n" +
+                "-> +pre actions.action2 0.6.\n" +
+                "\n" +
+                "pre -> #goal -pre actions.goal (0 <= a <= 0.2: 1, 0.2 <= a <= 1: 1, 1).");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+
+        assertFalse(ErrorHandler.Instance().hasErrors());
+    }
 
     @Test
     public void addition_rule_test() throws IOException {

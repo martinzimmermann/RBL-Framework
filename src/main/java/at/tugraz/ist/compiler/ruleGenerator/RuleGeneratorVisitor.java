@@ -1,5 +1,6 @@
 package at.tugraz.ist.compiler.ruleGenerator;
 
+import at.tugraz.ist.compiler.ErrorHandler;
 import at.tugraz.ist.compiler.antlr.RuleGrammarBaseVisitor;
 import at.tugraz.ist.compiler.antlr.RuleGrammarParser.*;
 import at.tugraz.ist.compiler.rule.*;
@@ -64,12 +65,14 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
         List<Atom> atoms = new ArrayList<>();
 
         RuleBuilder rule = new RuleBuilder();
+        DiagnosticPosition diagnosticPosition = new DiagnosticPosition(ctx.getStart().getLine(),
+                ctx.getStart().getCharPositionInLine(),
+                ctx.getStop().getLine(),
+                ctx.getStop().getCharPositionInLine(),
+                ctx.getText());
+
         rule = rule.setAction(ctx.action().getText())
-                .setDiagnosticPosition(new DiagnosticPosition(ctx.getStart().getLine(),
-                        ctx.getStart().getCharPositionInLine(),
-                        ctx.getStop().getLine(),
-                        ctx.getStop().getCharPositionInLine(),
-                        ctx.getText()));
+                .setDiagnosticPosition(diagnosticPosition);
 
         if (ctx.Goal != null) rule = rule.setGoal(ctx.Goal.getText());
         if (ctx.WorldAddtion != null) rule = rule.setWorldAddition(new Predicate(ctx.WorldAddtion.getText()));
@@ -82,6 +85,9 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
 
         if (ctx.alist() != null) {
             AlphaList aList = new AlphaListVisitor().visit(ctx.alist());
+            if (!aList.isValidRange())
+                ErrorHandler.Instance().reportError(ErrorHandler.Type.Syntactical, diagnosticPosition, "Alpha List doesn't cover the whole range between 0 and 1");
+
             rule = rule.setAlphaList(aList);
         } else {
             rule = rule.setAlphaList(AlphaList.getDefaultAlphaList());
