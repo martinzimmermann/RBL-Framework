@@ -48,4 +48,9 @@ public class ErrorHandler {
     public enum Type {
         Input, Lexical, Syntactical, Interpreter
     }
+
+    public void reset()
+    {
+        hasErrors = false;
+    }
 }

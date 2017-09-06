@@ -18,11 +18,9 @@ public class RuleGeneratorVisitorTests {
 
 
     @Test
-    public void aListNotComplete_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("-> +pre actions.action1 1.\n" +
-                "-> +pre actions.action2 0.6.\n" +
-                "\n" +
-                "pre -> #goal -pre actions.goal (0 <= a <= 0.2: 1, 0.2 <= a <= 1: 1, 1).");
+    public void aList1_pass_test() throws IOException {
+        ErrorHandler.Instance().reset();
+        RuleLexer ruleLexer = new RuleLexer("pre -> action (0 <= a <= 1: 1).");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
@@ -30,6 +28,132 @@ public class RuleGeneratorVisitorTests {
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         assertFalse(ErrorHandler.Instance().hasErrors());
+        
+    }
+
+    @Test
+    public void aList2_pass_test() throws IOException {
+        ErrorHandler.Instance().reset();
+        RuleLexer ruleLexer = new RuleLexer("pre -> action (0 <= a <= 0.5: 1, 0.5 < a <= 1: 1).");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+
+        assertFalse(ErrorHandler.Instance().hasErrors());
+        
+    }
+
+    @Test
+    public void aList3_pass_test() throws IOException {
+        ErrorHandler.Instance().reset();
+        RuleLexer ruleLexer = new RuleLexer("pre -> action (0 <= a < 0.5: 1, 0.5 <= a <= 1: 1).");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+
+        assertFalse(ErrorHandler.Instance().hasErrors());
+        
+    }
+    @Test
+    public void aList4_pass_test() throws IOException {
+        ErrorHandler.Instance().reset();
+        RuleLexer ruleLexer = new RuleLexer("pre -> action (0.2 < a < 0.8: 1, 1).");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+
+        assertFalse(ErrorHandler.Instance().hasErrors());
+        
+    }
+
+    @Test
+    public void aList4_fail_test() throws IOException {
+        ErrorHandler.Instance().reset();
+        RuleLexer ruleLexer = new RuleLexer("pre -> action (0 <= a <= 0.5: 1, 0.5 <= a <= 1: 1, 1).");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+
+        assertTrue(ErrorHandler.Instance().hasErrors());
+        
+    }
+
+    @Test
+    public void aList5_fail_test() throws IOException {
+        ErrorHandler.Instance().reset();
+        RuleLexer ruleLexer = new RuleLexer("pre -> action (0 <= a <= 0.5: 1).");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+
+        assertTrue(ErrorHandler.Instance().hasErrors());
+        
+    }
+
+    @Test
+    public void aList6_fail_test() throws IOException {
+        ErrorHandler.Instance().reset();
+        RuleLexer ruleLexer = new RuleLexer("pre -> action (0 <= a <= 0.5: 1, 0.4 <= a <= 1: 1).");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+
+        assertTrue(ErrorHandler.Instance().hasErrors());
+        
+    }
+
+    @Test
+    public void aList7_fail_test() throws IOException {
+        ErrorHandler.Instance().reset();
+        RuleLexer ruleLexer = new RuleLexer("pre -> action (0 < a <= 1: 1).");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+
+        assertTrue(ErrorHandler.Instance().hasErrors());
+        
+    }
+
+    @Test
+    public void aList8_fail_test() throws IOException {
+        ErrorHandler.Instance().reset();
+        RuleLexer ruleLexer = new RuleLexer("pre -> action (0 <= a < 1: 1).");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+
+        assertTrue(ErrorHandler.Instance().hasErrors());
+        
+    }
+
+    @Test
+    public void aList9_fail_test() throws IOException {
+        ErrorHandler.Instance().reset();
+        RuleLexer ruleLexer = new RuleLexer("pre -> action (0 <= a < 0.5: 1, 0.5 < a <= 1: 1).");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+
+        assertTrue(ErrorHandler.Instance().hasErrors());
+        
     }
 
     @Test

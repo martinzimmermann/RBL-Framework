@@ -27,10 +27,10 @@ public class AlphaList {
 
         for(AlphaEntry entry : sorted)
         {
-            if((entry.getStart() != start || entry.isStartSmallerEquals() == lastSmallerEquals) && defaultEntry == null)
+            if(entry.getStart() < start)
                 return false;
 
-            if(entry.getStart() != start && defaultEntry != null && entry.getStart() < start)
+            if((entry.getStart() != start || entry.isStartSmallerEquals() == lastSmallerEquals) && defaultEntry == null)
                 return false;
 
             if(entry.getStart() == start && entry.isStartSmallerEquals() == true && lastSmallerEquals == true)
@@ -40,7 +40,7 @@ public class AlphaList {
             lastSmallerEquals = entry.isEndSmallerEquals();
         }
 
-        if(start != 1 || lastSmallerEquals == false)
+        if((start != 1 || lastSmallerEquals == false) && defaultEntry == null)
             return false;
 
         return true;
@@ -48,7 +48,7 @@ public class AlphaList {
 
     public double calculateWeight(double alpha) {
         if (alpha < 0)
-            throw new IllegalArgumentException("alpha must be greater or equal than 0, was " + alpha);
+            throw new IllegalArgumentException("alpha must be greater or equal to 0, was " + alpha);
         if (alpha > 1)
             throw new IllegalArgumentException("alpha must be smaller or equal than 1, was " + alpha);
 
