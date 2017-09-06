@@ -5,7 +5,7 @@ import java.util.List;
 
 public class RuleBuilder {
     private String action;
-    private boolean interpret;
+    private DiagnosticPosition diagnosticPosition;
     private double ruleGoal = 1;
     private AlphaList alphaEntries = AlphaList.getDefaultAlphaList();
     private List<Predicate> worldDeletions = new ArrayList<>();
@@ -13,8 +13,8 @@ public class RuleBuilder {
     private Predicate worldAddition = null;
     private List<Predicate> preconditions = new ArrayList<>();
 
-    public RuleBuilder setInterpret(boolean interpret) {
-        this.interpret = interpret;
+    public RuleBuilder setDiagnosticPosition(DiagnosticPosition diagnosticPosition) {
+        this.diagnosticPosition = diagnosticPosition;
         return this;
     }
 
@@ -53,11 +53,8 @@ public class RuleBuilder {
         return this;
     }
 
-    public Rule createRule() throws ClassNotFoundException {
-        if (interpret)
-            return new InterpreterRule(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions);
-        else
-            return new Rule(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions);
+    public Rule createRule(){
+            return new Rule(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions, diagnosticPosition);
 
     }
 }

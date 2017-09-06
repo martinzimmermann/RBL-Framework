@@ -27,13 +27,15 @@ class RuleBasedCompiler {
             RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
             RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), !setting.isCompiling());
 
-            Model model = new Model(gen.getMemory(), gen.getRules());
 
             if (setting.isCompiling()) {
                 SourceWriter writer = new SourceWriter(setting.getOutputPath(), setting.getPackageName());
-                writer.writeSource(model);
+                writer.writeSource(gen, setting.isDefered());
 
             } else {
+                Model model = new Model(gen.getMemory(), gen.getRules());
+                if (ErrorHandler.Instance().hasErrors())
+                    System.exit(1);
                 Executor executor = new Executor();
                 executor.executeNTimes(model, setting.getNumberOfRuns());
             }
@@ -50,6 +52,7 @@ class RuleBasedCompiler {
         String packageName = null;
         boolean compile;
         int numberOfRuns = 1;
+        boolean defered = false;
 
         if (args.length == 0) {
             printHelp();
@@ -89,6 +92,9 @@ class RuleBasedCompiler {
             compile = true;
             if (args.length == 2) {
                 ruleFile = args[1];
+            } else if (args.length == 3 && args[1].equals("-d")) {
+                defered = true;
+                ruleFile = args[2];
             } else if (args.length == 4 && args[1].equals("-o")) {
                 outputPath = args[2];
                 ruleFile = args[3];
@@ -96,12 +102,27 @@ class RuleBasedCompiler {
                 packageName = args[2];
                 checkPackageName(packageName);
                 ruleFile = args[3];
+            } else if (args.length == 5 && args[1].equals("-o") && args[3].equals("-d")) {
+                outputPath = args[2];
+                defered = true;
+                ruleFile = args[4];
+            } else if (args.length == 5 && args[1].equals("-p") && args[3].equals("-d")) {
+                packageName = args[2];
+                checkPackageName(packageName);
+                defered = true;
+                ruleFile = args[4];
             } else if (args.length == 6 && args[1].equals("-o") && args[3].equals("-p")) {
                 outputPath = args[2];
                 packageName = args[4];
                 checkPackageName(packageName);
                 ruleFile = args[5];
-            } else {
+            } else if (args.length == 7 && args[1].equals("-o") && args[3].equals("-p") && args[5].equals("-d")) {
+                outputPath = args[2];
+                packageName = args[4];
+                checkPackageName(packageName);
+                defered = true;
+                ruleFile = args[6];
+            }else {
                 printHelp();
                 return null;
             }
@@ -110,18 +131,18 @@ class RuleBasedCompiler {
             return null;
         }
 
-        return new Setting(javaFiles, ruleFile, compile, numberOfRuns, outputPath, packageName);
+        return new Setting(javaFiles, ruleFile, compile, numberOfRuns, outputPath, packageName, defered);
     }
 
     private static void checkPackageName(String packageName) {
         if (!packageName.equals(packageName.toLowerCase()))
-            ErrorHandler.Instance().reportWarning(ErrorHandler.Type.Input, 0, 0, "Java package name should be in lower case letters.");
+            ErrorHandler.Instance().reportWarning(ErrorHandler.Type.Input, "Java package name should be in lower case letters.");
     }
 
     private static void printHelp() {
         System.out.println("Usage:\n" +
                 "   rule interpret [-times n] PATHTOJAVAFILES PATHTORULEFILE           interprets the rules n times, where n must be >= 0\n" +
-                "   rule compile [-o OUTPUTPATH] [-p PACKAGENAME] PATHTORULEFILE       compiles th rules to Java source\n" +
+                "   rule compile [-o OUTPUTPATH] [-p PACKAGENAME] [-d] PATHTORULEFILE       compiles th rules to Java source\n" +
                 "   rule (-h | --help)                                                 shows this help");
     }
 }

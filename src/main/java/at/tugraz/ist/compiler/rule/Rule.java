@@ -1,5 +1,6 @@
 package at.tugraz.ist.compiler.rule;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,9 @@ public class Rule extends Atom implements Comparable<Rule> {
     private double currentActivity = 0;
     private double damping = 0.5;
 
-    public Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions) {
+    private DiagnosticPosition diagnosticPosition;
+
+    public Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions, DiagnosticPosition diagnosticPosition) {
         if (action == null)
             throw new IllegalArgumentException("action can not be null");
 
@@ -38,6 +41,19 @@ public class Rule extends Atom implements Comparable<Rule> {
         this.worldAddition = worldAddition;
         this.preconditions = preconditions;
         this.actionName = action;
+        this.diagnosticPosition = diagnosticPosition;
+    }
+
+    public Rule(Rule rule) {
+        preconditions = rule.preconditions;
+        worldAddition = rule.worldAddition;
+        goal = rule.goal;
+        worldDeletions = rule.worldDeletions;
+        alphaEntries = rule.alphaEntries;
+        ruleGoal = rule.ruleGoal;
+        actionName = rule.actionName;
+        currentActivity = rule.currentActivity;
+        damping = rule.damping;
     }
 
     public List<Predicate> getPreconditions() {
@@ -165,8 +181,9 @@ public class Rule extends Atom implements Comparable<Rule> {
     }
 
 
-    public String getConstructorParameters() {
+    public String getConstructor() {
         StringBuilder builder = new StringBuilder();
+        builder.append("new Rule(");
         builder.append("\"" + actionName + "\", ");
         builder.append(ruleGoal + ", ");
         builder.append("new AlphaList(" + alphaEntries.getConstructorParameter() + "), ");
@@ -175,7 +192,16 @@ public class Rule extends Atom implements Comparable<Rule> {
         builder.append((goal == null ? "null" : "\"" + goal + "\"") + ", ");
         builder.append((worldAddition == null ? "null" : "new Predicate(\"" + worldAddition.getName() + "\")") + ", ");
         params = preconditions.stream().map(p -> "new Predicate(\"" + p.getName() + "\")").collect(Collectors.joining(", "));
-        builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "}))");
+        builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "})), ");
+        builder.append("new DiagnosticPosition(" + diagnosticPosition.getConstructorParameters() + "))");
         return builder.toString();
+    }
+
+    public DiagnosticPosition getDiagnosticPosition() {
+        return diagnosticPosition;
+    }
+
+    public String getActionConstructor() {
+        return "new " + actionName + "()";
     }
 }

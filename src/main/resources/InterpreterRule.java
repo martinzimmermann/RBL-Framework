@@ -1,12 +1,11 @@
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
-class InterpreterRule extends Rule {
+public class InterpreterRule extends Rule {
     private final RuleAction action;
 
-    public InterpreterRule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions) throws ClassNotFoundException {
-        super(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions);
+    public InterpreterRule(Rule rule) throws ClassNotFoundException {
+        super(rule);
         try {
             Class actionClass = Class.forName(getAction());
             Constructor constructor = actionClass.getConstructor();
@@ -14,6 +13,11 @@ class InterpreterRule extends Rule {
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             throw new ClassNotFoundException();
         }
+    }
+
+    public InterpreterRule(Rule rule, RuleAction action) throws ClassNotFoundException {
+        super(rule);
+        this.action = action;
     }
 
     public void execute(Memory memory) throws ActionFailedException {

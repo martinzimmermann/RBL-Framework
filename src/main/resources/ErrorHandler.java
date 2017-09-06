@@ -1,7 +1,3 @@
-package at.tugraz.ist.compiler;
-
-import at.tugraz.ist.compiler.rule.DiagnosticPosition;
-
 public class ErrorHandler {
 
     private static final String ANSI_RESET = "\u001B[0m";

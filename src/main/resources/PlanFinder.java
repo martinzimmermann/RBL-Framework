@@ -8,12 +8,12 @@ class PlanFinder {
         return allRules.stream().filter(Rule::hasGoal).collect(Collectors.toList());
     }
 
-    public static List<InterpreterRule> getPlanForRule(Rule goal, Memory memory, List<Rule> allRules) {
+    public static List<Rule> getPlanForRule(Rule goal, Memory memory, List<Rule> allRules) {
         List<Rule> plan = getPlanForRule(goal, memory, allRules, new Plan());
         if (plan == null)
             return null;
         Collections.reverse(plan);
-        return plan.stream().map(r -> (InterpreterRule) r).collect(Collectors.toList());
+        return plan;
     }
 
     private static List<Rule> getPlanForRule(Rule goal, Memory memory, List<Rule> allRules, Plan currentPlan) {

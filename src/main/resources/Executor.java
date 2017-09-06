@@ -17,6 +17,8 @@ public class Executor {
 
         Memory memory = new Memory(predicates);
         model = new Model(memory, rules);
+        if (ErrorHandler.Instance().hasErrors())
+            throw new ClassNotFoundException();
     }
 
     public boolean executesTillGoalReached() throws NoPlanFoundException {
@@ -31,14 +33,15 @@ public class Executor {
         return false;
     }
 
-    private boolean executeOnce() throws NoPlanFoundException {
-        List<Rule> rules = model.getRules();
-        List<Rule> goals = PlanFinder.getGoalRules(rules);
+    public boolean executeOnce() throws NoPlanFoundException {
+        List<Rule> rules = toRules(model.getRules());
+        List<InterpreterRule> goals = toInterprterRules(PlanFinder.getGoalRules(rules));
+
         goals.sort(Rule::compareTo);
-        Rule goal = goals.get(0);
+        InterpreterRule goal = goals.get(0);
 
         Memory memory = model.getMemory();
-        List<InterpreterRule> plan = PlanFinder.getPlanForRule(goal, memory, rules);
+        List<InterpreterRule> plan = toInterprterRules(PlanFinder.getPlanForRule(goal, memory, rules));
         if (plan == null)
             throw new NoPlanFoundException();
 
@@ -56,6 +59,15 @@ public class Executor {
         }
         return true;
     }
+
+    private List<InterpreterRule> toInterprterRules(List<Rule> goalRules) {
+        return goalRules.stream().map(r -> (InterpreterRule)r).collect(Collectors.toList());
+    }
+
+    private List<Rule> toRules(List<InterpreterRule> rules) {
+        return rules.stream().collect(Collectors.toList());
+    }
+
 
     public void executesNTimes(int n) throws NoPlanFoundException {
         for (int i = 0; i < n; i++) {

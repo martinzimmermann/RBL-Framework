@@ -7,14 +7,16 @@ public class Setting {
     private final int numberOfRuns;
     private final String packageName;
     private final String outputPath;
+    private boolean defered;
 
-    public Setting(String pathToJavaFiles, String pathToRuleFile, boolean compiling, int numberOfRuns, String outputPath, String packageName) {
+    public Setting(String pathToJavaFiles, String pathToRuleFile, boolean compiling, int numberOfRuns, String outputPath, String packageName, boolean defered) {
         this.pathToJavaFiles = pathToJavaFiles;
         this.pathToRuleFile = pathToRuleFile;
         this.compiling = compiling;
         this.numberOfRuns = numberOfRuns;
         this.outputPath = outputPath;
         this.packageName = packageName;
+        this.defered = defered;
     }
 
     public String getPathToJavaFiles() {
@@ -39,5 +41,9 @@ public class Setting {
 
     public String getOutputPath() {
         return outputPath;
+    }
+
+    public boolean isDefered() {
+        return defered;
     }
 }

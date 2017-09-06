@@ -64,8 +64,12 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
         List<Atom> atoms = new ArrayList<>();
 
         RuleBuilder rule = new RuleBuilder();
-        rule = rule.setInterpret(interpret)
-                .setAction(ctx.action().getText());
+        rule = rule.setAction(ctx.action().getText())
+                .setDiagnosticPosition(new DiagnosticPosition(ctx.getStart().getLine(),
+                        ctx.getStart().getCharPositionInLine(),
+                        ctx.getStop().getLine(),
+                        ctx.getStop().getCharPositionInLine(),
+                        ctx.getText()));
 
         if (ctx.Goal != null) rule = rule.setGoal(ctx.Goal.getText());
         if (ctx.WorldAddtion != null) rule = rule.setWorldAddition(new Predicate(ctx.WorldAddtion.getText()));
@@ -88,15 +92,7 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
             rule = rule.setWorldDeletions(worldDeletions.stream().map(obj -> (Predicate) obj).collect(Collectors.toList()));
         }
 
-        Rule concreteRule = null;
-        try {
-            concreteRule = rule.createRule();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            //TODO: report error
-        }
-
-        atoms.add(concreteRule);
+        atoms.add(rule.createRule());
         return atoms;
     }
 

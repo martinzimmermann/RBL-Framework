@@ -1,8 +1,9 @@
 package at.tugraz.ist.compiler.compiler;
 
-import at.tugraz.ist.compiler.interpreter.Model;
+import at.tugraz.ist.compiler.interpreter.Memory;
 import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
+import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -10,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class SourceWriter {
 
@@ -21,9 +23,9 @@ public class SourceWriter {
         packagePath = outputPath + (outputPath.endsWith("\\") ? "" : "\\") + (this.packageName == null ? "" : this.packageName.replace(".", "\\"));
     }
 
-    public void writeSource(Model model) throws IOException {
+    public void writeSource(RuleGenerator generator, boolean defereClassGeneration) throws IOException {
         writeFiles();
-        replaceStupsInExecutor(model);
+        replaceStupsInExecutor(generator, defereClassGeneration);
     }
 
     private void writeFiles() throws IOException {
@@ -32,6 +34,8 @@ public class SourceWriter {
         writeFile("AlphaEntry.java");
         writeFile("AlphaList.java");
         writeFile("Atom.java");
+        writeFile("DiagnosticPosition.java");
+        writeFile("ErrorHandler.java");
         writeFile("Executor.java");
         writeFile("InterpreterRule.java");
         writeFile("Memory.java");
@@ -49,32 +53,35 @@ public class SourceWriter {
         assert success;
     }
 
-    private void replaceStupsInExecutor(Model model) throws IOException {
+    private void replaceStupsInExecutor(RuleGenerator gen, boolean defereClassGeneration) throws IOException {
         File file = new File(packagePath, "Executor.java");
         Path path = Paths.get(file.getPath());
         Charset charset = StandardCharsets.UTF_8;
         String content = new String(Files.readAllBytes(path), charset);
 
-        String rules = buildRuleString(model);
-        content = content.replaceAll("// <replace with rules>", rules);
+        String rules = buildRuleString(gen.getRules(), defereClassGeneration);
+        String predicates = buildPredicateString(gen.getMemory(), defereClassGeneration);
 
-        String predicates = buildPredicateString(model);
+        content = content.replaceAll("// <replace with rules>", rules);
         content = content.replaceAll("// <replace with predicates>", predicates);
 
         Files.write(path, content.getBytes(charset));
     }
 
-    private String buildRuleString(Model model) {
+    private String buildRuleString(List<Rule> rules, boolean defereClassGeneration) {
         StringBuilder builder = new StringBuilder();
-        for (Rule rule : model.getRules()) {
-            builder.append("        rules.add(new InterpreterRule(" + rule.getConstructorParameters() + "));\n");
+        for (Rule rule :rules) {
+            if(defereClassGeneration)
+                builder.append("        rules.add(" + rule.getConstructor() + ");\n");
+            else
+                builder.append("        rules.add(new InterpreterRule(" + rule.getConstructor() + ", "  + rule.getActionConstructor() +  "));\n");
         }
         return builder.toString();
     }
 
-    private String buildPredicateString(Model model) {
+    private String buildPredicateString(Memory memory, boolean defereClassGeneration) {
         StringBuilder builder = new StringBuilder();
-        for (Predicate predicate : model.getMemory().getAllPredicates()) {
+        for (Predicate predicate : memory.getAllPredicates()) {
             builder.append("        predicates.add(new Predicate(\"" + predicate.getName() + "\"));\n");
         }
         return builder.toString();
