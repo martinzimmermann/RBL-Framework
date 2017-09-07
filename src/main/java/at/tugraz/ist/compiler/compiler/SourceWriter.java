@@ -74,7 +74,7 @@ public class SourceWriter {
             if(defereClassGeneration)
                 builder.append("        rules.add(" + rule.getConstructor() + ");\n");
             else
-                builder.append("        rules.add(new InterpreterRule(" + rule.getConstructor() + ", "  + rule.getActionConstructor() +  "));\n");
+                builder.append("        rules.add(new InterpreterRule("  + rule.getActionConstructor() + ", " + rule.getConstructor() + "));\n");
         }
         return builder.toString();
     }
