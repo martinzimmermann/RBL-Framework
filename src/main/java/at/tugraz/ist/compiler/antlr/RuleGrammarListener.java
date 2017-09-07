@@ -118,15 +118,53 @@ public interface RuleGrammarListener extends ParseTreeListener {
 	 */
 	void exitAction(RuleGrammarParser.ActionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RuleGrammarParser#expr}.
+	 * Enter a parse tree produced by the {@code SignExpr}
+	 * labeled alternative in {@link RuleGrammarParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpr(RuleGrammarParser.ExprContext ctx);
+	void enterSignExpr(RuleGrammarParser.SignExprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RuleGrammarParser#expr}.
+	 * Exit a parse tree produced by the {@code SignExpr}
+	 * labeled alternative in {@link RuleGrammarParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpr(RuleGrammarParser.ExprContext ctx);
+	void exitSignExpr(RuleGrammarParser.SignExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ValueExpr}
+	 * labeled alternative in {@link RuleGrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterValueExpr(RuleGrammarParser.ValueExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ValueExpr}
+	 * labeled alternative in {@link RuleGrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitValueExpr(RuleGrammarParser.ValueExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code UnarySignExpr}
+	 * labeled alternative in {@link RuleGrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnarySignExpr(RuleGrammarParser.UnarySignExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code UnarySignExpr}
+	 * labeled alternative in {@link RuleGrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnarySignExpr(RuleGrammarParser.UnarySignExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code MulopExpr}
+	 * labeled alternative in {@link RuleGrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterMulopExpr(RuleGrammarParser.MulopExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MulopExpr}
+	 * labeled alternative in {@link RuleGrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitMulopExpr(RuleGrammarParser.MulopExprContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link RuleGrammarParser#sign}.
 	 * @param ctx the parse tree
@@ -148,13 +186,39 @@ public interface RuleGrammarListener extends ParseTreeListener {
 	 */
 	void exitMulop(RuleGrammarParser.MulopContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RuleGrammarParser#value}.
+	 * Enter a parse tree produced by the {@code VarValue}
+	 * labeled alternative in {@link RuleGrammarParser#value}.
 	 * @param ctx the parse tree
 	 */
-	void enterValue(RuleGrammarParser.ValueContext ctx);
+	void enterVarValue(RuleGrammarParser.VarValueContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RuleGrammarParser#value}.
+	 * Exit a parse tree produced by the {@code VarValue}
+	 * labeled alternative in {@link RuleGrammarParser#value}.
 	 * @param ctx the parse tree
 	 */
-	void exitValue(RuleGrammarParser.ValueContext ctx);
+	void exitVarValue(RuleGrammarParser.VarValueContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code NumValue}
+	 * labeled alternative in {@link RuleGrammarParser#value}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumValue(RuleGrammarParser.NumValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NumValue}
+	 * labeled alternative in {@link RuleGrammarParser#value}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumValue(RuleGrammarParser.NumValueContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code BraceValue}
+	 * labeled alternative in {@link RuleGrammarParser#value}.
+	 * @param ctx the parse tree
+	 */
+	void enterBraceValue(RuleGrammarParser.BraceValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code BraceValue}
+	 * labeled alternative in {@link RuleGrammarParser#value}.
+	 * @param ctx the parse tree
+	 */
+	void exitBraceValue(RuleGrammarParser.BraceValueContext ctx);
 }

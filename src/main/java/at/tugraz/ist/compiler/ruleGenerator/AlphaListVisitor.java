@@ -16,12 +16,16 @@ public class AlphaListVisitor extends RuleGrammarBaseVisitor<AlphaList> {
 
         for (RuleGrammarParser.AlistentryContext entry : ctx.alistentry()) {
             String[] parts = entry.getText().split(":");
-            list.add(new AlphaEntry(parts[0], parts[1]));
+            String expresion = new ExpressionVisitor().visit(entry.expr());
+            list.add(new AlphaEntry(parts[0], expresion));
         }
 
         AlphaEntry defaultEntry = null;
         if (ctx.expr() != null)
-            defaultEntry = new AlphaEntry(ctx.expr().getText());
+        {
+            String expresion = new ExpressionVisitor().visit(ctx.expr());
+            defaultEntry = new AlphaEntry(expresion);
+        }
 
         return new AlphaList(list, defaultEntry);
     }

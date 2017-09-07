@@ -77,11 +77,33 @@ public interface RuleGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAction(RuleGrammarParser.ActionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RuleGrammarParser#expr}.
+	 * Visit a parse tree produced by the {@code SignExpr}
+	 * labeled alternative in {@link RuleGrammarParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpr(RuleGrammarParser.ExprContext ctx);
+	T visitSignExpr(RuleGrammarParser.SignExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ValueExpr}
+	 * labeled alternative in {@link RuleGrammarParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValueExpr(RuleGrammarParser.ValueExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnarySignExpr}
+	 * labeled alternative in {@link RuleGrammarParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnarySignExpr(RuleGrammarParser.UnarySignExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code MulopExpr}
+	 * labeled alternative in {@link RuleGrammarParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMulopExpr(RuleGrammarParser.MulopExprContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RuleGrammarParser#sign}.
 	 * @param ctx the parse tree
@@ -95,9 +117,24 @@ public interface RuleGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMulop(RuleGrammarParser.MulopContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RuleGrammarParser#value}.
+	 * Visit a parse tree produced by the {@code VarValue}
+	 * labeled alternative in {@link RuleGrammarParser#value}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitValue(RuleGrammarParser.ValueContext ctx);
+	T visitVarValue(RuleGrammarParser.VarValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NumValue}
+	 * labeled alternative in {@link RuleGrammarParser#value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumValue(RuleGrammarParser.NumValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BraceValue}
+	 * labeled alternative in {@link RuleGrammarParser#value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBraceValue(RuleGrammarParser.BraceValueContext ctx);
 }

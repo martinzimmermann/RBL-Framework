@@ -148,13 +148,49 @@ public class RuleGrammarBaseListener implements RuleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpr(RuleGrammarParser.ExprContext ctx) { }
+	@Override public void enterSignExpr(RuleGrammarParser.SignExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpr(RuleGrammarParser.ExprContext ctx) { }
+	@Override public void exitSignExpr(RuleGrammarParser.SignExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterValueExpr(RuleGrammarParser.ValueExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitValueExpr(RuleGrammarParser.ValueExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnarySignExpr(RuleGrammarParser.UnarySignExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnarySignExpr(RuleGrammarParser.UnarySignExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMulopExpr(RuleGrammarParser.MulopExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMulopExpr(RuleGrammarParser.MulopExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -184,13 +220,37 @@ public class RuleGrammarBaseListener implements RuleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterValue(RuleGrammarParser.ValueContext ctx) { }
+	@Override public void enterVarValue(RuleGrammarParser.VarValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitValue(RuleGrammarParser.ValueContext ctx) { }
+	@Override public void exitVarValue(RuleGrammarParser.VarValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNumValue(RuleGrammarParser.NumValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNumValue(RuleGrammarParser.NumValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBraceValue(RuleGrammarParser.BraceValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBraceValue(RuleGrammarParser.BraceValueContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

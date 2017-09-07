@@ -28,16 +28,16 @@ alist:      '('(( alistentry (',' alistentry)* (',' expr)?) | expr )')';
 alistentry: NUMBER (LT|LTE) 'a' (LT|LTE) NUMBER ':' expr;
 action:     ID('.'ID)*;
 
-expr: sign value
-    | expr mulop expr
-    | expr sign expr
-    | value
+expr: sign value #UnarySignExpr
+    | LHS=expr mulop RHS=expr #MulopExpr
+    | LHS=expr sign RHS=expr #SignExpr
+    | value #ValueExpr
     ;
 
 sign: '+' | '-';
 mulop: '*' | '/';
 
-value: 'a'
-     | NUMBER
-     | '(' expr ')'
+value: 'a' #VarValue
+     | NUMBER #NumValue
+     | '(' expr ')' #BraceValue
      ;

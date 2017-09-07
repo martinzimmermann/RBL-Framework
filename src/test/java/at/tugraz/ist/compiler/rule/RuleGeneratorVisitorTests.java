@@ -334,4 +334,35 @@ public class RuleGeneratorVisitorTests {
         assertTrue(new BigDecimal(1).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.8))) == 0);
         assertTrue(new BigDecimal(1).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(1))) == 0);
     }
+
+    @Test
+    public void complicated_alphaEntrie_test() throws IOException {
+        RuleLexer ruleLexer = new RuleLexer("-> Actions.action (0 <= a <= 1: 3 + (1 + 2 / 1 + 2 * (+2 + 2 + 2 + (2 + 2)))).");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+
+        List<Rule> atoms = gen.getRules();
+        Assert.assertNotNull(atoms);
+        assertEquals(1, atoms.size());
+        Rule rule = atoms.get(0);
+
+        assertEquals(rule.getAction(), "Actions.action");
+        assertEquals(rule.getRuleGoal(), 1.0);
+        assertEquals(rule.getWorldAddition(), null);
+        assertEquals(rule.getGoal(), null);
+        assertEquals(rule.hasGoal(), false);
+        assertEquals(rule.hasWorldAddition(), false);
+
+        assertNotNull(rule.getPreconditions());
+        assertEquals(rule.getPreconditions().size(), 0);
+
+        assertNotNull(rule.getWorldDeletions());
+        assertEquals(rule.getWorldDeletions().size(), 0);
+
+        assertNotNull(rule.getAlphaList());
+        assertTrue(new BigDecimal(26).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(1))) == 0);
+    }
 }
