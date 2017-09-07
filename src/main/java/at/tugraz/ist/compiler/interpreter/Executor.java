@@ -26,17 +26,18 @@ public class Executor {
                 rule.execute(memory);
                 memory.update(rule);
                 rule.decreaseDamping();
-                rule.increaseActivity();
             } catch (ActionFailedException e) {
                 rule.repairMemory(memory);
                 rule.increaseDamping();
                 throw e;
+            } finally {
+                rule.increaseActivity();
             }
         }
     }
 
     private List<InterpreterRule> toInterprterRules(List<Rule> goalRules) {
-        return goalRules.stream().map(r -> (InterpreterRule)r).collect(Collectors.toList());
+        return goalRules.stream().map(r -> (InterpreterRule) r).collect(Collectors.toList());
     }
 
     private List<Rule> toRules(List<InterpreterRule> rules) {

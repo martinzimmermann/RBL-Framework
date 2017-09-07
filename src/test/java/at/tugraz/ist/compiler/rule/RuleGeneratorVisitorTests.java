@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import static junit.framework.TestCase.*;
@@ -28,7 +29,7 @@ public class RuleGeneratorVisitorTests {
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         assertFalse(ErrorHandler.Instance().hasErrors());
-        
+
     }
 
     @Test
@@ -42,7 +43,7 @@ public class RuleGeneratorVisitorTests {
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         assertFalse(ErrorHandler.Instance().hasErrors());
-        
+
     }
 
     @Test
@@ -56,8 +57,9 @@ public class RuleGeneratorVisitorTests {
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         assertFalse(ErrorHandler.Instance().hasErrors());
-        
+
     }
+
     @Test
     public void aList4_pass_test() throws IOException {
         ErrorHandler.Instance().reset();
@@ -69,7 +71,7 @@ public class RuleGeneratorVisitorTests {
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         assertFalse(ErrorHandler.Instance().hasErrors());
-        
+
     }
 
     @Test
@@ -83,7 +85,7 @@ public class RuleGeneratorVisitorTests {
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         assertTrue(ErrorHandler.Instance().hasErrors());
-        
+
     }
 
     @Test
@@ -97,7 +99,7 @@ public class RuleGeneratorVisitorTests {
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         assertTrue(ErrorHandler.Instance().hasErrors());
-        
+
     }
 
     @Test
@@ -111,7 +113,7 @@ public class RuleGeneratorVisitorTests {
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         assertTrue(ErrorHandler.Instance().hasErrors());
-        
+
     }
 
     @Test
@@ -125,7 +127,7 @@ public class RuleGeneratorVisitorTests {
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         assertTrue(ErrorHandler.Instance().hasErrors());
-        
+
     }
 
     @Test
@@ -139,7 +141,7 @@ public class RuleGeneratorVisitorTests {
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         assertTrue(ErrorHandler.Instance().hasErrors());
-        
+
     }
 
     @Test
@@ -153,7 +155,7 @@ public class RuleGeneratorVisitorTests {
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
 
         assertTrue(ErrorHandler.Instance().hasErrors());
-        
+
     }
 
     @Test
@@ -195,7 +197,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals(rule.getWorldDeletions().get(1), new Predicate("pre2"));
 
         assertNotNull(rule.getAlphaList());
-        assertEquals(1.0, rule.getAlphaList().calculateWeight(0.5));
+        assertTrue(new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))) == 0);
     }
 
     @Test
@@ -226,7 +228,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals(rule.getWorldDeletions().size(), 0);
 
         assertNotNull(rule.getAlphaList());
-        assertEquals(1.0, rule.getAlphaList().calculateWeight(0.5));
+        assertTrue(new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))) == 0);
     }
 
     @Test
@@ -257,7 +259,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals(rule.getWorldDeletions().size(), 0);
 
         assertNotNull(rule.getAlphaList());
-        assertEquals(0.5, rule.getAlphaList().calculateWeight(0.5));
+        assertTrue(new BigDecimal(0.5).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))) == 0);
     }
 
     @Test
@@ -288,11 +290,11 @@ public class RuleGeneratorVisitorTests {
         assertEquals(rule.getWorldDeletions().size(), 0);
 
         assertNotNull(rule.getAlphaList());
-        assertEquals(0.0, rule.getAlphaList().calculateWeight(0));
-        assertEquals(0.5, rule.getAlphaList().calculateWeight(0.25));
-        assertEquals(1.0, rule.getAlphaList().calculateWeight(0.5));
-        assertEquals(0.75, rule.getAlphaList().calculateWeight(0.75));
-        assertEquals(1.0, rule.getAlphaList().calculateWeight(1));
+        assertTrue(new BigDecimal(0.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.0))) == 0);
+        assertTrue(new BigDecimal(0.5).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.25))) == 0);
+        assertTrue(new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))) == 0);
+        assertTrue(new BigDecimal(0.75).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.75))) == 0);
+        assertTrue(new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(1.0))) == 0);
     }
 
 
@@ -324,12 +326,12 @@ public class RuleGeneratorVisitorTests {
         assertEquals(rule.getWorldDeletions().size(), 0);
 
         assertNotNull(rule.getAlphaList());
-        assertEquals(0.0, rule.getAlphaList().calculateWeight(0));
-        assertEquals(0.5, rule.getAlphaList().calculateWeight(0.25));
-        assertEquals(1.0, rule.getAlphaList().calculateWeight(0.3));
-        assertEquals(1.0, rule.getAlphaList().calculateWeight(0.5));
-        assertEquals(0.75, rule.getAlphaList().calculateWeight(0.75));
-        assertEquals(1.0, rule.getAlphaList().calculateWeight(0.8));
-        assertEquals(1.0, rule.getAlphaList().calculateWeight(1));
+        assertTrue(new BigDecimal(0.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0))) == 0);
+        assertTrue(new BigDecimal(0.5).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.25))) == 0);
+        assertTrue(new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.3))) == 0);
+        assertTrue(new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))) == 0);
+        assertTrue(new BigDecimal(0.75).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.75))) == 0);
+        assertTrue(new BigDecimal(1).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.8))) == 0);
+        assertTrue(new BigDecimal(1).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(1))) == 0);
     }
 }

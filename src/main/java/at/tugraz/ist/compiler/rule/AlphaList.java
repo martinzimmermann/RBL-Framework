@@ -1,5 +1,6 @@
 package at.tugraz.ist.compiler.rule;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,10 +47,10 @@ public class AlphaList {
         return true;
     }
 
-    public double calculateWeight(double alpha) {
-        if (alpha < 0)
+    public BigDecimal calculateWeight(BigDecimal alpha) {
+        if (alpha.compareTo(new BigDecimal(0)) < 0)
             throw new IllegalArgumentException("alpha must be greater or equal to 0, was " + alpha);
-        if (alpha > 1)
+        if (alpha.compareTo(new BigDecimal(1)) > 0)
             throw new IllegalArgumentException("alpha must be smaller or equal than 1, was " + alpha);
 
         for (AlphaEntry entry : entries) {
@@ -63,8 +64,8 @@ public class AlphaList {
         throw new IllegalArgumentException("This AlphaList has no entry for the provided alpha, alpha was " + alpha);
     }
 
-    public String getConstructorParameter() {
-        String params = entries.stream().map(e -> "new AlphaEntry(" + e.getConstructorParameter() + ")").collect(Collectors.joining(", "));
-        return "new ArrayList<AlphaEntry>(Arrays.asList(new AlphaEntry[]{" + params + "}))";
+    public String getConstructor() {
+        String params = entries.stream().map(AlphaEntry::getConstructor).collect(Collectors.joining(", "));
+        return "new AlphaList(new ArrayList<AlphaEntry>(Arrays.asList(new AlphaEntry[]{" + params + "})), " + (defaultEntry == null ? "null" : defaultEntry.getConstructor()) + ")";
     }
 }

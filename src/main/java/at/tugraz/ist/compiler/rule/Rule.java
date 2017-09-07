@@ -1,6 +1,6 @@
 package at.tugraz.ist.compiler.rule;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,10 +11,10 @@ public class Rule extends Atom implements Comparable<Rule> {
     private final String goal;
     private final List<Predicate> worldDeletions;
     private final AlphaList alphaEntries;
-    private final double ruleGoal;
+    private final BigDecimal ruleGoal;
     private final String actionName;
-    private double currentActivity = 0;
-    private double damping = 0.5;
+    private BigDecimal currentActivity = BigDecimal.valueOf(0.00000000001);
+    private BigDecimal damping = BigDecimal.valueOf(0.5);
 
     private DiagnosticPosition diagnosticPosition;
 
@@ -34,7 +34,7 @@ public class Rule extends Atom implements Comparable<Rule> {
         if (preconditions == null)
             throw new IllegalArgumentException("preconditions can not be null");
 
-        this.ruleGoal = ruleGoal;
+        this.ruleGoal = BigDecimal.valueOf(ruleGoal);
         this.alphaEntries = alphaEntries;
         this.worldDeletions = worldDeletions;
         this.goal = goal;
@@ -85,7 +85,7 @@ public class Rule extends Atom implements Comparable<Rule> {
     }
 
     public double getRuleGoal() {
-        return ruleGoal;
+        return ruleGoal.doubleValue();
     }
 
     public String getAction() {
@@ -132,7 +132,7 @@ public class Rule extends Atom implements Comparable<Rule> {
 
         Rule rule = (Rule) o;
 
-        if (Double.compare(rule.ruleGoal, ruleGoal) != 0) return false;
+        if (rule.ruleGoal.compareTo(ruleGoal) != 0) return false;
         if (!preconditions.equals(rule.preconditions)) return false;
         if (worldAddition != null ? !worldAddition.equals(rule.worldAddition) : rule.worldAddition != null)
             return false;
@@ -151,7 +151,7 @@ public class Rule extends Atom implements Comparable<Rule> {
         result = 31 * result + (goal != null ? goal.hashCode() : 0);
         result = 31 * result + worldDeletions.hashCode();
         result = 31 * result + alphaEntries.hashCode();
-        temp = Double.doubleToLongBits(ruleGoal);
+        temp = ruleGoal.hashCode();
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + actionName.hashCode();
         return result;
@@ -160,24 +160,24 @@ public class Rule extends Atom implements Comparable<Rule> {
     @Override
     public int compareTo(Rule o) {
 
-        double otherWeight = o.alphaEntries.calculateWeight(o.currentActivity) * (o.ruleGoal - o.currentActivity) * (1 - o.damping);
-        double thisWeight = alphaEntries.calculateWeight(currentActivity) * (ruleGoal - currentActivity) * (1 - damping);
+        BigDecimal otherWeight = o.alphaEntries.calculateWeight(o.currentActivity).multiply(o.ruleGoal.subtract(o.currentActivity)).multiply(new BigDecimal(1).subtract(o.damping));
+        BigDecimal thisWeight = alphaEntries.calculateWeight(currentActivity).multiply(ruleGoal.subtract(currentActivity)).multiply(new BigDecimal(1).subtract(damping));
 
-        return Double.compare(otherWeight, thisWeight);
+        return otherWeight.compareTo(thisWeight);
     }
 
     public void decreaseDamping() {
-        damping = damping - 0.1;
-        damping = damping < 0.1 ? 0.1 : damping;
+        damping = damping.subtract(new BigDecimal(0.1));
+        damping = damping.compareTo(new BigDecimal(0.1)) < 0 ? new BigDecimal(0.1) : damping;
     }
 
     public void increaseDamping() {
-        damping = damping + 0.1;
-        damping = damping > 0.9 ? 0.9 : damping;
+        damping = damping.add(new BigDecimal(0.1));
+        damping = damping.compareTo(new BigDecimal(0.9)) > 0 ? new BigDecimal(0.9) : damping;
     }
 
     public void increaseActivity() {
-        currentActivity = (currentActivity + ruleGoal) / 2;
+        currentActivity = currentActivity.add(ruleGoal).divide(new BigDecimal(2));
     }
 
     public String getConstructor() {
@@ -185,7 +185,7 @@ public class Rule extends Atom implements Comparable<Rule> {
         builder.append("new Rule(");
         builder.append("\"" + actionName + "\", ");
         builder.append(ruleGoal + ", ");
-        builder.append("new AlphaList(" + alphaEntries.getConstructorParameter() + "), ");
+        builder.append( alphaEntries.getConstructor() + ", ");
         String params = worldDeletions.stream().map(p -> "new Predicate(\"" + p.getName() + "\")").collect(Collectors.joining(", "));
         builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "})), ");
         builder.append((goal == null ? "null" : "\"" + goal + "\"") + ", ");

@@ -3,6 +3,7 @@ package at.tugraz.ist.compiler.rule;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,7 +59,7 @@ public class AlphaEntry {
         return Double.parseDouble(end);
     }
 
-    public double calculateWeight(double alpha) {
+    public BigDecimal calculateWeight(BigDecimal alpha) {
 
         String eval = "a = " + alpha + "; " + function;
 
@@ -72,12 +73,12 @@ public class AlphaEntry {
         }
 
         if (result instanceof Number)
-            return ((Number) result).doubleValue();
+            return  BigDecimal.valueOf(((Number) result).doubleValue());
         else
             throw new IllegalStateException("The function provided is not a valid function, function was: " + function);
     }
 
-    public boolean isResponsible(double alpha) {
+    public boolean isResponsible(BigDecimal alpha) {
         int indexOfA = expression.indexOf("a");
         String les = expression.substring(0, indexOfA + 1);
         String greater = expression.substring(indexOfA, expression.length());
@@ -99,7 +100,7 @@ public class AlphaEntry {
             return false;
     }
 
-    public String getConstructorParameter() {
-        return "\"" + expression + "\"" + "," + "\"" + function + "\"";
+    public String getConstructor() {
+        return "new AlphaEntry(\"" + expression + "\"" + "," + "\"" + function + "\")";
     }
 }

@@ -24,11 +24,20 @@ class RuleBasedCompiler {
                 ClassCompiler.compileClasses(setting.getPathToJavaFiles());
 
             RuleLexer ruleLexer = new RuleLexer(Paths.get(setting.getPathToRuleFile()));
-            RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
-            RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), !setting.isCompiling());
-            if(ErrorHandler.Instance().hasErrors()) {
-                System.exit(1);
+            if (ruleLexer.getErrorCount() != 0) {
                 ErrorHandler.Instance().printErrorCount();
+                System.exit(1);
+            }
+
+            RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+            if (ruleParser.getErrorCount() != 0) {
+                ErrorHandler.Instance().printErrorCount();
+                System.exit(1);
+            }
+            RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), !setting.isCompiling());
+            if (ErrorHandler.Instance().hasErrors()) {
+                ErrorHandler.Instance().printErrorCount();
+                System.exit(1);
             }
 
             if (setting.isCompiling()) {
@@ -37,9 +46,9 @@ class RuleBasedCompiler {
 
             } else {
                 Model model = new Model(gen.getMemory(), gen.getRules());
-                if(ErrorHandler.Instance().hasErrors()) {
-                    System.exit(1);
+                if (ErrorHandler.Instance().hasErrors()) {
                     ErrorHandler.Instance().printErrorCount();
+                    System.exit(1);
                 }
                 Executor executor = new Executor();
                 executor.executeNTimes(model, setting.getNumberOfRuns());
@@ -127,7 +136,7 @@ class RuleBasedCompiler {
                 checkPackageName(packageName);
                 defered = true;
                 ruleFile = args[6];
-            }else {
+            } else {
                 printHelp();
                 return null;
             }

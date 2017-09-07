@@ -56,6 +56,7 @@ public class Executor {
             } catch (ActionFailedException e) {
                 rule.repairMemory(memory);
                 rule.increaseDamping();
+                rule.increaseActivity();
                 return false;
             }
         }

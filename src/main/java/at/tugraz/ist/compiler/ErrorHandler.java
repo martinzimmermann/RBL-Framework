@@ -4,7 +4,6 @@ import at.tugraz.ist.compiler.rule.DiagnosticPosition;
 
 public class ErrorHandler {
 
-    private static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
@@ -12,6 +11,7 @@ public class ErrorHandler {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
+    private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_YELLOW = "\u001B[33m";
     private static ErrorHandler instance;
     private int errorCount = 0;
@@ -35,26 +35,32 @@ public class ErrorHandler {
             System.out.println(ANSI_YELLOW + "Warning: " + message + ANSI_RESET);
     }
 
-    public void reportError(Type type, DiagnosticPosition diagnosticPosition, String Message) {
+    public void reportError(Type type, DiagnosticPosition diagnosticPosition, String message) {
+
+        if (diagnosticPosition == null)
+            throw new IllegalArgumentException("diagnosticPosition can't be null");
+
         errorCount++;
-        System.out.println(ANSI_RED + Message);
-        System.out.println(diagnosticPosition.getPrettyPrint() + ANSI_RESET);
+        if (message != null) {
+            System.out.println(ANSI_RED + message);
+            System.out.println(diagnosticPosition.getPrettyPrint() + ANSI_RESET);
+        } else
+            System.out.println(ANSI_RED + diagnosticPosition.getPrettyPrint() + ANSI_RESET);
     }
 
     public boolean hasErrors() {
         return errorCount != 0;
     }
 
-    public enum Type {
-        Input, Lexical, Syntactical, Interpreter
-    }
-
     public void printErrorCount() {
         System.out.println(ANSI_RED + errorCount + " Errors found" + ANSI_RESET);
     }
 
-    public void reset()
-    {
+    public void reset() {
         errorCount = 0;
+    }
+
+    public enum Type {
+        Input, Lexical, Syntactical, Interpreter
     }
 }
