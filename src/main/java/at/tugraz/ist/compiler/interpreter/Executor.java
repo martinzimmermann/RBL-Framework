@@ -12,12 +12,15 @@ public class Executor {
     public void executeOnce(Model model) throws ActionFailedException, NoPlanFoundException {
         List<Rule> rules = toRules(model.getRules());
         List<InterpreterRule> goals = toInterprterRules(PlanFinder.getGoalRules(rules));
-
-        goals.sort(Rule::compareTo);
-        InterpreterRule goal = goals.get(0);
-
         Memory memory = model.getMemory();
-        List<InterpreterRule> plan = toInterprterRules(PlanFinder.getPlanForRule(goal, memory, rules));
+
+        List<InterpreterRule> plan = null;
+        goals.sort(Rule::compareTo);
+        for (Rule goal : goals) {
+            plan = toInterprterRules(PlanFinder.getPlanForRule(goal, memory, rules));
+            if (plan != null)
+                break;
+        }
         if (plan == null)
             throw new NoPlanFoundException();
 
@@ -37,11 +40,11 @@ public class Executor {
     }
 
     private List<InterpreterRule> toInterprterRules(List<Rule> goalRules) {
-        return goalRules.stream().map(r -> (InterpreterRule) r).collect(Collectors.toList());
+        return goalRules == null ? null : goalRules.stream().map(r -> (InterpreterRule) r).collect(Collectors.toList());
     }
 
     private List<Rule> toRules(List<InterpreterRule> rules) {
-        return rules.stream().collect(Collectors.toList());
+        return rules == null ? null : rules.stream().collect(Collectors.toList());
     }
 
     public void executeNTimes(Model model, int n) throws ActionFailedException, NoPlanFoundException {
