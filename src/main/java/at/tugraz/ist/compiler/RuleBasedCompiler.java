@@ -7,7 +7,6 @@ import at.tugraz.ist.compiler.interpreter.Model;
 import at.tugraz.ist.compiler.interpreter.NoPlanFoundException;
 import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
-import at.tugraz.ist.compiler.rule.ActionFailedException;
 import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
 
 import javax.tools.ToolProvider;
@@ -54,7 +53,7 @@ class RuleBasedCompiler {
                 executor.executeNTimes(model, setting.getNumberOfRuns());
             }
 
-        } catch (IOException | ActionFailedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

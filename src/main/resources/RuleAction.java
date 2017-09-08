@@ -1,5 +1,4 @@
 public interface RuleAction {
-    void execute(Memory model) throws ActionFailedException;
-
+    boolean execute(Memory model);
     void repair(Memory model);
 }

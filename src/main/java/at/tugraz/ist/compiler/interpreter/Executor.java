@@ -1,6 +1,5 @@
 package at.tugraz.ist.compiler.interpreter;
 
-import at.tugraz.ist.compiler.rule.ActionFailedException;
 import at.tugraz.ist.compiler.rule.InterpreterRule;
 import at.tugraz.ist.compiler.rule.Rule;
 
@@ -9,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class Executor {
 
-    public void executeOnce(Model model) throws ActionFailedException, NoPlanFoundException {
+    public boolean executeOnce(Model model) throws NoPlanFoundException {
         List<Rule> rules = toRules(model.getRules());
         List<InterpreterRule> goals = toInterprterRules(PlanFinder.getGoalRules(rules));
         Memory memory = model.getMemory();
@@ -25,18 +24,19 @@ public class Executor {
             throw new NoPlanFoundException();
 
         for (InterpreterRule rule : plan) {
-            try {
-                rule.execute(memory);
+            boolean result = rule.execute(memory);
+            rule.increaseActivity();
+
+            if (result) {
                 memory.update(rule);
                 rule.decreaseDamping();
-            } catch (ActionFailedException e) {
+            } else {
                 rule.repairMemory(memory);
                 rule.increaseDamping();
-                throw e;
-            } finally {
-                rule.increaseActivity();
+                return false;
             }
         }
+        return true;
     }
 
     private List<InterpreterRule> toInterprterRules(List<Rule> goalRules) {
@@ -47,15 +47,9 @@ public class Executor {
         return rules == null ? null : rules.stream().collect(Collectors.toList());
     }
 
-    public void executeNTimes(Model model, int n) throws ActionFailedException, NoPlanFoundException {
+    public void executeNTimes(Model model, int n) throws NoPlanFoundException {
         for (int i = 0; i < n; i++) {
-            try {
                 executeOnce(model);
-            } catch (ActionFailedException e) {
-                // Do nothing
-            }
         }
     }
-
-
 }

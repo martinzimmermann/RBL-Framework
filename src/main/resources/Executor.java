@@ -51,15 +51,15 @@ public class Executor {
             throw new NoPlanFoundException();
 
         for (InterpreterRule rule : plan) {
-            try {
-                rule.execute(memory);
+            boolean result = rule.execute(memory);
+            rule.increaseActivity();
+
+            if (result) {
                 memory.update(rule);
                 rule.decreaseDamping();
-                rule.increaseActivity();
-            } catch (ActionFailedException e) {
+            } else {
                 rule.repairMemory(memory);
                 rule.increaseDamping();
-                rule.increaseActivity();
                 return false;
             }
         }

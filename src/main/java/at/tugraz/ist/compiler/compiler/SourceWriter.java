@@ -30,7 +30,6 @@ public class SourceWriter {
 
     private void writeFiles() throws IOException {
         createFolder();
-        writeFile("ActionFailedException.java");
         writeFile("AlphaEntry.java");
         writeFile("AlphaList.java");
         writeFile("Atom.java");

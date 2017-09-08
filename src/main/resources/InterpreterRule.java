@@ -20,10 +20,9 @@ public class InterpreterRule extends Rule {
         this.action = action;
     }
 
-    public void execute(Memory memory) throws ActionFailedException {
+    public boolean execute(Memory memory) {
         assert (memory.containsAll(this.getPreconditions()));
-
-        action.execute(memory);
+        return action.execute(memory);
     }
 
     public void repairMemory(Memory memory) {
