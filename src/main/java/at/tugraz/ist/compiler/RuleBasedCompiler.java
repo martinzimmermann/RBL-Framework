@@ -33,7 +33,7 @@ class RuleBasedCompiler {
                 ErrorHandler.Instance().printErrorCount();
                 System.exit(1);
             }
-            RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), !setting.isCompiling());
+            RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
             if (ErrorHandler.Instance().hasErrors()) {
                 ErrorHandler.Instance().printErrorCount();
                 System.exit(1);
@@ -41,7 +41,7 @@ class RuleBasedCompiler {
 
             if (setting.isCompiling()) {
                 SourceWriter writer = new SourceWriter(setting.getOutputPath(), setting.getPackageName());
-                writer.writeSource(gen, setting.isDefered());
+                writer.writeSource(gen, setting.isDeferred(), setting.isLibraryUsed());
 
             } else {
                 Model model = new Model(gen.getMemory(), gen.getRules());
@@ -65,86 +65,83 @@ class RuleBasedCompiler {
         String packageName = null;
         boolean compile;
         int numberOfRuns = 1;
-        boolean defered = false;
+        boolean deferred = false;
+        boolean lib = false;
 
         if (args.length == 0) {
             printHelp();
             return null;
         }
 
-        if (args[0].equals("interpret")) {
-            javax.tools.JavaCompiler c = ToolProvider.getSystemJavaCompiler();
-            if (c == null) {
-                System.out.println("Error: if you want to interpret the rules, please make sure to run this program with the JDK rather than the JRE ");
-                System.exit(1);
-            }
+        switch (args[0]) {
+            case "interpret":
+                javax.tools.JavaCompiler c = ToolProvider.getSystemJavaCompiler();
+                if (c == null) {
+                    System.out.println("Error: if you want to interpret the rules, please make sure to run this program with the JDK rather than the JRE ");
+                    System.exit(1);
+                }
 
-            compile = false;
-            if (args.length == 5 && args[1].equals("-times")) {
-                try {
-                    numberOfRuns = Integer.parseInt(args[2]);
-                    if (numberOfRuns < 0) {
+                compile = false;
+                if (args.length == 5 && args[1].equals("-times")) {
+                    try {
+                        numberOfRuns = Integer.parseInt(args[2]);
+                        if (numberOfRuns < 0) {
+                            printHelp();
+                            return null;
+                        }
+                    } catch (NumberFormatException e) {
                         printHelp();
                         return null;
                     }
-                } catch (NumberFormatException e) {
+                    javaFiles = args[3];
+                    ruleFile = args[4];
+                } else if (args.length == 3) {
+                    javaFiles = args[1];
+                    ruleFile = args[2];
+                } else {
                     printHelp();
                     return null;
                 }
-                javaFiles = args[3];
-                ruleFile = args[4];
-            } else if (args.length == 3) {
-                javaFiles = args[1];
-                ruleFile = args[2];
-            } else {
-                printHelp();
-                return null;
-            }
 
-        } else if (args[0].equals("compile")) {
-            compile = true;
-            if (args.length == 2) {
-                ruleFile = args[1];
-            } else if (args.length == 3 && args[1].equals("-d")) {
-                defered = true;
-                ruleFile = args[2];
-            } else if (args.length == 4 && args[1].equals("-o")) {
-                outputPath = args[2];
-                ruleFile = args[3];
-            } else if (args.length == 4 && args[1].equals("-p")) {
-                packageName = args[2];
-                checkPackageName(packageName);
-                ruleFile = args[3];
-            } else if (args.length == 5 && args[1].equals("-o") && args[3].equals("-d")) {
-                outputPath = args[2];
-                defered = true;
-                ruleFile = args[4];
-            } else if (args.length == 5 && args[1].equals("-p") && args[3].equals("-d")) {
-                packageName = args[2];
-                checkPackageName(packageName);
-                defered = true;
-                ruleFile = args[4];
-            } else if (args.length == 6 && args[1].equals("-o") && args[3].equals("-p")) {
-                outputPath = args[2];
-                packageName = args[4];
-                checkPackageName(packageName);
-                ruleFile = args[5];
-            } else if (args.length == 7 && args[1].equals("-o") && args[3].equals("-p") && args[5].equals("-d")) {
-                outputPath = args[2];
-                packageName = args[4];
-                checkPackageName(packageName);
-                defered = true;
-                ruleFile = args[6];
-            } else {
+                break;
+            case "compile":
+                compile = true;
+                int currentIndex = 1;
+
+                if (args.length > (currentIndex + 1) && args[currentIndex].equals("-o")) {
+                    currentIndex++;
+                    outputPath = args[currentIndex++];
+                }
+
+                if (args.length > (currentIndex + 1) && args[currentIndex].equals("-p")) {
+                    currentIndex++;
+                    packageName = args[currentIndex++];
+                    checkPackageName(packageName);
+                }
+
+                if (args.length > (currentIndex) && args[currentIndex].equals("-d")) {
+                    currentIndex++;
+                    deferred = true;
+                }
+
+                if (args.length > (currentIndex) && args[currentIndex].equals("-lib")) {
+                    currentIndex++;
+                    lib = true;
+                }
+
+                if (args.length > (currentIndex)) {
+                    ruleFile = args[currentIndex];
+                } else {
+                    printHelp();
+                    return null;
+                }
+                break;
+            default:
                 printHelp();
                 return null;
-            }
-        } else {
-            printHelp();
-            return null;
         }
 
-        return new Setting(javaFiles, ruleFile, compile, numberOfRuns, outputPath, packageName, defered);
+        return new Setting(javaFiles, ruleFile, compile, numberOfRuns, outputPath, packageName, deferred, lib);
     }
 
     private static void checkPackageName(String packageName) {
@@ -154,8 +151,8 @@ class RuleBasedCompiler {
 
     private static void printHelp() {
         System.out.println("Usage:\n" +
-                "   rule interpret [-times n] PATHTOJAVAFILES PATHTORULEFILE           interprets the rules n times, where n must be >= 0\n" +
-                "   rule compile [-o OUTPUTPATH] [-p PACKAGENAME] [-d] PATHTORULEFILE  compiles th rules to Java source\n" +
-                "   rule (-h | --help)                                                 shows this help");
+                "   rule interpret [-times n] PATHTOJAVAFILES PATHTORULEFILE                  interprets the rules n times, where n must be >= 0\n" +
+                "   rule compile [-o OUTPUTPATH] [-p PACKAGENAME] [-d] [-lib} PATHTORULEFILE  compiles th rules to Java source\n" +
+                "   rule (-h | --help)                                                        shows this help");
     }
 }

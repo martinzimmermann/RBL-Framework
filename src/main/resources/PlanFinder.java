@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class PlanFinder {
+public class PlanFinder {
     public static List<Rule> getGoalRules(List<Rule> allRules) {
         return allRules.stream().filter(Rule::hasGoal).collect(Collectors.toList());
     }

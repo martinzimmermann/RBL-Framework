@@ -34,17 +34,14 @@ public class AlphaList {
             if((entry.getStart() != start || entry.isStartSmallerEquals() == lastSmallerEquals) && defaultEntry == null)
                 return false;
 
-            if(entry.getStart() == start && entry.isStartSmallerEquals() == true && lastSmallerEquals == true)
+            if(entry.getStart() == start && entry.isStartSmallerEquals() && lastSmallerEquals)
                 return false;
 
             start = entry.getEnd();
             lastSmallerEquals = entry.isEndSmallerEquals();
         }
 
-        if((start != 1 || lastSmallerEquals == false) && defaultEntry == null)
-            return false;
-
-        return true;
+        return (!(start != 1) && lastSmallerEquals) || defaultEntry != null;
     }
 
     public BigDecimal calculateWeight(BigDecimal alpha) {

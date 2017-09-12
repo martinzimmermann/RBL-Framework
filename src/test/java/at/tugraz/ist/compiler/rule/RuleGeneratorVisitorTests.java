@@ -26,7 +26,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         assertFalse(ErrorHandler.Instance().hasErrors());
 
@@ -40,7 +40,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         assertFalse(ErrorHandler.Instance().hasErrors());
 
@@ -54,7 +54,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         assertFalse(ErrorHandler.Instance().hasErrors());
 
@@ -68,7 +68,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         assertFalse(ErrorHandler.Instance().hasErrors());
 
@@ -82,7 +82,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         assertTrue(ErrorHandler.Instance().hasErrors());
 
@@ -96,7 +96,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         assertTrue(ErrorHandler.Instance().hasErrors());
 
@@ -110,7 +110,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         assertTrue(ErrorHandler.Instance().hasErrors());
 
@@ -124,7 +124,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         assertTrue(ErrorHandler.Instance().hasErrors());
 
@@ -138,7 +138,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         assertTrue(ErrorHandler.Instance().hasErrors());
 
@@ -152,7 +152,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         assertTrue(ErrorHandler.Instance().hasErrors());
 
@@ -167,7 +167,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         Memory memory = gen.getMemory();
         Assert.assertNotNull(memory);
@@ -207,7 +207,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         List<Rule> atoms = gen.getRules();
         Assert.assertNotNull(atoms);
@@ -238,7 +238,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         List<Rule> rules = gen.getRules();
         Assert.assertNotNull(rules);
@@ -269,7 +269,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         List<Rule> atoms = gen.getRules();
         Assert.assertNotNull(atoms);
@@ -305,7 +305,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         List<Rule> atoms = gen.getRules();
         Assert.assertNotNull(atoms);
@@ -336,13 +336,13 @@ public class RuleGeneratorVisitorTests {
     }
 
     @Test
-    public void complicated_alphaEntrie_test() throws IOException {
+    public void complicated_alphaEntry_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer("-> Actions.action (0 <= a <= 1: 3 + (1 + 2 / 1 + 2 * (+2 + 2 + 2 + (2 + 2)))).");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree(), true);
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         List<Rule> atoms = gen.getRules();
         Assert.assertNotNull(atoms);

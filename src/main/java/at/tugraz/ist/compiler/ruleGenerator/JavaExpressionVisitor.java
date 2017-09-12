@@ -3,8 +3,6 @@ package at.tugraz.ist.compiler.ruleGenerator;
 import at.tugraz.ist.compiler.antlr.RuleGrammarBaseVisitor;
 import at.tugraz.ist.compiler.antlr.RuleGrammarParser;
 
-import java.math.BigDecimal;
-
 public class JavaExpressionVisitor extends RuleGrammarBaseVisitor<String> {
 
     @Override

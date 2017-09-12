@@ -4,7 +4,6 @@ import at.tugraz.ist.compiler.ErrorHandler;
 import at.tugraz.ist.compiler.rule.InterpreterRule;
 import at.tugraz.ist.compiler.rule.Rule;
 
-import java.awt.font.TextHitInfo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

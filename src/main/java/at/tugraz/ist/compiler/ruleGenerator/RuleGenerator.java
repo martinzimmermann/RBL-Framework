@@ -10,14 +10,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RuleGenerator {
-    private final ParseTree parseTree;
-    private final boolean interpret;
     private List<Atom> atoms = null;
 
-    public RuleGenerator(ParseTree parseTree, boolean interpret) {
-        this.parseTree = parseTree;
-        this.interpret = interpret;
-        atoms = new RuleGeneratorVisitor(interpret).visit(parseTree);
+    public RuleGenerator(ParseTree parseTree) {
+        atoms = new RuleGeneratorVisitor().visit(parseTree);
     }
 
     public List<Rule> getRules() {

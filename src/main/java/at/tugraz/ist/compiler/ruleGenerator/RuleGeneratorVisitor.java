@@ -12,12 +12,6 @@ import java.util.stream.Collectors;
 
 public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
 
-    private boolean interpret;
-
-    public RuleGeneratorVisitor(boolean interpret) {
-        this.interpret = interpret;
-    }
-
     @Override
     public List<Atom> visitProgram(ProgramContext ctx) {
         List<Atom> atoms = new ArrayList<>();

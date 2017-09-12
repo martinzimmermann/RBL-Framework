@@ -1,27 +1,26 @@
 package at.tugraz.ist.compiler.rule;
 
 public class DiagnosticPosition {
-    private int startLineNumber;
-    private int startColoum;
-    private int endLineNumber;
-    private int endColoum;
-    private String text;
-    private String constructorParameters;
+    private final int startLineNumber;
+    private final int startColumn;
+    private final int endLineNumber;
+    private final int endColumn;
+    private final String text;
 
-    public DiagnosticPosition(int startLineNumber, int startColoum, int endLineNumber, int endColoum, String text)
+    public DiagnosticPosition(int startLineNumber, int startColumn, int endLineNumber, int endColumn, String text)
     {
         this.startLineNumber = startLineNumber;
-        this.startColoum = startColoum;
+        this.startColumn = startColumn;
         this.endLineNumber = endLineNumber;
-        this.endColoum = endColoum;
+        this.endColumn = endColumn;
         this.text = text;
     }
 
     public String getPrettyPrint(){
-        return startLineNumber + ":" + startColoum +": " + text;
+        return startLineNumber + ":" + startColumn +": " + text;
     }
 
     public String getConstructorParameters() {
-        return startLineNumber + ", " + startColoum + ", " + endLineNumber + ", " + endColoum + ", \"" + text + "\"";
+        return startLineNumber + ", " + startColumn + ", " + endLineNumber + ", " + endColumn + ", \"" + text + "\"";
     }
 }

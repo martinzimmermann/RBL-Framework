@@ -1,3 +1,5 @@
+
+// <replace with import>
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,13 +41,13 @@ public class Executor {
 
     public boolean executeOnce() throws NoPlanFoundException {
         List<Rule> rules = toRules(model.getRules());
-        List<InterpreterRule> goals = toInterprterRules(PlanFinder.getGoalRules(rules));
+        List<InterpreterRule> goals = toInterpreterRules(PlanFinder.getGoalRules(rules));
         Memory memory = model.getMemory();
 
         List<InterpreterRule> plan = null;
         goals.sort(Rule::compareTo);
         for (Rule goal: goals) {
-            plan = toInterprterRules(PlanFinder.getPlanForRule(goal, memory, rules));
+            plan = toInterpreterRules(PlanFinder.getPlanForRule(goal, memory, rules));
             if(plan != null)
                 break;
         }
@@ -68,7 +70,7 @@ public class Executor {
         return true;
     }
 
-    private List<InterpreterRule> toInterprterRules(List<Rule> goalRules) {
+    private List<InterpreterRule> toInterpreterRules(List<Rule> goalRules) {
         return goalRules == null ? null : goalRules.stream().map(r -> (InterpreterRule) r).collect(Collectors.toList());
     }
 

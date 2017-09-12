@@ -23,28 +23,31 @@ public class SourceWriter {
         packagePath = outputPath + (outputPath.endsWith("\\") ? "" : "\\") + (this.packageName == null ? "" : this.packageName.replace(".", "\\"));
     }
 
-    public void writeSource(RuleGenerator generator, boolean defereClassGeneration) throws IOException {
-        writeFiles();
-        replaceStupsInExecutor(generator, defereClassGeneration);
+    public void writeSource(RuleGenerator generator, boolean deferClassGeneration, boolean libraryUsed) throws IOException {
+        writeFiles(libraryUsed);
+        replaceStubsInExecutor(generator, deferClassGeneration, libraryUsed);
     }
 
-    private void writeFiles() throws IOException {
+    private void writeFiles(boolean libraryUsed) throws IOException {
         createFolder();
-        writeFile("AlphaEntry.java");
-        writeFile("AlphaList.java");
-        writeFile("Atom.java");
-        writeFile("DiagnosticPosition.java");
-        writeFile("ErrorHandler.java");
         writeFile("Executor.java");
-        writeFile("InterpreterRule.java");
-        writeFile("Memory.java");
-        writeFile("Model.java");
-        writeFile("NoPlanFoundException.java");
-        writeFile("Plan.java");
-        writeFile("PlanFinder.java");
-        writeFile("Predicate.java");
-        writeFile("Rule.java");
-        writeFile("RuleAction.java");
+
+        if(!libraryUsed) {
+            writeFile("AlphaEntry.java");
+            writeFile("AlphaList.java");
+            writeFile("Atom.java");
+            writeFile("DiagnosticPosition.java");
+            writeFile("ErrorHandler.java");
+            writeFile("InterpreterRule.java");
+            writeFile("Memory.java");
+            writeFile("Model.java");
+            writeFile("NoPlanFoundException.java");
+            writeFile("Plan.java");
+            writeFile("PlanFinder.java");
+            writeFile("Predicate.java");
+            writeFile("Rule.java");
+            writeFile("RuleAction.java");
+        }
     }
 
     private void createFolder() {
@@ -52,14 +55,17 @@ public class SourceWriter {
         assert success;
     }
 
-    private void replaceStupsInExecutor(RuleGenerator gen, boolean defereClassGeneration) throws IOException {
+    private void replaceStubsInExecutor(RuleGenerator gen, boolean deferClassGeneration, boolean libraryUsed) throws IOException {
         File file = new File(packagePath, "Executor.java");
         Path path = Paths.get(file.getPath());
         Charset charset = StandardCharsets.UTF_8;
         String content = new String(Files.readAllBytes(path), charset);
 
-        String rules = buildRuleString(gen.getRules(), defereClassGeneration);
-        String predicates = buildPredicateString(gen.getMemory(), defereClassGeneration);
+        String rules = buildRuleString(gen.getRules(), deferClassGeneration);
+        String predicates = buildPredicateString(gen.getMemory());
+
+        if(libraryUsed)
+            content = content.replaceAll("// <replace with import>", getImports());
 
         content = content.replaceAll("// <replace with rules>", rules);
         content = content.replaceAll("// <replace with predicates>", predicates);
@@ -67,10 +73,16 @@ public class SourceWriter {
         Files.write(path, content.getBytes(charset));
     }
 
-    private String buildRuleString(List<Rule> rules, boolean defereClassGeneration) {
+    private String getImports() {
+        return "import at.tugraz.ist.compiler.*;\n" +
+                "import at.tugraz.ist.compiler.interpreter.*;\n" +
+                "import at.tugraz.ist.compiler.rule.*;";
+    }
+
+    private String buildRuleString(List<Rule> rules, boolean deferClassGeneration) {
         StringBuilder builder = new StringBuilder();
         for (Rule rule :rules) {
-            if(defereClassGeneration)
+            if(deferClassGeneration)
                 builder.append("        rules.add(" + rule.getConstructor() + ");\n");
             else
                 builder.append("        rules.add(new InterpreterRule("  + rule.getActionConstructor() + ", " + rule.getConstructor() + "));\n");
@@ -78,7 +90,7 @@ public class SourceWriter {
         return builder.toString();
     }
 
-    private String buildPredicateString(Memory memory, boolean defereClassGeneration) {
+    private String buildPredicateString(Memory memory) {
         StringBuilder builder = new StringBuilder();
         for (Predicate predicate : memory.getAllPredicates()) {
             builder.append("        predicates.add(new Predicate(\"" + predicate.getName() + "\"));\n");

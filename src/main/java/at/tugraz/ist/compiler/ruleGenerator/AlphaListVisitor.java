@@ -16,8 +16,8 @@ public class AlphaListVisitor extends RuleGrammarBaseVisitor<AlphaList> {
 
         for (RuleGrammarParser.AlistentryContext entry : ctx.alistentry()) {
             String[] parts = entry.getText().split(":");
-            String JavaExpresion = new JavaExpressionVisitor().visit(entry.expr());
-            list.add(new AlphaEntry(parts[0], "(a) -> " + JavaExpresion, null));
+            String JavaExpression = new JavaExpressionVisitor().visit(entry.expr());
+            list.add(new AlphaEntry(parts[0], "(a) -> " + JavaExpression, null));
         }
 
         AlphaEntry defaultEntry = null;

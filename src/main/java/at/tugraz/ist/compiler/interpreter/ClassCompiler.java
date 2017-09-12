@@ -1,7 +1,5 @@
 package at.tugraz.ist.compiler.interpreter;
 
-import at.tugraz.ist.compiler.rule.AlphaEntry;
-
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.File;
@@ -9,7 +7,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;

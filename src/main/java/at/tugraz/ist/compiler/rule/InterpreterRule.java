@@ -19,7 +19,7 @@ public class InterpreterRule extends Rule {
         }
     }
 
-    public InterpreterRule(RuleAction action, Rule rule) throws ClassNotFoundException {
+    public InterpreterRule(RuleAction action, Rule rule) {
         super(rule);
         this.action = action;
     }

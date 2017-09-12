@@ -7,16 +7,18 @@ public class Setting {
     private final int numberOfRuns;
     private final String packageName;
     private final String outputPath;
-    private boolean defered;
+    private final boolean libraryUsed;
+    private final boolean deferred;
 
-    public Setting(String pathToJavaFiles, String pathToRuleFile, boolean compiling, int numberOfRuns, String outputPath, String packageName, boolean defered) {
+    public Setting(String pathToJavaFiles, String pathToRuleFile, boolean compiling, int numberOfRuns, String outputPath, String packageName, boolean deferred, boolean libraryUsed) {
         this.pathToJavaFiles = pathToJavaFiles;
         this.pathToRuleFile = pathToRuleFile;
         this.compiling = compiling;
         this.numberOfRuns = numberOfRuns;
         this.outputPath = outputPath;
         this.packageName = packageName;
-        this.defered = defered;
+        this.deferred = deferred;
+        this.libraryUsed = libraryUsed;
     }
 
     public String getPathToJavaFiles() {
@@ -31,6 +33,10 @@ public class Setting {
         return compiling;
     }
 
+    public boolean isLibraryUsed() {
+        return libraryUsed;
+    }
+
     public int getNumberOfRuns() {
         return numberOfRuns;
     }
@@ -43,7 +49,7 @@ public class Setting {
         return outputPath;
     }
 
-    public boolean isDefered() {
-        return defered;
+    public boolean isDeferred() {
+        return deferred;
     }
 }

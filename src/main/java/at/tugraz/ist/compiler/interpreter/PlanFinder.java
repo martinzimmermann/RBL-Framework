@@ -1,14 +1,13 @@
 package at.tugraz.ist.compiler.interpreter;
 
 import at.tugraz.ist.compiler.rule.Rule;
-import at.tugraz.ist.compiler.rule.Rule;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class PlanFinder {
+public class PlanFinder {
     public static List<Rule> getGoalRules(List<Rule> allRules) {
         return allRules.stream().filter(Rule::hasGoal).collect(Collectors.toList());
     }
