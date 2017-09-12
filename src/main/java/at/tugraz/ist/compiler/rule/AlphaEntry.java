@@ -11,18 +11,38 @@ public class AlphaEntry {
 
     private final String expression;
     private final String JSfunction;
+    private final String JavaFunction;
     private final ResponsibleFunction responsibleFunction;
     private final WeightFunction weightFunction;
-    public AlphaEntry(ResponsibleFunction responsibleFunction, WeightFunction weightFunction) {
-        this.responsibleFunction = responsibleFunction;
+
+    public AlphaEntry(String expression, WeightFunction weightFunction) {
+        this.expression = expression;
         this.weightFunction = weightFunction;
-        expression = null;
         JSfunction = null;
+        JavaFunction = null;
+
+        final double start = getStart();
+        final double end = getEnd();
+
+        final CompareFunction first;
+        if (isStartSmallerEquals())
+            first = (a, b) -> a.compareTo(b) <= 0;
+        else
+            first = (a, b) -> a.compareTo(b) < 0;
+
+        final CompareFunction second;
+        if (isEndSmallerEquals())
+            second = (a, b) -> a.compareTo(b) <= 0;
+        else
+            second = (a, b) -> a.compareTo(b) < 0;
+
+        responsibleFunction = (a) -> first.inRange(new BigDecimal(start), a) && second.inRange(a, new BigDecimal(end));
     }
 
-    public AlphaEntry(String expression, String JSfunction) {
+    public AlphaEntry(String expression, String JSfunction, String JavaFunction) {
         this.expression = expression;
         this.JSfunction = JSfunction;
+        this.JavaFunction = JavaFunction;
         weightFunction = null;
 
         final double start = getStart();
@@ -42,9 +62,10 @@ public class AlphaEntry {
 
         responsibleFunction = (a) -> first.inRange(new BigDecimal(start), a) && second.inRange(a, new BigDecimal(end));
     }
-    public AlphaEntry(String JSfunction) {
+    public AlphaEntry(String JSfunction, String JavaFunction) {
         this.expression = "0 <= a <= 1";
         this.JSfunction = JSfunction;
+        this.JavaFunction = JavaFunction;
         responsibleFunction = (a) -> new BigDecimal(0).compareTo(a) != -1 && a.compareTo(a) != 1;
         weightFunction = null;
     }
@@ -117,7 +138,7 @@ public class AlphaEntry {
     }
 
     public String getConstructor() {
-        return "new AlphaEntry(\"" + expression + "\"" + "," + "\"" + JSfunction + "\")";
+        return "new AlphaEntry(\"" + expression + "\"" + "," + "(a) -> " + JavaFunction + ")";
     }
 
     public interface ResponsibleFunction {

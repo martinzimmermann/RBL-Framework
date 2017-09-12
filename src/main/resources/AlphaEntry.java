@@ -1,7 +1,7 @@
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.io.*;
 import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,16 +9,64 @@ import java.util.regex.Pattern;
 public class AlphaEntry {
 
     private final String expression;
-    private final String function;
+    private final String JSfunction;
+    private final String JavaFunction;
+    private final ResponsibleFunction responsibleFunction;
+    private final WeightFunction weightFunction;
 
-    public AlphaEntry(String expression, String function) {
+    public AlphaEntry(String expression, WeightFunction weightFunction) {
         this.expression = expression;
-        this.function = function;
+        this.weightFunction = weightFunction;
+        JSfunction = null;
+        JavaFunction = null;
+
+        final double start = getStart();
+        final double end = getEnd();
+
+        final CompareFunction first;
+        if (isStartSmallerEquals())
+            first = (a, b) -> a.compareTo(b) <= 0;
+        else
+            first = (a, b) -> a.compareTo(b) < 0;
+
+        final CompareFunction second;
+        if (isEndSmallerEquals())
+            second = (a, b) -> a.compareTo(b) <= 0;
+        else
+            second = (a, b) -> a.compareTo(b) < 0;
+
+        responsibleFunction = (a) -> first.inRange(new BigDecimal(start), a) && second.inRange(a, new BigDecimal(end));
     }
 
-    public AlphaEntry(String function) {
+    public AlphaEntry(String expression, String JSfunction, String JavaFunction) {
+        this.expression = expression;
+        this.JSfunction = JSfunction;
+        this.JavaFunction = JavaFunction;
+        weightFunction = null;
+
+        final double start = getStart();
+        final double end = getEnd();
+
+        final CompareFunction first;
+        if (isStartSmallerEquals())
+            first = (a, b) -> a.compareTo(b) <= 0;
+        else
+            first = (a, b) -> a.compareTo(b) < 0;
+
+        final CompareFunction second;
+        if (isEndSmallerEquals())
+            second = (a, b) -> a.compareTo(b) <= 0;
+        else
+            second = (a, b) -> a.compareTo(b) < 0;
+
+        responsibleFunction = (a) -> first.inRange(new BigDecimal(start), a) && second.inRange(a, new BigDecimal(end));
+    }
+    public AlphaEntry(String JSfunction, String JavaFunction) {
         this.expression = "0 <= a <= 1";
-        this.function = function;
+        this.JSfunction = JSfunction;
+        this.JavaFunction = JavaFunction;
+        responsibleFunction = (a) -> new BigDecimal(0).compareTo(a) != -1 && a.compareTo(a) != 1;
+        weightFunction = null;
     }
 
     public double getStart() {
@@ -60,7 +108,10 @@ public class AlphaEntry {
 
     public BigDecimal calculateWeight(BigDecimal a) {
 
-        String eval = "a = new Big('" + a + "'); " + function + ".toString()";
+        if (weightFunction != null)
+            return weightFunction.calculate(a);
+
+        String eval = "a = new Big('" + a + "'); " + JSfunction + ".toString()";
 
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
 
@@ -70,40 +121,34 @@ public class AlphaEntry {
             result = engine.eval(eval);
         } catch (ScriptException e) {
             e.printStackTrace();
-            throw new IllegalStateException("The function provided is not a valid function, function was: " + function);
+            throw new IllegalStateException("The function provided is not a valid function, function was: " + JSfunction);
         }
 
         if (result instanceof Number)
-            return  BigDecimal.valueOf(((Number) result).doubleValue());
+            return BigDecimal.valueOf(((Number) result).doubleValue());
         else if (result instanceof String)
-            return new BigDecimal((String)result);
+            return new BigDecimal((String) result);
         else
-            throw new IllegalStateException("The function provided is not a valid function, function was: " + function);
+            throw new IllegalStateException("The function provided is not a valid function, function was: " + JSfunction);
     }
 
     public boolean isResponsible(BigDecimal alpha) {
-        int indexOfA = expression.indexOf("a");
-        String les = expression.substring(0, indexOfA + 1);
-        String greater = expression.substring(indexOfA, expression.length());
-
-        String eval = "a = " + alpha + "; " + les + " && " + greater;
-
-        ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
-        Object result;
-        try {
-            result = engine.eval(eval);
-        } catch (ScriptException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        if (result instanceof Boolean)
-            return (Boolean) result;
-        else
-            return false;
+        return responsibleFunction.isResponsible(alpha);
     }
 
     public String getConstructor() {
-        return "new AlphaEntry(\"" + expression + "\"" + "," + "\"" + function + "\")";
+        return "new AlphaEntry(\"" + expression + "\"" + "," + "(a) -> " + JavaFunction + ")";
+    }
+
+    public interface ResponsibleFunction {
+        boolean isResponsible(BigDecimal a);
+    }
+
+    public interface WeightFunction {
+        BigDecimal calculate(BigDecimal a);
+    }
+
+    private interface CompareFunction {
+        boolean inRange(BigDecimal a, BigDecimal b);
     }
 }

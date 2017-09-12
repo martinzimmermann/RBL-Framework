@@ -3,7 +3,7 @@ package at.tugraz.ist.compiler.ruleGenerator;
 import at.tugraz.ist.compiler.antlr.RuleGrammarBaseVisitor;
 import at.tugraz.ist.compiler.antlr.RuleGrammarParser;
 
-public class ExpressionVisitor extends RuleGrammarBaseVisitor<String> {
+public class JSExpressionVisitor extends RuleGrammarBaseVisitor<String> {
 
     @Override
     public String visitUnarySignExpr(RuleGrammarParser.UnarySignExprContext ctx) {
