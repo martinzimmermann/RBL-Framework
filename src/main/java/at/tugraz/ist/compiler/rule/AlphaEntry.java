@@ -2,9 +2,6 @@ package at.tugraz.ist.compiler.rule;
 
 import at.tugraz.ist.compiler.interpreter.ClassCompiler;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import java.math.BigDecimal;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -13,41 +10,28 @@ import java.util.regex.Pattern;
 public class AlphaEntry {
 
     private final String expression;
-    private final String JSfunction;
     private final String JavaFunction;
-    private final ResponsibleFunction responsibleFunction;
-    private final Function<BigDecimal, BigDecimal> weightFunction;
+    private ResponsibleFunction responsibleFunction = null; //lazy evaluation
+    private Function<BigDecimal, BigDecimal> weightFunction = null; //lazy evaluation
 
     public AlphaEntry(String expression, Function<BigDecimal, BigDecimal> weightFunction) {
         this.expression = expression;
         this.weightFunction = weightFunction;
-        JSfunction = null;
         JavaFunction = null;
-
-        final double start = getStart();
-        final double end = getEnd();
-
-        final CompareFunction first;
-        if (isStartSmallerEquals())
-            first = (a, b) -> a.compareTo(b) <= 0;
-        else
-            first = (a, b) -> a.compareTo(b) < 0;
-
-        final CompareFunction second;
-        if (isEndSmallerEquals())
-            second = (a, b) -> a.compareTo(b) <= 0;
-        else
-            second = (a, b) -> a.compareTo(b) < 0;
-
-        responsibleFunction = (a) -> first.inRange(new BigDecimal(start), a) && second.inRange(a, new BigDecimal(end));
     }
 
-    public AlphaEntry(String expression, String JSfunction, String JavaFunction) {
+    public AlphaEntry(String expression, String JavaFunction) {
         this.expression = expression;
-        this.JSfunction = JSfunction;
         this.JavaFunction = JavaFunction;
-        weightFunction = ClassCompiler.getFunctionFromLambda("(a) -> " + JavaFunction);
+    }
 
+    public AlphaEntry(String JavaFunction) {
+        this.expression = "0 <= a <= 1";
+        this.JavaFunction = JavaFunction;
+    }
+
+
+    private ResponsibleFunction getResponsibleFunction() {
         final double start = getStart();
         final double end = getEnd();
 
@@ -63,15 +47,9 @@ public class AlphaEntry {
         else
             second = (a, b) -> a.compareTo(b) < 0;
 
-        responsibleFunction = (a) -> first.inRange(new BigDecimal(start), a) && second.inRange(a, new BigDecimal(end));
+        return (a) -> first.inRange(new BigDecimal(start), a) && second.inRange(a, new BigDecimal(end));
     }
-    public AlphaEntry(String JSfunction, String JavaFunction) {
-        this.expression = "0 <= a <= 1";
-        this.JSfunction = JSfunction;
-        this.JavaFunction = JavaFunction;
-        responsibleFunction = (a) -> new BigDecimal(0).compareTo(a) != -1 && a.compareTo(a) != 1;
-        weightFunction = ClassCompiler.getFunctionFromLambda("(a) -> " + JavaFunction);
-    }
+
 
     public double getStart() {
         String patternString = "(\\d+(\\.\\d+)?)";
@@ -111,15 +89,19 @@ public class AlphaEntry {
     }
 
     public BigDecimal calculateWeight(BigDecimal a) {
+        if (weightFunction == null)
+            weightFunction = ClassCompiler.getFunctionFromLambda(JavaFunction);
         return weightFunction.apply(a);
     }
 
     public boolean isResponsible(BigDecimal alpha) {
+        if (responsibleFunction == null)
+            responsibleFunction = getResponsibleFunction();
         return responsibleFunction.isResponsible(alpha);
     }
 
     public String getConstructor() {
-        return "new AlphaEntry(\"" + expression + "\"" + "," + "(a) -> " + JavaFunction + ")";
+        return "new AlphaEntry(\"" + expression + "\"" + "," + JavaFunction + ")";
     }
 
     public interface ResponsibleFunction {
