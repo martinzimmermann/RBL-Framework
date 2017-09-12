@@ -15,7 +15,7 @@ public class AlphaList {
     }
 
     public static AlphaList getDefaultAlphaList() {
-        return new AlphaList(new ArrayList<>(), new AlphaEntry("new Big(1)", "new BigDecimal(1)"));
+        return new AlphaList(new ArrayList<>(), new AlphaEntry("0 <= a <= 1", "(a) -> new BigDecimal(1)", (a) -> new BigDecimal(1)));
     }
 
     public boolean isValidRange()

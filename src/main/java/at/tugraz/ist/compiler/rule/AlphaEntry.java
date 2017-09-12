@@ -14,22 +14,14 @@ public class AlphaEntry {
     private ResponsibleFunction responsibleFunction = null; //lazy evaluation
     private Function<BigDecimal, BigDecimal> weightFunction = null; //lazy evaluation
 
-    public AlphaEntry(String expression, Function<BigDecimal, BigDecimal> weightFunction) {
+    public AlphaEntry(String expression, String JavaFunction, Function<BigDecimal, BigDecimal> weightFunction) {
+        if(JavaFunction == null && weightFunction == null)
+            throw new IllegalArgumentException("JavaFunction and weightFunction can't both be null");
+
         this.expression = expression;
         this.weightFunction = weightFunction;
-        JavaFunction = null;
-    }
-
-    public AlphaEntry(String expression, String JavaFunction) {
-        this.expression = expression;
         this.JavaFunction = JavaFunction;
     }
-
-    public AlphaEntry(String JavaFunction) {
-        this.expression = "0 <= a <= 1";
-        this.JavaFunction = JavaFunction;
-    }
-
 
     private ResponsibleFunction getResponsibleFunction() {
         final double start = getStart();
@@ -101,7 +93,7 @@ public class AlphaEntry {
     }
 
     public String getConstructor() {
-        return "new AlphaEntry(\"" + expression + "\"" + "," + JavaFunction + ")";
+        return "new AlphaEntry(\"" + expression + "\"" + "," +  "null" + "," + JavaFunction + ")";
     }
 
     public interface ResponsibleFunction {
