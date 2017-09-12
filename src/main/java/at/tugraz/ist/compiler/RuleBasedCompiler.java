@@ -155,7 +155,7 @@ class RuleBasedCompiler {
     private static void printHelp() {
         System.out.println("Usage:\n" +
                 "   rule interpret [-times n] PATHTOJAVAFILES PATHTORULEFILE           interprets the rules n times, where n must be >= 0\n" +
-                "   rule compile [-o OUTPUTPATH] [-p PACKAGENAME] [-d] PATHTORULEFILE       compiles th rules to Java source\n" +
+                "   rule compile [-o OUTPUTPATH] [-p PACKAGENAME] [-d] PATHTORULEFILE  compiles th rules to Java source\n" +
                 "   rule (-h | --help)                                                 shows this help");
     }
 }
