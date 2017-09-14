@@ -17,6 +17,13 @@ public class Memory {
         this.start_predicates = new ArrayList<>(predicates);
     }
 
+    public Memory(Memory memory) {
+
+        this.predicates = new ArrayList<>(memory.predicates);
+        this.start_predicates = new ArrayList<>(memory.start_predicates);
+    }
+
+
     public boolean contains(Predicate precondition) {
         return predicates.contains(precondition);
     }

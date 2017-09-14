@@ -22,7 +22,16 @@ class Plan {
     }
 
     public boolean ruleWouldRemoveNeededPrecondition(Rule rule) {
-        return rules.stream().anyMatch(r -> r.getPreconditions().stream().anyMatch(p -> rule.getWorldDeletions().contains(p)));
+        List<Predicate> deletions =  rule.getWorldDeletions();
+        List<Predicate> laterAdded;
+        if(rules.size() <= 1)
+            laterAdded = new ArrayList<>();
+        else
+            laterAdded= rules.subList(1, rules.size() - 1).stream().filter(Rule::hasWorldAddition).map(Rule::getWorldAddition).collect(Collectors.toList());
+
+        deletions.removeAll(laterAdded);
+
+        return rules.stream().anyMatch(r -> r.getPreconditions().stream().anyMatch(p -> deletions.contains(p)));
     }
 
     public void add(Rule rule) {

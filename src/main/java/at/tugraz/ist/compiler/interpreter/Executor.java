@@ -17,7 +17,7 @@ public class Executor {
         List<InterpreterRule> plan = null;
         goals.sort(Rule::compareTo);
         for (Rule goal : goals) {
-            plan = toInterpreterRules(PlanFinder.getPlanForRule(goal, memory, rules));
+            plan = toInterpreterRules(PlanFinder.getPlan(memory, rules));
             if (plan != null)
                 break;
         }

@@ -29,7 +29,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<Rule> plan = PlanFinder.getPlan(memory, rules);
         assertNotNull(plan);
         assertEquals(1, plan.size());
         assertEquals(rules.get(0), plan.get(0));
@@ -49,7 +49,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<Rule> plan = PlanFinder.getPlan(memory, rules);
         assertNotNull(plan);
         assertEquals(1, plan.size());
         assertEquals(rules.get(0), plan.get(0));
@@ -70,7 +70,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<Rule> plan = PlanFinder.getPlan(memory, rules);
         assertNotNull(plan);
         assertEquals(2, plan.size());
         assertEquals(rules.get(0), plan.get(0));
@@ -93,7 +93,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<Rule> plan = PlanFinder.getPlan(memory, rules);
         assertNotNull(plan);
         assertEquals(3, plan.size());
     }
@@ -115,7 +115,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<Rule> plan = PlanFinder.getPlan(memory, rules);
         assertNotNull(plan);
         assertEquals(4, plan.size());
     }
@@ -140,7 +140,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<Rule> plan = PlanFinder.getPlan(memory, rules);
         assertNotNull(plan);
         assertEquals(3, plan.size());
     }
@@ -161,7 +161,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<Rule> plan = PlanFinder.getPlan(memory, rules);
         assertNotNull(plan);
         assertEquals(2, plan.size());
     }
@@ -182,7 +182,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<Rule> plan = PlanFinder.getPlan(memory, rules);
         assertNull(plan);
     }
 
@@ -205,8 +205,8 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
-        assertNull(plan);
+        List<Rule> plan = PlanFinder.getPlan(memory, rules);
+        assertNotNull(plan);
     }
 
     @Test
@@ -226,7 +226,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<Rule> plan = PlanFinder.getPlan(memory, rules);
         assertNotNull(plan);
         assertEquals(2, plan.size());
         assertEquals(rules.get(1), plan.get(0));
@@ -247,7 +247,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<Rule> plan = PlanFinder.getPlan(memory, rules);
         assertNotNull(plan);
         assertEquals(2, plan.size());
     }
@@ -265,7 +265,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanForRule(goals.get(0), memory, rules);
+        List<Rule> plan = PlanFinder.getPlan(memory, rules);
         assertNotNull(plan);
         assertEquals(5, plan.size());
     }
