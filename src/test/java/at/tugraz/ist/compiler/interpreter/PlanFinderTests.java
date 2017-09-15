@@ -269,4 +269,21 @@ public class PlanFinderTests {
         assertNotNull(plan);
         assertEquals(5, plan.size());
     }
+
+    @Test
+    public void large_test() throws IOException {
+        RuleLexer ruleLexer = new RuleLexer(Paths.get("src/test/resources/compiler/interpreter.input/large.rule"));
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+
+        Memory memory = gen.getMemory();
+        List<Rule> rules = gen.getRules();
+        List<Rule> goals = PlanFinder.getGoalRules(rules);
+
+        List<Rule> plan = PlanFinder.getPlan(memory, rules);
+        assertNotNull(plan);
+    }
 }
