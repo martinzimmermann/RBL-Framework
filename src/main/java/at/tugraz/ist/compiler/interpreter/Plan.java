@@ -3,6 +3,7 @@ package at.tugraz.ist.compiler.interpreter;
 import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +20,9 @@ class Plan {
 
     public Plan(Plan currentPlan) {
         rules = new ArrayList<>(currentPlan.rules);
+    }
+    public Plan(List<Rule> currentRules) {
+        rules = new ArrayList<>(currentRules);
     }
 
     public boolean ruleWouldRemoveNeededPrecondition(Rule rule) {
@@ -61,5 +65,15 @@ class Plan {
 
         preconditions.removeAll(posEffects);
         return new ArrayList<>(preconditions);
+    }
+
+    public Plan concat(Plan plan) {
+        List<Rule> newRules = new ArrayList<>(rules);
+        newRules.addAll(plan.getRules());
+        return new Plan(newRules);
+    }
+
+    public BigDecimal getWeight() {
+        return rules.stream().reduce(new BigDecimal(0), (BigDecimal a, Rule b) -> b.getWeight(), (BigDecimal a, BigDecimal b) -> a.add(b));
     }
 }
