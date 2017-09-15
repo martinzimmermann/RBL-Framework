@@ -247,7 +247,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlan(memory, rules);
+        List<Rule> plan = PlanFinder.getBestPlan(memory, rules);
         assertNotNull(plan);
         assertEquals(2, plan.size());
     }

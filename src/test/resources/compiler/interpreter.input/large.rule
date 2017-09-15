@@ -934,6 +934,6 @@
 -> +pre1 actions.action1.
 -> +pre1 actions.action1.
 -> +pre1 actions.action1.
--> +pre1 actions.action1.
+-> +pre actions.action1.
 
-pre1 -> #goal actions.goal.
+pre -> #goal actions.goal.
