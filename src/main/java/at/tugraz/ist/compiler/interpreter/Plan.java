@@ -67,13 +67,13 @@ class Plan {
         return new ArrayList<>(preconditions);
     }
 
-    public Plan concat(Plan plan) {
-        List<Rule> newRules = new ArrayList<>(rules);
-        newRules.addAll(plan.getRules());
-        return new Plan(newRules);
-    }
-
     public BigDecimal getWeight() {
-        return rules.stream().reduce(new BigDecimal(0), (BigDecimal a, Rule b) -> b.getWeight(), (BigDecimal a, BigDecimal b) -> a.add(b));
+        BigDecimal sum = new BigDecimal(0);
+
+        for (Rule rule : rules) {
+            BigDecimal weight = rule.getWeight();
+            sum = sum.add(weight);
+        }
+        return sum;
     }
 }

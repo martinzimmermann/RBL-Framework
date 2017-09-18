@@ -167,7 +167,10 @@ public class Rule extends Atom implements Comparable<Rule> {
     }
 
     public BigDecimal getWeight() {
-        return alphaEntries.calculateWeight(currentActivity).multiply(ruleGoal.subtract(currentActivity)).multiply(new BigDecimal(1).subtract(damping));
+        BigDecimal alpha = alphaEntries.calculateWeight(currentActivity);
+        BigDecimal activity = ruleGoal.subtract(currentActivity);
+        BigDecimal invDamping = new BigDecimal(1).subtract(damping);
+        return alpha.multiply(activity).multiply(invDamping);
     }
 
     public void decreaseDamping() {

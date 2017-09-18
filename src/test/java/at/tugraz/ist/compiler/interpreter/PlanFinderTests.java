@@ -7,14 +7,59 @@ import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Random;
 
 import static junit.framework.Assert.assertNull;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.*;
 
 public class PlanFinderTests {
+
+    private String generateRandomRules(int numberOfRules, int numberOfGoals, int maxNumberOfConditions, int maxNumberOfPreconditions) {
+        String template = "%s -> %s %s Actions.action.\n";
+        StringBuilder builder = new StringBuilder();
+        Random rnd = new Random();
+
+        for (int i = 0; i < numberOfRules; i++) {
+            int numberOfPreConditions = Math.abs(rnd.nextInt()) % maxNumberOfPreconditions;
+            StringBuilder preconditions = new StringBuilder();
+            for (int j = 0; j < numberOfPreConditions; j++) {
+                preconditions.append("pre" + Math.abs(rnd.nextInt()) % maxNumberOfConditions + ", ");
+            }
+            if (preconditions.length() != 0) {
+                preconditions.deleteCharAt(preconditions.length() - 1);
+                preconditions.deleteCharAt(preconditions.length() - 1);
+            }
+
+            int numberOfDeletions = Math.abs(rnd.nextInt()) % 4;
+            StringBuilder deletions = new StringBuilder();
+            for (int j = 0; j < numberOfDeletions; j++) {
+                deletions.append("-pre" + Math.abs(rnd.nextInt()) % maxNumberOfConditions + " ");
+            }
+
+            builder.append(String.format(template, preconditions.toString(), "+pre" + Math.abs(rnd.nextInt()) % maxNumberOfConditions, deletions.toString()));
+        }
+
+        int numberOfPreConditions = Math.abs(rnd.nextInt()) % 4;
+        StringBuilder preconditions = new StringBuilder();
+        for (int j = 0; j < numberOfPreConditions; j++) {
+            preconditions.append("pre" + Math.abs(rnd.nextInt()) % maxNumberOfConditions + ", ");
+        }
+        if (preconditions.length() != 0) {
+            preconditions.deleteCharAt(preconditions.length() - 1);
+            preconditions.deleteCharAt(preconditions.length() - 1);
+        }
+
+        for (int i = 0; i < numberOfGoals; i++) {
+            builder.append(String.format(template, preconditions.toString(), "#pre" + (Math.abs(rnd.nextInt() % maxNumberOfConditions)), ""));
+        }
+
+
+        return builder.toString();
+    }
+
 
     @Test
     public void simple_test() throws IOException {
@@ -180,7 +225,6 @@ public class PlanFinderTests {
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();
-        List<Rule> goals = PlanFinder.getGoalRules(rules);
 
         List<Rule> plan = PlanFinder.getPlan(memory, rules);
         assertNull(plan);
@@ -219,7 +263,7 @@ public class PlanFinderTests {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-                ClassCompiler.compileClasses("src/test/resources/Actions");
+        ClassCompiler.compileClasses("src/test/resources/Actions");
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
 
         Memory memory = gen.getMemory();
@@ -285,5 +329,29 @@ public class PlanFinderTests {
 
         List<Rule> plan = PlanFinder.getPlan(memory, rules);
         assertNotNull(plan);
+    }
+
+    @Test
+    public void random_test() throws IOException {
+        for (int i = 0; i < 10; i++) {
+            String rulesString = generateRandomRules(20, 1, 5, 4);
+            RuleLexer ruleLexer = new RuleLexer(rulesString);
+            assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+            RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+            assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+            ClassCompiler.compileClasses("src/test/resources/Actions");
+            RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+
+            Memory memory = gen.getMemory();
+            List<Rule> rules = gen.getRules();
+            List<Rule> goals = PlanFinder.getGoalRules(rules);
+
+            List<Rule> anyPlan = PlanFinder.getPlan(memory, rules);
+            List<Rule> bestPlan = PlanFinder.getBestPlan(memory, rules);
+            assertTrue(anyPlan == null ? bestPlan == null : true);
+            assertTrue(bestPlan == null ? bestPlan == null : true);
+            if (bestPlan != null)
+                assertTrue(bestPlan.size() <= anyPlan.size());
+        }
     }
 }

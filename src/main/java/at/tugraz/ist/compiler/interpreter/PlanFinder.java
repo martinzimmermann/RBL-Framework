@@ -25,7 +25,7 @@ public class PlanFinder {
         if (plans.size() == 0)
             return null; // plan couldn't be fulfilled on this path
 
-        Plan bestPlan = plans.stream().max(Comparator.comparing(Plan::getWeight)).get();
+        Plan bestPlan = plans.stream().min(Comparator.comparing(Plan::getWeight)).get();
         return bestPlan.getRules();
     }
 
