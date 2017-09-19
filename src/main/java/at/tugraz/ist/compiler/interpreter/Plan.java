@@ -68,12 +68,18 @@ class Plan {
     }
 
     public BigDecimal getWeight() {
-        BigDecimal sum = new BigDecimal(0);
+        BigDecimal sum = new BigDecimal(2);
 
-        for (Rule rule : rules) {
-            BigDecimal weight = rule.getWeight();
-            sum = sum.add(weight);
+        for(int pos = 1; pos < rules.size(); pos++)
+        {
+            BigDecimal a = new BigDecimal(1).divide(new BigDecimal(10).pow(pos * 10));
+            BigDecimal b = rules.get((rules.size() - 1) - pos).getWeight();
+            sum = sum.add(a.multiply(b));
         }
         return sum;
+    }
+
+    public void remove(Rule rule) {
+        rules.remove(rule);
     }
 }

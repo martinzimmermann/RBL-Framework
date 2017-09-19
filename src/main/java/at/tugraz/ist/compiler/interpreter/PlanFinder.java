@@ -25,13 +25,41 @@ public class PlanFinder {
         if (plans.size() == 0)
             return null; // plan couldn't be fulfilled on this path
 
-        Plan bestPlan = plans.stream().min(Comparator.comparing(Plan::getWeight)).get();
+        List<Plan> reasonablePaht = plans.stream().filter(p -> !isReduceable(p, memory)).collect(Collectors.toList());
+
+        Plan bestPlan = reasonablePaht.stream().max(Comparator.comparing(Plan::getWeight)).get();
         return bestPlan.getRules();
     }
 
-    public static List<Rule> getPlanForGoal(Rule goal, Memory memory, List<Rule> allRules) {
-        Plan plan = getPlanForGoal(goal, null, memory, allRules, new Plan());
+    public static List<Rule> getPlanForGoalTopDown(Rule goal, Memory memory, List<Rule> allRules) {
+        Plan plan = getPlanForGoalTopDown(goal, null, memory, allRules, new Plan());
         return plan == null ? null : CleanUp(plan);
+    }
+
+    public static boolean isReduceable(Plan plan, Memory memory)
+    {
+        for (Rule rule : plan.getRules()) {
+            Plan newPlan = new Plan(plan);
+            newPlan.remove(rule);
+            if(isInterpreadable(newPlan, new Memory(memory)))
+                return true;
+        }
+        return false;
+    }
+
+    private static boolean isInterpreadable(Plan plan, Memory memory) {
+        for (Rule rule : plan.getRules()) {
+            boolean result = memory.containsAll(rule.getPreconditions());
+            if (result) {
+                memory.update(rule);
+                if(rule.hasGoal())
+                    return true;
+            } else {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     private static List<Rule> CleanUp(Plan plan) {
@@ -68,10 +96,9 @@ public class PlanFinder {
         }
     }
 
-    public static List<Rule> getPlan(Memory memory, List<Rule> allRules) {
-        return getPlanForGoal(null, memory, allRules); // plan couldn't be fulfilled on this path
+    public static List<Rule> getPlanTopDown(Memory memory, List<Rule> allRules) {
+        return getPlanForGoalTopDown(null, memory, allRules); // plan couldn't be fulfilled on this path
     }
-
 
     private static List<Rule> getRulesThatArePossible(Memory memory, List<Rule> allRules) {
         return allRules.stream().filter(rule -> memory.getAllPredicates().containsAll(rule.getPreconditions())).collect(Collectors.toList());
@@ -103,7 +130,7 @@ public class PlanFinder {
         return plans;
     }
 
-    private static Plan getPlanForGoal(Rule goal, Rule currentRule, Memory memory, List<Rule> allRules, Plan currentPlan) {
+    private static Plan getPlanForGoalTopDown(Rule goal, Rule currentRule, Memory memory, List<Rule> allRules, Plan currentPlan) {
 
         List<Rule> rules = getRulesThatArePossible(memory, allRules);
 
@@ -125,12 +152,63 @@ public class PlanFinder {
                 return newPlan;
             }
 
-            Plan p = getPlanForGoal(goal, rule, newMemory, remainingRules, newPlan);
+            Plan p = getPlanForGoalTopDown(goal, rule, newMemory, remainingRules, newPlan);
             if(p != null)
                 return p;
             else
                 continue;
         }
         return null;
+    }
+
+    public static List<Rule> getPlanForGoalBottomUp(Rule goal, Memory memory, List<Rule> allRules) {
+        List<Rule> plan = getPlanForGoalBottomUp(goal, memory, allRules, new Plan());
+        if (plan == null)
+            return null;
+        Collections.reverse(plan);
+        return plan;
+    }
+
+    public static List<Rule> getPlanBottomUp(Memory memory, List<Rule> allRules) {
+
+        List<Rule> goals = getGoalRules(allRules);
+        if(goals.size() == 0)
+            return null;
+
+        goals.sort(Rule::compareTo);
+
+        List<Rule> plan = getPlanForGoalBottomUp(goals.get(0), memory, allRules, new Plan());
+        if (plan == null)
+            return null;
+        Collections.reverse(plan);
+        return plan;
+    }
+
+    private static List<Rule> getPlanForGoalBottomUp(Rule goal, Memory memory, List<Rule> allRules, Plan currentPlan) {
+        Plan newPlan = new Plan(currentPlan);
+        newPlan.add(goal);
+
+        if (newPlan.isComplete(memory))
+            return newPlan.getRules();
+
+        List<Rule> rules = new ArrayList<>(allRules);
+        rules.remove(goal);
+        rules.sort(Rule::compareTo);
+
+        for (Rule rule : rules) {
+            if (!newPlan.needs(rule, memory))
+                continue;
+
+            if (newPlan.ruleWouldRemoveNeededPrecondition(rule))
+                continue;
+
+            List<Rule> newRules = getPlanForGoalBottomUp(rule, memory, rules, newPlan);
+            if (newRules == null) // this path didn't yield a valid plan, try other rule
+                continue;
+
+            return newRules;
+        }
+
+        return null; // plan couldn't be fulfilled on this path
     }
 }

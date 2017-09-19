@@ -24,6 +24,10 @@ public class Executor {
         if (plan == null)
             throw new NoPlanFoundException();
 
+        return interpreteRules(memory, plan);
+    }
+
+    private boolean interpreteRules(Memory memory, List<InterpreterRule> plan) {
         for (InterpreterRule rule : plan) {
             boolean result = rule.execute(memory);
             rule.increaseActivity();
