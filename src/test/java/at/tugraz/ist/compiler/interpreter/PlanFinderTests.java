@@ -254,6 +254,27 @@ public class PlanFinderTests {
     }
 
     @Test
+    public void goal_directly_reachable_test() throws IOException {
+        RuleLexer ruleLexer = new RuleLexer(" -> +pre0  Actions.action.\n" +
+                " -> +pre0 -pre0 -pre0  Actions.action.\n" +
+                " -> +pre0 -pre0  Actions.action.\n" +
+                " -> #pre0  Actions.action.\n");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+
+        Memory memory = gen.getMemory();
+        List<Rule> rules = gen.getRules();
+        List<Rule> goals = PlanFinder.getGoalRules(rules);
+
+        List<Rule> plan = PlanFinder.getPlanTopDown(memory, rules);
+        assertNotNull(plan);
+        assertEquals(1, plan.size());
+    }
+
+    @Test
     public void find_rule_with_greater_weight_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer(
                 "-> +pre1 Actions.action (0.5)." +
@@ -352,9 +373,15 @@ public class PlanFinderTests {
 
     @Test
     public void simple_quick_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("pre1 -> +pre0 Actions.action." +
-                "pre0 -> +pre1 Actions.action." +
-                "pre0, pre1 -> #goal Actions.action.");
+        RuleLexer ruleLexer = new RuleLexer("pre4 -> +pre2  Actions.action.\n" +
+                " -> +pre1  Actions.action.\n" +
+                "pre2 -> +pre0  Actions.action.\n" +
+                " -> +pre4  Actions.action.\n" +
+                " -> +pre4  Actions.action.\n" +
+                "pre0 -> +pre2  Actions.action.\n" +
+                "pre2 -> +pre3  Actions.action.\n" +
+                "pre4, pre3, pre1 -> #pre1  Actions.action.\n" +
+                "pre4, pre3, pre1 -> #pre3  Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
@@ -365,7 +392,7 @@ public class PlanFinderTests {
         List<Rule> rules = gen.getRules();
         List<Rule> goals = PlanFinder.getGoalRules(rules);
 
-        List<Rule> plan = PlanFinder.getPlanBottomUp(memory, rules);
+        List<Rule> plan = PlanFinder.getPlanTopDown(memory, rules);
         assertNotNull(plan);
         assertEquals(1, plan.size());
         assertEquals(rules.get(1), plan.get(0));
@@ -373,7 +400,7 @@ public class PlanFinderTests {
 
     @Test
     public void random_test() throws IOException {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             String rulesString = generateRandomRules(7, 2, 5, 2);
             RuleLexer ruleLexer = new RuleLexer(rulesString);
             assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
@@ -388,15 +415,10 @@ public class PlanFinderTests {
             List<Rule> bottomUpPlan = PlanFinder.getPlanBottomUp(memory, rules);
             List<Rule> bestPlan = PlanFinder.getBestPlan(memory, rules);
             assertTrue(topDownPlan == null ? bestPlan == null : true);
-            assertTrue(bestPlan == null ? bestPlan == null : true);
+            assertTrue(bestPlan == null ? topDownPlan == null : true);
             assertTrue((bestPlan != null && topDownPlan != null) ? (bestPlan.size() >= topDownPlan.size()) : true);
             assertTrue((bestPlan != null && topDownPlan != null) ? (new Plan(bestPlan).getWeight().compareTo(new Plan(topDownPlan).getWeight())) >= 0 : true);
             //assertTrue(bottomUpPlan != null ? bestPlan != null : true);
-            if (bestPlan != null && bottomUpPlan != null) {
-                if (bestPlan.size() < bottomUpPlan.size()) {
-                    assertTrue(true);
-                }
-            }
         }
     }
 }

@@ -33,24 +33,25 @@ public class PlanFinder {
 
     public static List<Rule> getPlanForGoalTopDown(Rule goal, Memory memory, List<Rule> allRules) {
         Plan plan = getPlanForGoalTopDown(goal, null, memory, allRules, new Plan());
-        return plan == null ? null : CleanUp2(CleanUp(plan), memory);
+        return plan == null ? null : reduce(plan, memory).getRules();
     }
 
     public static boolean isReduceable(Plan plan, Memory memory) {
         for (Rule rule : plan.getRules()) {
             Plan newPlan = new Plan(plan);
             newPlan.remove(rule);
-            if (isInterpreadable(newPlan, new Memory(memory)))
+            if (isInterpreadable(newPlan, memory))
                 return true;
         }
         return false;
     }
 
     private static boolean isInterpreadable(Plan plan, Memory memory) {
+        Memory newMemory = new Memory(memory);
         for (Rule rule : plan.getRules()) {
-            boolean result = memory.containsAll(rule.getPreconditions());
+            boolean result = newMemory.containsAll(rule.getPreconditions());
             if (result) {
-                memory.update(rule);
+                newMemory.update(rule);
                 if (rule.hasGoal())
                     return true;
             } else {
@@ -67,7 +68,7 @@ public class PlanFinder {
         List<Predicate> conditions = new ArrayList<>(memory.getAllPredicates());
 
         for (Rule rule : rules) {
-            if (!rule.hasWorldAddition())
+            if (!rule.hasWorldAddition() && !rule.hasGoal())
                 newRules.remove(rule);
 
             if (conditions.contains(rule.getWorldAddition())) {
@@ -78,6 +79,33 @@ public class PlanFinder {
             }
         }
         return newRules;
+    }
+
+    private static Plan reduce(Plan plan, Memory memory)
+    {
+        boolean reducable = false;
+        int firstReduction = 0;
+
+        for(int i = 0; i < plan.getRules().size(); i++)
+        {
+            Rule rule = plan.getRules().get(i);
+            Plan newPlan = new Plan(plan);
+            newPlan.remove(rule);
+            if(isInterpreadable(newPlan, memory)) {
+                reducable = true;
+                firstReduction = i;
+                break;
+            }
+        }
+
+        if(!reducable)
+            return plan;
+        else
+        {
+            Plan newPlan = new Plan(plan);
+            newPlan.remove(plan.getRules().get(firstReduction));
+            return reduce(newPlan, memory);
+        }
     }
 
     private static List<Rule> CleanUp(Plan plan) {

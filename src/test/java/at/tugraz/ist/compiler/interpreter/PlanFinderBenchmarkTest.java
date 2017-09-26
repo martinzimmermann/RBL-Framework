@@ -109,18 +109,18 @@ public class PlanFinderBenchmarkTest {
 
     private static void generateRandomTestData() throws IOException {
         String path = folderPath + "test_%s%d_%d_%d_%d_%d.rule";
-        int[] rules = new int[]{3, 3, 3, 5, 5, 5, 9, 9, 9, 11, 11, 11};
-        int[] goals = new int[]{1, 1, 1, 1, 1, 2, 1, 2, 2, 1, 2, 4};
+        int[] rules = new int[]{3, 3, 3, 5, 5, 5, 9, 9, 9}; // , 11, 11, 11};
+        int[] goals = new int[]{1, 1, 1, 1, 1, 2, 1, 2, 2}; //, 1, 2, 4};
 
-        int[] maxConditions = new int[]{1, 1, 2, 2, 2, 4, 2, 4, 6, 4, 6, 8};
-        int[] maxPreconditons = new int[]{1, 2, 3, 1, 2, 3, 2, 4, 4, 2, 4, 6};
+        int[] maxConditions = new int[]{1, 1, 2, 2, 2, 4, 2, 4, 6}; //, 4, 6, 8};
+        int[] maxPreconditons = new int[]{1, 2, 3, 1, 2, 3, 2, 4, 4}; //, 2, 4, 6};
 
         for (int j = 0; j < rules.length; j++) {
             int r = rules[j];
             int g = goals[j];
             int mC = maxConditions[j];
             int mP = maxPreconditons[j];
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 50; i++) {
                 String rulesString = generateRandomRules(r, g, mC, mP);
 
                 PrintWriter writer = new PrintWriter(String.format(path, "valid", i, r, g, mC, mP), "UTF-8");
