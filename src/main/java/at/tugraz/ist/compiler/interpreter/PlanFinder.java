@@ -33,15 +33,14 @@ public class PlanFinder {
 
     public static List<Rule> getPlanForGoalTopDown(Rule goal, Memory memory, List<Rule> allRules) {
         Plan plan = getPlanForGoalTopDown(goal, null, memory, allRules, new Plan());
-        return plan == null ? null : CleanUp(plan);
+        return plan == null ? null : CleanUp2(CleanUp(plan), memory);
     }
 
-    public static boolean isReduceable(Plan plan, Memory memory)
-    {
+    public static boolean isReduceable(Plan plan, Memory memory) {
         for (Rule rule : plan.getRules()) {
             Plan newPlan = new Plan(plan);
             newPlan.remove(rule);
-            if(isInterpreadable(newPlan, new Memory(memory)))
+            if (isInterpreadable(newPlan, new Memory(memory)))
                 return true;
         }
         return false;
@@ -52,7 +51,7 @@ public class PlanFinder {
             boolean result = memory.containsAll(rule.getPreconditions());
             if (result) {
                 memory.update(rule);
-                if(rule.hasGoal())
+                if (rule.hasGoal())
                     return true;
             } else {
                 return false;
@@ -60,6 +59,25 @@ public class PlanFinder {
         }
 
         return false;
+    }
+
+    private static List<Rule> CleanUp2(List<Rule> rules, Memory memory) {
+
+        List<Rule> newRules = new ArrayList<>(rules);
+        List<Predicate> conditions = new ArrayList<>(memory.getAllPredicates());
+
+        for (Rule rule : rules) {
+            if (!rule.hasWorldAddition())
+                newRules.remove(rule);
+
+            if (conditions.contains(rule.getWorldAddition())) {
+                newRules.remove(rule);
+            } else {
+                conditions.add(rule.getWorldAddition());
+                conditions.removeAll(rule.getWorldDeletions());
+            }
+        }
+        return newRules;
     }
 
     private static List<Rule> CleanUp(Plan plan) {
@@ -72,7 +90,7 @@ public class PlanFinder {
             checkRule(rules, 1, checked, precondition);
         }
 
-        List<Rule> filteredRules = IntStream.range(0,rules.size())
+        List<Rule> filteredRules = IntStream.range(0, rules.size())
                 .filter(i -> checked[i])
                 .mapToObj(i -> rules.get(i))
                 .collect(Collectors.toList());
@@ -81,11 +99,9 @@ public class PlanFinder {
     }
 
     private static void checkRule(List<Rule> rules, int currentIndex, boolean[] checked, Predicate precondition) {
-        for(int i = currentIndex; i < rules.size(); i++)
-        {
-            if(rules.get(i).hasWorldAddition() && rules.get(i).getWorldAddition().equals(precondition))
-            {
-                if(checked[i] == true)
+        for (int i = currentIndex; i < rules.size(); i++) {
+            if (rules.get(i).hasWorldAddition() && rules.get(i).getWorldAddition().equals(precondition)) {
+                if (checked[i] == true)
                     continue;
 
                 checked[i] = true;
@@ -153,7 +169,7 @@ public class PlanFinder {
             }
 
             Plan p = getPlanForGoalTopDown(goal, rule, newMemory, remainingRules, newPlan);
-            if(p != null)
+            if (p != null)
                 return p;
             else
                 continue;
@@ -172,7 +188,7 @@ public class PlanFinder {
     public static List<Rule> getPlanBottomUp(Memory memory, List<Rule> allRules) {
 
         List<Rule> goals = getGoalRules(allRules);
-        if(goals.size() == 0)
+        if (goals.size() == 0)
             return null;
 
         goals.sort(Rule::compareTo);
