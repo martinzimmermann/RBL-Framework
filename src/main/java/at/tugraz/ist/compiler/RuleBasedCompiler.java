@@ -64,12 +64,13 @@ class RuleBasedCompiler {
         int numberOfRuns = 1;
         boolean deferred = false;
         boolean lib = false;
+        Setting.PlanFinder planFinder = null;
 
         if (args.length == 0) {
             printHelp();
             return null;
         }
-
+        int currentIndex = 1;
         switch (args[0]) {
             case "interpret":
                 javax.tools.JavaCompiler c = ToolProvider.getSystemJavaCompiler();
@@ -79,9 +80,10 @@ class RuleBasedCompiler {
                 }
 
                 compile = false;
-                if (args.length == 5 && args[1].equals("-times")) {
+                if (args.length > (currentIndex + 1) && args[currentIndex].equals("-times")) {
+                    currentIndex++;
                     try {
-                        numberOfRuns = Integer.parseInt(args[2]);
+                        numberOfRuns = Integer.parseInt(args[currentIndex++]);
                         if (numberOfRuns < 0) {
                             printHelp();
                             return null;
@@ -90,11 +92,26 @@ class RuleBasedCompiler {
                         printHelp();
                         return null;
                     }
-                    javaFiles = args[3];
-                    ruleFile = args[4];
-                } else if (args.length == 3) {
-                    javaFiles = args[1];
-                    ruleFile = args[2];
+                }
+
+                if (args.length > (currentIndex + 1) && args[currentIndex].equals("-p")) {
+                    currentIndex++;
+                    switch (args[currentIndex++]) {
+                        case "td":
+                            planFinder = Setting.PlanFinder.TopDown;
+                            break;
+                        case "bu":
+                            planFinder = Setting.PlanFinder.BottomUp;
+                            break;
+                        case "best":
+                            planFinder = Setting.PlanFinder.Best;
+                            break;
+                    }
+                }
+
+                if (args.length > (currentIndex + 1)) {
+                    javaFiles = args[currentIndex++];
+                    ruleFile = args[currentIndex++];
                 } else {
                     printHelp();
                     return null;
@@ -103,7 +120,6 @@ class RuleBasedCompiler {
                 break;
             case "compile":
                 compile = true;
-                int currentIndex = 1;
 
                 if (args.length > (currentIndex + 1) && args[currentIndex].equals("-o")) {
                     currentIndex++;
@@ -138,7 +154,7 @@ class RuleBasedCompiler {
                 return null;
         }
 
-        return new Setting(javaFiles, ruleFile, compile, numberOfRuns, outputPath, packageName, deferred, lib);
+        return new Setting(javaFiles, ruleFile, compile, numberOfRuns, outputPath, packageName, deferred, lib, planFinder);
     }
 
     private static void checkPackageName(String packageName) {
@@ -148,7 +164,7 @@ class RuleBasedCompiler {
 
     private static void printHelp() {
         System.out.println("Usage:\n" +
-                "   rule interpret [-times n] PATHTOJAVAFILES PATHTORULEFILE                  interprets the rules n times, where n must be >= 0\n" +
+                "   rule interpret [-times n] [-p bu|td|best] PATHTOJAVAFILES PATHTORULEFILE  interprets the rules\n" +
                 "   rule compile [-o OUTPUTPATH] [-p PACKAGENAME] [-d] [-lib} PATHTORULEFILE  compiles th rules to Java source\n" +
                 "   rule (-h | --help)                                                        shows this help");
     }

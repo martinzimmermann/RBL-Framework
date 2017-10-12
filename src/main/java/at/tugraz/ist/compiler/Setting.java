@@ -9,8 +9,11 @@ public class Setting {
     private final String outputPath;
     private final boolean libraryUsed;
     private final boolean deferred;
+    private final PlanFinder planFinder;
 
-    public Setting(String pathToJavaFiles, String pathToRuleFile, boolean compiling, int numberOfRuns, String outputPath, String packageName, boolean deferred, boolean libraryUsed) {
+    enum PlanFinder { BottomUp, TopDown, Best}
+
+    public Setting(String pathToJavaFiles, String pathToRuleFile, boolean compiling, int numberOfRuns, String outputPath, String packageName, boolean deferred, boolean libraryUsed, PlanFinder planFinder) {
         this.pathToJavaFiles = pathToJavaFiles;
         this.pathToRuleFile = pathToRuleFile;
         this.compiling = compiling;
@@ -19,6 +22,7 @@ public class Setting {
         this.packageName = packageName;
         this.deferred = deferred;
         this.libraryUsed = libraryUsed;
+        this.planFinder = planFinder;
     }
 
     public String getPathToJavaFiles() {
