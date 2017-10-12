@@ -36,6 +36,8 @@ public class SourceWriter {
             writeFile("AlphaEntry.java");
             writeFile("AlphaList.java");
             writeFile("Atom.java");
+            writeFile("BestPlanFinder.java");
+            writeFile("BottomUpPlanFinder.java");
             writeFile("DiagnosticPosition.java");
             writeFile("ErrorHandler.java");
             writeFile("InterpreterRule.java");
@@ -47,6 +49,7 @@ public class SourceWriter {
             writeFile("Predicate.java");
             writeFile("Rule.java");
             writeFile("RuleAction.java");
+            writeFile("TopDownPlanFinder.java");
         }
     }
 

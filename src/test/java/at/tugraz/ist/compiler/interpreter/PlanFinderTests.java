@@ -374,17 +374,12 @@ public class PlanFinderTests {
     }
 
     @Test
-    @Ignore
     public void simple_quick_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("pre4 -> +pre2  Actions.action.\n" +
-                " -> +pre1  Actions.action.\n" +
-                "pre2 -> +pre0  Actions.action.\n" +
-                " -> +pre4  Actions.action.\n" +
-                " -> +pre4  Actions.action.\n" +
-                "pre0 -> +pre2  Actions.action.\n" +
-                "pre2 -> +pre3  Actions.action.\n" +
-                "pre4, pre3, pre1 -> #pre1  Actions.action.\n" +
-                "pre4, pre3, pre1 -> #pre3  Actions.action.");
+        RuleLexer ruleLexer = new RuleLexer("-> +door_open actions.OpenDoor.\n" +
+                "-> +window_open actions.OpenWindow.\n" +
+                "\n" +
+                "door_open -> #exitDoor -window_open -door_open actions.ExitDoor (0 <= a <= 1: a + 1.0 + 2 - -3 *(4 / -8)).\n" +
+                "window_open -> #exitWindow -window_open -door_open actions.ExitWindow.\n");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());

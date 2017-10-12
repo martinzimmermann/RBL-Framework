@@ -9,8 +9,10 @@ import java.util.stream.Collectors;
 public class Executor {
 
     private Model model;
+    private final PlanFinder planFinder;
 
-    public Executor() throws ClassNotFoundException {
+    public Executor(PlanFinder planFinder) throws ClassNotFoundException {
+        this.planFinder = planFinder;
         Arrays.asList(); // Just so the import won't get removed at a code cleanup
         new BigDecimal(0); // Just so the import won't get removed at a code cleanup
         List<Rule> rules = new ArrayList<>();
@@ -47,7 +49,7 @@ public class Executor {
         List<InterpreterRule> plan = null;
         goals.sort(Rule::compareTo);
         for (Rule goal: goals) {
-            plan = toInterpreterRules(PlanFinder.getPlanForRule(goal, memory, rules));
+            plan = toInterpreterRules(planFinder.getPlanForGoal(goal, memory, rules));
             if(plan != null)
                 break;
         }

@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,9 +16,21 @@ class Plan {
     public Plan(Plan currentPlan) {
         rules = new ArrayList<>(currentPlan.rules);
     }
+    public Plan(List<Rule> currentRules) {
+        rules = new ArrayList<>(currentRules);
+    }
 
     public boolean ruleWouldRemoveNeededPrecondition(Rule rule) {
-        return rules.stream().anyMatch(r -> r.getPreconditions().stream().anyMatch(p -> rule.getWorldDeletions().contains(p)));
+        List<Predicate> deletions =  rule.getWorldDeletions();
+        List<Predicate> laterAdded;
+        if(rules.size() <= 1)
+            laterAdded = new ArrayList<>();
+        else
+            laterAdded= rules.subList(1, rules.size() - 1).stream().filter(Rule::hasWorldAddition).map(Rule::getWorldAddition).collect(Collectors.toList());
+
+        deletions.removeAll(laterAdded);
+
+        return rules.stream().anyMatch(r -> r.getPreconditions().stream().anyMatch(p -> deletions.contains(p)));
     }
 
     public void add(Rule rule) {
@@ -47,5 +60,21 @@ class Plan {
 
         preconditions.removeAll(posEffects);
         return new ArrayList<>(preconditions);
+    }
+
+    public BigDecimal getWeight() {
+        BigDecimal sum = new BigDecimal(2);
+
+        for(int pos = 1; pos < rules.size(); pos++)
+        {
+            BigDecimal a = new BigDecimal(1).divide(new BigDecimal(10).pow(pos * 10));
+            BigDecimal b = rules.get((rules.size() - 1) - pos).getWeight();
+            sum = sum.add(a.multiply(b));
+        }
+        return sum;
+    }
+
+    public void remove(Rule rule) {
+        rules.remove(rule);
     }
 }
