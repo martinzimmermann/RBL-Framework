@@ -22,7 +22,7 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        Executor executor = new Executor();
+         Executor executor = new Executor(new BottomUpPlanFinder());
         executor.executeOnce(model);
     }
 
@@ -38,7 +38,7 @@ public class ExecutorTest {
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        Executor executor = new Executor();
+         Executor executor = new Executor(new BottomUpPlanFinder());
         executor.executeOnce(model);
     }
 
@@ -54,7 +54,7 @@ public class ExecutorTest {
 
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        Executor executor = new Executor();
+         Executor executor = new Executor(new BottomUpPlanFinder());
         executor.executeOnce(model);
     }
 
@@ -71,7 +71,7 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        Executor executor = new Executor();
+         Executor executor = new Executor(new BottomUpPlanFinder());
         executor.executeOnce(model);
     }
 
@@ -89,7 +89,7 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        Executor executor = new Executor();
+         Executor executor = new Executor(new BottomUpPlanFinder());
         executor.executeOnce(model);
     }
 
@@ -110,7 +110,7 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        Executor executor = new Executor();
+         Executor executor = new Executor(new BottomUpPlanFinder());
         executor.executeOnce(model);
     }
 
@@ -127,7 +127,7 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        Executor executor = new Executor();
+         Executor executor = new Executor(new BottomUpPlanFinder());
         executor.executeOnce(model);
     }
 
@@ -145,7 +145,7 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        Executor executor = new Executor();
+         Executor executor = new Executor(new BottomUpPlanFinder());
         executor.executeOnce(model);
     }
 
@@ -163,7 +163,7 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        Executor executor = new Executor();
+         Executor executor = new Executor(new BottomUpPlanFinder());
         executor.executeOnce(model);
     }
 
@@ -183,7 +183,7 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        Executor executor = new Executor();
+         Executor executor = new Executor(new BottomUpPlanFinder());
         executor.executeNTimes(model, 2);
     }
 
@@ -198,7 +198,7 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        Executor executor = new Executor();
+         Executor executor = new Executor(new BottomUpPlanFinder());
         executor.executeOnce(model);
     }
 
@@ -212,7 +212,7 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        Executor executor = new Executor();
+         Executor executor = new Executor(new BottomUpPlanFinder());
         executor.executeOnce(model);
     }
 }

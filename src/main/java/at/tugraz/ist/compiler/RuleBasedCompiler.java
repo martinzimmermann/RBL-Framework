@@ -1,10 +1,7 @@
 package at.tugraz.ist.compiler;
 
 import at.tugraz.ist.compiler.compiler.SourceWriter;
-import at.tugraz.ist.compiler.interpreter.ClassCompiler;
-import at.tugraz.ist.compiler.interpreter.Executor;
-import at.tugraz.ist.compiler.interpreter.Model;
-import at.tugraz.ist.compiler.interpreter.NoPlanFoundException;
+import at.tugraz.ist.compiler.interpreter.*;
 import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
 import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
@@ -49,7 +46,7 @@ class RuleBasedCompiler {
                     ErrorHandler.Instance().printErrorCount();
                     System.exit(1);
                 }
-                Executor executor = new Executor();
+                Executor executor = new Executor(new BottomUpPlanFinder());
                 executor.executeNTimes(model, setting.getNumberOfRuns());
             }
 

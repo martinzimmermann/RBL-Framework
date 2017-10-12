@@ -9,15 +9,22 @@ import java.util.stream.Collectors;
 
 public class Executor {
 
+    private final PlanFinder planFinder;
+
+    public Executor(PlanFinder planFinder)
+    {
+        this.planFinder = planFinder;
+    }
+
     public boolean executeOnce(Model model) throws NoPlanFoundException {
         List<Rule> rules = toRules(model.getRules());
-        List<InterpreterRule> goals = toInterpreterRules(PlanFinder.getGoalRules(rules));
+        List<InterpreterRule> goals = toInterpreterRules(planFinder.getGoalRules(rules));
         Memory memory = model.getMemory();
 
         List<InterpreterRule> plan = null;
         goals.sort(Rule::compareTo);
         for (Rule goal : goals) {
-            plan = toInterpreterRules(PlanFinder.getBestPlan(memory, rules));
+            plan = toInterpreterRules(planFinder.getAnyPlan(memory, rules));
             if (plan != null)
                 break;
         }

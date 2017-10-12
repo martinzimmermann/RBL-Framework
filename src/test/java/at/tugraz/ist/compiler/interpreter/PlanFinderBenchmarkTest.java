@@ -6,6 +6,7 @@ import at.tugraz.ist.compiler.parser.RuleParser;
 import at.tugraz.ist.compiler.rule.Rule;
 import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 import static junit.framework.TestCase.assertEquals;
 
 @RunWith(Parameterized.class)
+@Ignore
 public class PlanFinderBenchmarkTest {
 
     static final String resultFileName = "result.csv";
@@ -158,14 +160,14 @@ public class PlanFinderBenchmarkTest {
         List<Rule> rules = gen.getRules();
 
         long startTime = System.nanoTime();
-        List<Rule> topDownPlan = PlanFinder.getPlanTopDown(memory, rules);
+        List<Rule> topDownPlan = new TopDownPlanFinder().getAnyPlan(memory, rules);
         long endTime = System.nanoTime();
         long topDownPlanDuration = (endTime - startTime);
         BigDecimal topDownPlanWeight = topDownPlan != null ? new Plan(topDownPlan).getWeight() : null;
         int topDownPlanRules = topDownPlan != null ? topDownPlan.size() : 0;
 
         startTime = System.nanoTime();
-        List<Rule> bottomUpPlan = PlanFinder.getPlanBottomUp(memory, rules);
+        List<Rule> bottomUpPlan = new BottomUpPlanFinder().getAnyPlan(memory, rules);
         endTime = System.nanoTime();
         long bottomUpPlanDuration = (endTime - startTime);
         BigDecimal bottomUpPlanWeight = bottomUpPlan != null ? new Plan(bottomUpPlan).getWeight() : null;
@@ -174,7 +176,7 @@ public class PlanFinderBenchmarkTest {
         List<Rule> bestPlan = null;
         startTime = System.nanoTime();
         try {
-            bestPlan = PlanFinder.getBestPlan(memory, rules);
+            bestPlan = new BestPlanFinder().getAnyPlan(memory, rules);
         } catch (StackOverflowError | OutOfMemoryError e) {
         }
         endTime = System.nanoTime();
