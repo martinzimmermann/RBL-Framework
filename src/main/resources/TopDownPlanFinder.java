@@ -82,7 +82,7 @@ public class TopDownPlanFinder extends PlanFinder {
             remainingRules.remove(rule);
             newPlan.add(rule);
 
-            if (rule.hasGoal() && (goal == null ? true : currentPlan.equals(goal))) {
+            if (rule.hasGoal() && (goal == null ? true : rule.equals(goal))) {
                 return newPlan;
             }
 
