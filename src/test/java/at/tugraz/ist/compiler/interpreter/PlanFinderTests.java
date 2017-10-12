@@ -374,6 +374,7 @@ public class PlanFinderTests {
     }
 
     @Test
+    @Ignore
     public void simple_quick_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer("-> +door_open actions.OpenDoor.\n" +
                 "-> +window_open actions.OpenWindow.\n" +
