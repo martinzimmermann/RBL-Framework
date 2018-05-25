@@ -43,23 +43,34 @@ public class Executor {
 
     public boolean executeOnce() throws NoPlanFoundException {
         List<Rule> rules = toRules(model.getRules());
-        List<InterpreterRule> goals = toInterpreterRules(PlanFinder.getGoalRules(rules));
+        List<InterpreterRule> goals = toInterpreterRules(planFinder.getGoalRules(rules));
         Memory memory = model.getMemory();
 
         List<InterpreterRule> plan = null;
         goals.sort(Rule::compareTo);
-        for (Rule goal: goals) {
-            plan = toInterpreterRules(planFinder.getPlanForGoal(goal, memory, rules));
-            if(plan != null)
+        for (Rule goal : goals) {
+            plan = toInterpreterRules(planFinder.getAnyPlan(memory, rules));
+            if (plan != null)
                 break;
         }
         if (plan == null)
             throw new NoPlanFoundException();
 
+        boolean success = interpreteRules(memory, plan);
+
+        for (Rule rule : model.getRules()) {
+            if(plan.contains(rule))
+                rule.increaseActivity();
+            else
+                rule.decreaseActivity();
+        }
+        return success;
+    }
+
+    private boolean interpreteRules(Memory memory, List<InterpreterRule> plan) {
+
         for (InterpreterRule rule : plan) {
             boolean result = rule.execute(memory);
-            rule.increaseActivity();
-
             if (result) {
                 memory.update(rule);
                 rule.decreaseDamping();

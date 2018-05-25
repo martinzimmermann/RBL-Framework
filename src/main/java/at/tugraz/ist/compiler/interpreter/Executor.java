@@ -11,8 +11,7 @@ public class Executor {
 
     private final PlanFinder planFinder;
 
-    public Executor(PlanFinder planFinder)
-    {
+    public Executor(PlanFinder planFinder) {
         this.planFinder = planFinder;
     }
 
@@ -31,20 +30,27 @@ public class Executor {
         if (plan == null)
             throw new NoPlanFoundException();
 
-        return interpreteRules(memory, plan);
+        boolean success = interpreteRules(memory, plan);
+
+        for (Rule rule : model.getRules()) {
+            if(plan.contains(rule))
+                rule.decreaseActivity();
+            else
+                rule.increaseActivity();
+        }
+        return success;
     }
 
     private boolean interpreteRules(Memory memory, List<InterpreterRule> plan) {
+
         for (InterpreterRule rule : plan) {
             boolean result = rule.execute(memory);
-            rule.increaseActivity();
-
             if (result) {
                 memory.update(rule);
-                rule.decreaseDamping();
+                rule.increaseDamping();
             } else {
                 rule.repairMemory(memory);
-                rule.increaseDamping();
+                rule.decreaseDamping();
                 return false;
             }
         }
@@ -61,7 +67,7 @@ public class Executor {
 
     public void executeNTimes(Model model, int n) throws NoPlanFoundException {
         for (int i = 0; i < n; i++) {
-                executeOnce(model);
+            executeOnce(model);
         }
     }
 }

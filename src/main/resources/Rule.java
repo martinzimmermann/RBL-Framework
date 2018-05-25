@@ -11,7 +11,7 @@ public class Rule extends Atom implements Comparable<Rule> {
     private final AlphaList alphaEntries;
     private final BigDecimal ruleGoal;
     private final String actionName;
-    private BigDecimal currentActivity = BigDecimal.valueOf(0.00000000001);
+    private BigDecimal currentActivity = BigDecimal.valueOf(0.5);
     private BigDecimal damping = BigDecimal.valueOf(0.5);
 
     private DiagnosticPosition diagnosticPosition;
@@ -172,13 +172,19 @@ public class Rule extends Atom implements Comparable<Rule> {
     }
 
     public void decreaseDamping() {
+        //damping = damping.divide(new BigDecimal(2));
         damping = damping.subtract(new BigDecimal(0.1));
-        damping = damping.compareTo(new BigDecimal(0.1)) < 0 ? new BigDecimal(0.1) : damping;
+        damping = damping.compareTo(new BigDecimal(0.1)) < 0.1 ? new BigDecimal(0.1) : damping;
     }
 
     public void increaseDamping() {
+        //damping = damping.add(new BigDecimal(1)).divide(new BigDecimal(2));
         damping = damping.add(new BigDecimal(0.1));
-        damping = damping.compareTo(new BigDecimal(0.9)) > 0 ? new BigDecimal(0.9) : damping;
+        damping = damping.compareTo(new BigDecimal(0.9)) > 0.9 ? new BigDecimal(0.9) : damping;
+    }
+
+    public void decreaseActivity() {
+        currentActivity = currentActivity.divide(new BigDecimal(2));
     }
 
     public void increaseActivity() {
@@ -190,7 +196,7 @@ public class Rule extends Atom implements Comparable<Rule> {
         builder.append("new Rule(");
         builder.append("\"" + actionName + "\", ");
         builder.append(ruleGoal + ", ");
-        builder.append( alphaEntries.getConstructor() + ", ");
+        builder.append(alphaEntries.getConstructor() + ", ");
         String params = worldDeletions.stream().map(p -> "new Predicate(\"" + p.getName() + "\")").collect(Collectors.joining(", "));
         builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "})), ");
         builder.append((goal == null ? "null" : "\"" + goal + "\"") + ", ");

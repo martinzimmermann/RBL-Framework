@@ -38,8 +38,8 @@ public class ExecutorTest {
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         Executor executor = new Executor(new BottomUpPlanFinder());
-        executor.executeOnce(model);
+        Executor executor = new Executor(new BottomUpPlanFinder());
+        executor.executeNTimes(model, 100);
     }
 
     @Test

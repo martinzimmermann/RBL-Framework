@@ -315,7 +315,7 @@ public class PlanFinderTests {
 
         List<Rule> plan = new BestPlanFinder().getAnyPlan(memory, rules);
         assertNotNull(plan);
-        assertEquals(2, plan.size());
+        assertEquals(1, plan.size());
     }
 
     @Test

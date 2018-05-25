@@ -27,18 +27,17 @@ import java.util.stream.Collectors;
 import static junit.framework.TestCase.assertEquals;
 
 @RunWith(Parameterized.class)
-@Ignore
 public class PlanFinderBenchmarkTest {
 
     static final String resultFileName = "result.csv";
     private final static String folderPath = "src/test/resources/RandomRules/";
 
     static {
-        try {
+        /*try {
             generateRandomTestData();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private final String name;
@@ -111,11 +110,11 @@ public class PlanFinderBenchmarkTest {
 
     private static void generateRandomTestData() throws IOException {
         String path = folderPath + "test_%s%d_%d_%d_%d_%d.rule";
-        int[] rules = new int[]{3, 3, 3, 5, 5, 5, 9, 9, 9}; // , 11, 11, 11};
-        int[] goals = new int[]{1, 1, 1, 1, 1, 2, 1, 2, 2}; //, 1, 2, 4};
+        int[] rules = new int[]{3, 3, 3, 5, 5, 5, 9, 9, 9, 11, 11, 11, 15, 15, 15};
+        int[] goals = new int[]{1, 1, 1, 1, 1, 2, 1, 2, 2, 1, 2, 4, 1, 2, 4};
 
-        int[] maxConditions = new int[]{1, 1, 2, 2, 2, 4, 2, 4, 6}; //, 4, 6, 8};
-        int[] maxPreconditons = new int[]{1, 2, 3, 1, 2, 3, 2, 4, 4}; //, 2, 4, 6};
+        int[] maxConditions = new int[]{1, 1, 2, 2, 2, 4, 2, 4, 6, 4, 6, 8, 4, 6, 8};
+        int[] maxPreconditons = new int[]{1, 2, 3, 1, 2, 3, 2, 4, 4, 2, 4, 6, 2, 4, 6};
 
         for (int j = 0; j < rules.length; j++) {
             int r = rules[j];
@@ -125,13 +124,18 @@ public class PlanFinderBenchmarkTest {
             for (int i = 0; i < 50; i++) {
                 String rulesString = generateRandomRules(r, g, mC, mP);
 
-                PrintWriter writer = new PrintWriter(String.format(path, "valid", i, r, g, mC, mP), "UTF-8");
+                File file = new File(String.format(path, "valid", i, r, g, mC, mP));
+
+                file.createNewFile();
+
+                PrintWriter writer = new PrintWriter(file, "UTF-8");
                 writer.print(rulesString);
                 writer.close();
             }
         }
     }
 
+    @Ignore
     @Test
     public void test() throws IOException {
         String pattern = "test_(invalid|valid)(\\d+)_(\\d+)_(\\d+)_(\\d+)_(\\d+)";
