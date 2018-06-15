@@ -59,6 +59,33 @@ public interface RuleGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRule_goal(RuleGrammarParser.Rule_goalContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link RuleGrammarParser#damping}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDamping(RuleGrammarParser.DampingContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code AgingNoBound}
+	 * labeled alternative in {@link RuleGrammarParser#agingTarget}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAgingNoBound(RuleGrammarParser.AgingNoBoundContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code AgingLowerBound}
+	 * labeled alternative in {@link RuleGrammarParser#agingTarget}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAgingLowerBound(RuleGrammarParser.AgingLowerBoundContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code AgingUpperBound}
+	 * labeled alternative in {@link RuleGrammarParser#agingTarget}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAgingUpperBound(RuleGrammarParser.AgingUpperBoundContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link RuleGrammarParser#alist}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

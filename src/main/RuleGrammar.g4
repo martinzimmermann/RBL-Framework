@@ -20,10 +20,15 @@ memory:     (predicate '.')+;
 predicate:  ID;
 
 r_rules:    (r_rule '.')+;
-r_rule:     preconditions? '->' ('+' WorldAddtion=predicate | '#' Goal=predicate)? worldDeletions action alist? rule_goal?;
+r_rule:     preconditions? '->' ('+' WorldAddtion=predicate | '#' Goal=predicate)? worldDeletions action alist? rule_goal? damping?;
 preconditions: predicate  (',' predicate )*;
 worldDeletions: (('-' predicate)*);
 rule_goal:  NUMBER;
+damping: '['Damping=NUMBER? ',' Aging=NUMBER? ',' agingTarget? ']';
+agingTarget: MaxAging=NUMBER #AgingNoBound
+     | '|' MaxAging=NUMBER #AgingLowerBound
+     |  MaxAging=NUMBER '|' #AgingUpperBound
+     ;
 alist:      '('(( alistentry (',' alistentry)* (',' expr)?) | expr )')';
 alistentry: NUMBER (LT|LTE) 'a' (LT|LTE) NUMBER ':' expr;
 action:     ID('.'ID)*;
