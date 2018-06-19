@@ -11,7 +11,7 @@ import static junit.framework.TestCase.assertEquals;
 public class SettingTest {
 
     @Test
-    public void ctor_test() throws IOException {
+    public void ctor_test() {
         final String pathToJavaFiles = "abc";
         final String pathToRuleFile = "xyz";
         final boolean compiling = true;
