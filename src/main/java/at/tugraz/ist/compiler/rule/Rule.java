@@ -54,6 +54,7 @@ public class Rule extends Atom implements Comparable<Rule> {
         actionName = rule.actionName;
         currentActivity = rule.currentActivity;
         damping = rule.damping;
+        diagnosticPosition = rule.diagnosticPosition;
     }
 
     public List<Predicate> getPreconditions() {

@@ -114,13 +114,13 @@ public class PlanFinderBenchmarkTest {
         int[] goals = new int[]{1, 1, 1, 1, 1, 2, 1, 2, 2, 1, 2, 4, 1, 2, 4};
 
         int[] maxConditions = new int[]{1, 1, 2, 2, 2, 4, 2, 4, 6, 4, 6, 8, 4, 6, 8};
-        int[] maxPreconditons = new int[]{1, 2, 3, 1, 2, 3, 2, 4, 4, 2, 4, 6, 2, 4, 6};
+        int[] maxPreconditions = new int[]{1, 2, 3, 1, 2, 3, 2, 4, 4, 2, 4, 6, 2, 4, 6};
 
         for (int j = 0; j < rules.length; j++) {
             int r = rules[j];
             int g = goals[j];
             int mC = maxConditions[j];
-            int mP = maxPreconditons[j];
+            int mP = maxPreconditions[j];
             for (int i = 0; i < 50; i++) {
                 String rulesString = generateRandomRules(r, g, mC, mP);
 

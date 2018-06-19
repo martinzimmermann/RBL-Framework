@@ -1,14 +1,11 @@
 package at.tugraz.ist.compiler.interpreter;
 
-import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class TopDownPlanFinder extends PlanFinder {
 
@@ -23,7 +20,7 @@ public class TopDownPlanFinder extends PlanFinder {
         return plan == null ? null : reduce(plan, memory).getRules();
     }
 
-    private boolean isInterpreadable(Plan plan, Memory memory) {
+    private boolean isInterpretable(Plan plan, Memory memory) {
         Memory newMemory = new Memory(memory);
         for (Rule rule : plan.getRules()) {
             boolean result = newMemory.containsAll(rule.getPreconditions());
@@ -42,7 +39,7 @@ public class TopDownPlanFinder extends PlanFinder {
 
     private Plan reduce(Plan plan, Memory memory)
     {
-        boolean reducable = false;
+        boolean reducible = false;
         int firstReduction = 0;
 
         for(int i = 0; i < plan.getRules().size(); i++)
@@ -50,14 +47,14 @@ public class TopDownPlanFinder extends PlanFinder {
             Rule rule = plan.getRules().get(i);
             Plan newPlan = new Plan(plan);
             newPlan.remove(rule);
-            if(isInterpreadable(newPlan, memory)) {
-                reducable = true;
+            if(isInterpretable(newPlan, memory)) {
+                reducible = true;
                 firstReduction = i;
                 break;
             }
         }
 
-        if(!reducable)
+        if(!reducible)
             return plan;
         else
         {
@@ -76,7 +73,7 @@ public class TopDownPlanFinder extends PlanFinder {
         List<Rule> rules = getRulesThatArePossible(memory, allRules);
 
         // prioritize Goal rules
-        Comparator<Rule> comparator = Comparator.comparing(r -> !(r.hasGoal() && (goal == null ? true : goal.equals(r.getGoal()))));
+        Comparator<Rule> comparator = Comparator.comparing(r -> !(r.hasGoal() && (goal == null || goal.getGoal().equals(r.getGoal()))));
         comparator = comparator.thenComparing(Rule::compareTo);
         rules.sort(comparator);
 
@@ -89,15 +86,13 @@ public class TopDownPlanFinder extends PlanFinder {
             remainingRules.remove(rule);
             newPlan.add(rule);
 
-            if (rule.hasGoal() && (goal == null ? true : rule.equals(goal))) {
+            if (rule.hasGoal() && (goal == null || rule.equals(goal))) {
                 return newPlan;
             }
 
             Plan p = getPlanForGoalTopDown(goal, rule, newMemory, remainingRules, newPlan);
             if (p != null)
                 return p;
-            else
-                continue;
         }
         return null;
     }

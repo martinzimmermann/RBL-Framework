@@ -182,9 +182,9 @@ public class RuleGeneratorVisitorTests {
         assertEquals(rule.getAction(), "Actions.action");
         assertEquals(rule.getRuleGoal(), 0.2);
         assertEquals(rule.getWorldAddition(), new Predicate("post"));
-        assertEquals(rule.getGoal(), null);
-        assertEquals(rule.hasGoal(), false);
-        assertEquals(rule.hasWorldAddition(), true);
+        assertNull(rule.getGoal());
+        assertFalse(rule.hasGoal());
+        assertTrue(rule.hasWorldAddition());
 
         assertNotNull(rule.getPreconditions());
         assertEquals(rule.getPreconditions().size(), 2);
@@ -197,7 +197,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals(rule.getWorldDeletions().get(1), new Predicate("pre2"));
 
         assertNotNull(rule.getAlphaList());
-        assertTrue(new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))) == 0);
+        assertEquals(0, new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))));
     }
 
     @Test
@@ -216,10 +216,10 @@ public class RuleGeneratorVisitorTests {
 
         assertEquals(rule.getAction(), "Actions.action");
         assertEquals(rule.getRuleGoal(), 1.0);
-        assertEquals(rule.getWorldAddition(), null);
+        assertNull(rule.getWorldAddition());
         assertEquals(rule.getGoal(), "goal");
-        assertEquals(rule.hasGoal(), true);
-        assertEquals(rule.hasWorldAddition(), false);
+        assertTrue(rule.hasGoal());
+        assertFalse(rule.hasWorldAddition());
 
         assertNotNull(rule.getPreconditions());
         assertEquals(rule.getPreconditions().size(), 0);
@@ -228,7 +228,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals(rule.getWorldDeletions().size(), 0);
 
         assertNotNull(rule.getAlphaList());
-        assertTrue(new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))) == 0);
+        assertEquals(0, new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))));
     }
 
     @Test
@@ -247,10 +247,10 @@ public class RuleGeneratorVisitorTests {
 
         assertEquals(rule.getAction(), "Actions.action");
         assertEquals(rule.getRuleGoal(), 1.0);
-        assertEquals(rule.getWorldAddition(), null);
-        assertEquals(rule.getGoal(), null);
-        assertEquals(rule.hasGoal(), false);
-        assertEquals(rule.hasWorldAddition(), false);
+        assertNull(rule.getWorldAddition());
+        assertNull(rule.getGoal());
+        assertFalse(rule.hasGoal());
+        assertFalse(rule.hasWorldAddition());
 
         assertNotNull(rule.getPreconditions());
         assertEquals(rule.getPreconditions().size(), 0);
@@ -259,7 +259,7 @@ public class RuleGeneratorVisitorTests {
         assertEquals(rule.getWorldDeletions().size(), 0);
 
         assertNotNull(rule.getAlphaList());
-        assertTrue(new BigDecimal(0.5).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))) == 0);
+        assertEquals(0, new BigDecimal(0.5).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))));
     }
 
     @Test
@@ -278,10 +278,10 @@ public class RuleGeneratorVisitorTests {
 
         assertEquals(rule.getAction(), "Actions.action");
         assertEquals(rule.getRuleGoal(), 1.0);
-        assertEquals(rule.getWorldAddition(), null);
-        assertEquals(rule.getGoal(), null);
-        assertEquals(rule.hasGoal(), false);
-        assertEquals(rule.hasWorldAddition(), false);
+        assertNull(rule.getWorldAddition());
+        assertNull(rule.getGoal());
+        assertFalse(rule.hasGoal());
+        assertFalse(rule.hasWorldAddition());
 
         assertNotNull(rule.getPreconditions());
         assertEquals(rule.getPreconditions().size(), 0);
@@ -290,11 +290,11 @@ public class RuleGeneratorVisitorTests {
         assertEquals(rule.getWorldDeletions().size(), 0);
 
         assertNotNull(rule.getAlphaList());
-        assertTrue(new BigDecimal(0.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.0))) == 0);
-        assertTrue(new BigDecimal(0.5).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.25))) == 0);
-        assertTrue(new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))) == 0);
-        assertTrue(new BigDecimal(0.75).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.75))) == 0);
-        assertTrue(new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(1.0))) == 0);
+        assertEquals(0, new BigDecimal(0.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.0))));
+        assertEquals(0, new BigDecimal(0.5).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.25))));
+        assertEquals(0, new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))));
+        assertEquals(0, new BigDecimal(0.75).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.75))));
+        assertEquals(0, new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(1.0))));
     }
 
 
@@ -314,10 +314,10 @@ public class RuleGeneratorVisitorTests {
 
         assertEquals(rule.getAction(), "Actions.action");
         assertEquals(rule.getRuleGoal(), 1.0);
-        assertEquals(rule.getWorldAddition(), null);
-        assertEquals(rule.getGoal(), null);
-        assertEquals(rule.hasGoal(), false);
-        assertEquals(rule.hasWorldAddition(), false);
+        assertNull(rule.getWorldAddition());
+        assertNull(rule.getGoal());
+        assertFalse(rule.hasGoal());
+        assertFalse(rule.hasWorldAddition());
 
         assertNotNull(rule.getPreconditions());
         assertEquals(rule.getPreconditions().size(), 0);
@@ -326,13 +326,13 @@ public class RuleGeneratorVisitorTests {
         assertEquals(rule.getWorldDeletions().size(), 0);
 
         assertNotNull(rule.getAlphaList());
-        assertTrue(new BigDecimal(0.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0))) == 0);
-        assertTrue(new BigDecimal(0.5).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.25))) == 0);
-        assertTrue(new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.3))) == 0);
-        assertTrue(new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))) == 0);
-        assertTrue(new BigDecimal(0.75).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.75))) == 0);
-        assertTrue(new BigDecimal(1).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.8))) == 0);
-        assertTrue(new BigDecimal(1).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(1))) == 0);
+        assertEquals(0, new BigDecimal(0.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0))));
+        assertEquals(0, new BigDecimal(0.5).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.25))));
+        assertEquals(0, new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.3))));
+        assertEquals(0, new BigDecimal(1.0).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.5))));
+        assertEquals(0, new BigDecimal(0.75).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.75))));
+        assertEquals(0, new BigDecimal(1).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(0.8))));
+        assertEquals(0, new BigDecimal(1).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(1))));
     }
 
     @Test
@@ -351,10 +351,10 @@ public class RuleGeneratorVisitorTests {
 
         assertEquals(rule.getAction(), "Actions.action");
         assertEquals(rule.getRuleGoal(), 1.0);
-        assertEquals(rule.getWorldAddition(), null);
-        assertEquals(rule.getGoal(), null);
-        assertEquals(rule.hasGoal(), false);
-        assertEquals(rule.hasWorldAddition(), false);
+        assertNull(rule.getWorldAddition());
+        assertNull(rule.getGoal());
+        assertFalse(rule.hasGoal());
+        assertFalse(rule.hasWorldAddition());
 
         assertNotNull(rule.getPreconditions());
         assertEquals(rule.getPreconditions().size(), 0);
@@ -363,6 +363,6 @@ public class RuleGeneratorVisitorTests {
         assertEquals(rule.getWorldDeletions().size(), 0);
 
         assertNotNull(rule.getAlphaList());
-        assertTrue(new BigDecimal(26).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(1))) == 0);
+        assertEquals(0, new BigDecimal(26).compareTo(rule.getAlphaList().calculateWeight(new BigDecimal(1))));
     }
 }

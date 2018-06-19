@@ -1,14 +1,11 @@
 package at.tugraz.ist.compiler.interpreter;
 
-import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class BestPlanFinder extends PlanFinder {
 
@@ -24,23 +21,23 @@ public class BestPlanFinder extends PlanFinder {
         if (plans.size() == 0)
             return null; // plan couldn't be fulfilled on this path
 
-        List<Plan> reasonablePaht = plans.stream().filter(p -> !isReduceable(p, memory)).collect(Collectors.toList());
+        List<Plan> reasonablePath = plans.stream().filter(p -> !isReducible(p, memory)).collect(Collectors.toList());
 
-        Plan bestPlan = reasonablePaht.stream().max(Comparator.comparing(Plan::getWeight)).get();
+        Plan bestPlan = reasonablePath.stream().max(Comparator.comparing(Plan::getWeight)).get();
         return bestPlan.getRules();
     }
 
-    private boolean isReduceable(Plan plan, Memory memory) {
+    private boolean isReducible(Plan plan, Memory memory) {
         for (Rule rule : plan.getRules()) {
             Plan newPlan = new Plan(plan);
             newPlan.remove(rule);
-            if (isInterpreadable(newPlan, memory))
+            if (isInterpretable(newPlan, memory))
                 return true;
         }
         return false;
     }
 
-    private boolean isInterpreadable(Plan plan, Memory memory) {
+    private boolean isInterpretable(Plan plan, Memory memory) {
         Memory newMemory = new Memory(memory);
         for (Rule rule : plan.getRules()) {
             boolean result = newMemory.containsAll(rule.getPreconditions());
@@ -75,7 +72,7 @@ public class BestPlanFinder extends PlanFinder {
             remainingRules.remove(rule);
             newPlan.add(rule);
 
-            if (rule.hasGoal() && (goal == null ? true : rule.equals(goal))) {
+            if (rule.hasGoal() && (goal == null || rule.equals(goal))) {
                 plans.add(newPlan);
             }
 

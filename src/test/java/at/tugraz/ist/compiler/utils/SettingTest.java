@@ -3,9 +3,6 @@ package at.tugraz.ist.compiler.utils;
 import at.tugraz.ist.compiler.Setting;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-
 import static junit.framework.TestCase.assertEquals;
 
 public class SettingTest {

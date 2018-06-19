@@ -1,12 +1,9 @@
 package at.tugraz.ist.compiler.rule;
 
-import at.tugraz.ist.compiler.ErrorHandler;
 import at.tugraz.ist.compiler.interpreter.ClassCompiler;
-import at.tugraz.ist.compiler.interpreter.Memory;
 import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
 import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;

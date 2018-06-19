@@ -35,7 +35,7 @@ class Plan {
 
         deletions.removeAll(laterAdded);
 
-        return rules.stream().anyMatch(r -> r.getPreconditions().stream().anyMatch(p -> deletions.contains(p)));
+        return rules.stream().anyMatch(r -> r.getPreconditions().stream().anyMatch(deletions::contains));
     }
 
     public void add(Rule rule) {
@@ -60,7 +60,7 @@ class Plan {
     }
 
     private List<Predicate> toReach() {
-        Set<Predicate> preconditions = new HashSet<>(rules.stream().flatMap(r -> r.getPreconditions().stream()).collect(Collectors.toList()));
+        Set<Predicate> preconditions = rules.stream().flatMap(r -> r.getPreconditions().stream()).collect(Collectors.toSet());
         Set<Predicate> posEffects = new HashSet<>(rules.stream().filter(Rule::hasWorldAddition).map(Rule::getWorldAddition).collect(Collectors.toList()));
 
         preconditions.removeAll(posEffects);
