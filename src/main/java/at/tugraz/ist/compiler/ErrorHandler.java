@@ -30,11 +30,6 @@ public class ErrorHandler {
             System.out.println(ANSI_YELLOW + "Warning: " + message + ANSI_RESET);
     }
 
-    public void reportWarning(Type type, DiagnosticPosition diagnosticPosition, String message) {
-        if (type == Type.Input)
-            System.out.println(ANSI_YELLOW + "Warning: " + message + ANSI_RESET);
-    }
-
     public void reportError(Type type, DiagnosticPosition diagnosticPosition, String message) {
 
         if (diagnosticPosition == null)

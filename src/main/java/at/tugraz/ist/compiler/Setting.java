@@ -11,7 +11,7 @@ public class Setting {
     private final boolean deferred;
     private final PlanFinder planFinder;
 
-    enum PlanFinder { BottomUp, TopDown, Best}
+    public enum PlanFinder { BottomUp, TopDown, Best}
 
     public Setting(String pathToJavaFiles, String pathToRuleFile, boolean compiling, int numberOfRuns, String outputPath, String packageName, boolean deferred, boolean libraryUsed, PlanFinder planFinder) {
         this.pathToJavaFiles = pathToJavaFiles;
