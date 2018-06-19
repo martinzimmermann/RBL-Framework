@@ -12,6 +12,11 @@ public class RuleBuilder {
     private String goal = null;
     private Predicate worldAddition = null;
     private List<Predicate> preconditions = new ArrayList<>();
+    private double damping = 0.1;
+    private double aging = 0;
+    private double maxAging = 0;
+    private boolean agingUpperBound = false;
+    private boolean agingLowerBound = false;
 
     public RuleBuilder setDiagnosticPosition(DiagnosticPosition diagnosticPosition) {
         this.diagnosticPosition = diagnosticPosition;
@@ -53,8 +58,32 @@ public class RuleBuilder {
         return this;
     }
 
-    public Rule createRule(){
-            return new Rule(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions, diagnosticPosition);
+    public RuleBuilder setDamping(double damping) {
+        this.damping = damping;
+        return this;
+    }
 
+    public RuleBuilder setAging(double aging) {
+        this.aging = aging;
+        return this;
+    }
+
+    public RuleBuilder setMaxAging(double maxAging) {
+        this.maxAging = maxAging;
+        return this;
+    }
+
+    public RuleBuilder setAgingUpperBound(boolean agingUpperBound) {
+        this.agingUpperBound = agingUpperBound;
+        return this;
+    }
+
+    public RuleBuilder setAgingLowerBound(boolean agingLowerBound) {
+        this.agingLowerBound = agingLowerBound;
+        return this;
+    }
+
+    public Rule createRule(){
+            return new Rule(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions, damping, aging, maxAging, agingUpperBound, agingLowerBound, diagnosticPosition);
     }
 }

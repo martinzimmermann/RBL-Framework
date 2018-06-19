@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.List;
 
 import static junit.framework.TestCase.*;
@@ -106,6 +107,128 @@ public class RuleWeightTest {
 
         BigDecimal weight = rule.getWeight();
         assertEquals(0, new BigDecimal(0.0625).compareTo(weight));
+    }
+
+    @Test
+    public void weight_damping_increase() throws IOException {
+        String source = "pre -> action.";
+        Rule rule = checkRule(source);
+
+        rule.increaseDamping();
+        BigDecimal weight = rule.getWeight();
+        assertEquals(0, new BigDecimal(0.2).round(new MathContext(10)).compareTo(weight));
+    }
+
+    @Test
+    public void weight_damping_increase_to_max() throws IOException {
+        String source = "pre -> action.";
+        Rule rule = checkRule(source);
+        rule.increaseDamping();
+        rule.increaseDamping();
+        rule.increaseDamping();
+        rule.increaseDamping();
+        rule.increaseDamping();
+        rule.increaseDamping();
+        rule.increaseDamping();
+
+        BigDecimal weight = rule.getWeight();
+        assertEquals(0, new BigDecimal(0.05).round(new MathContext(10)).compareTo(weight));
+    }
+
+    @Test
+    public void weight_damping_decrease() throws IOException {
+        String source = "pre -> action.";
+        Rule rule = checkRule(source);
+
+        rule.decreaseDamping();
+        BigDecimal weight = rule.getWeight();
+        assertEquals(0 , new BigDecimal(0.3).round(new MathContext(10)).compareTo(weight));
+    }
+
+    @Test
+    public void weight_damping_decrease_to_min() throws IOException {
+        String source = "pre -> action.";
+        Rule rule = checkRule(source);
+        rule.decreaseDamping();
+        rule.decreaseDamping();
+        rule.decreaseDamping();
+        rule.decreaseDamping();
+        rule.decreaseDamping();
+        rule.decreaseDamping();
+        rule.decreaseDamping();
+        rule.decreaseDamping();
+        rule.decreaseDamping();
+
+        BigDecimal weight = rule.getWeight();
+        assertEquals(0, new BigDecimal(0.45).round(new MathContext(10)).compareTo(weight));
+    }
+
+    @Test
+    public void age_std_test() throws IOException {
+        String source = "pre -> action.";
+        Rule rule = checkRule(source);
+        rule.ageRule();
+
+        BigDecimal weight = rule.getWeight();
+        assertEquals(new BigDecimal(0.25),weight);
+    }
+
+    @Test
+    public void age_up_test() throws IOException {
+        String source = "pre -> action [0.1,0.1,1].";
+        Rule rule = checkRule(source);
+
+        rule.ageRule();
+        BigDecimal weight = rule.getWeight();
+        assertEquals(0, new BigDecimal(0.2).round(new MathContext(10)).compareTo(weight));
+    }
+
+    @Test
+    public void age_down_test() throws IOException {
+        String source = "pre -> action [0.1,0.1,0].";
+        Rule rule = checkRule(source);
+
+        rule.ageRule();
+        BigDecimal weight = rule.getWeight();
+        assertEquals(0, new BigDecimal(0.3).round(new MathContext(10)).compareTo(weight));
+    }
+
+    @Test
+    public void age_up_to_upperBound_test() throws IOException {
+        String source = "pre -> action [0.1,0.1,0.7|].";
+        Rule rule = checkRule(source);
+
+        rule.ageRule();
+        rule.ageRule();
+        rule.ageRule();
+        rule.ageRule();
+        rule.ageRule();
+        rule.ageRule();
+        rule.ageRule();
+        rule.ageRule();
+
+        BigDecimal weight = rule.getWeight();
+        assertEquals(0, new BigDecimal(0.15).round(new MathContext(10)).compareTo(weight));
+    }
+
+    @Test
+    public void age_down_to_lowerbound_test() throws IOException {
+        String source = "pre -> action [0.1,0.1,|0.3].";
+        Rule rule = checkRule(source);
+
+        rule.ageRule();
+        rule.ageRule();
+        rule.ageRule();
+        rule.ageRule();
+        rule.ageRule();
+        rule.ageRule();
+        rule.ageRule();
+        rule.ageRule();
+        rule.ageRule();
+        rule.ageRule();
+
+        BigDecimal weight = rule.getWeight();
+        assertEquals(0, new BigDecimal(0.35).round(new MathContext(10)).compareTo(weight));
     }
 
 
