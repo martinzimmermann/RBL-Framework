@@ -83,8 +83,29 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
                 ErrorHandler.Instance().reportError(ErrorHandler.Type.Syntactical, diagnosticPosition, "Alpha List doesn't cover the whole range between 0 and 1");
 
             rule = rule.setAlphaList(aList);
-        } else {
-            rule = rule.setAlphaList(AlphaList.getDefaultAlphaList());
+        }
+
+        if(ctx.damping() != null){
+            if(ctx.damping().Damping != null)
+                rule = rule.setDamping(Double.parseDouble(ctx.damping().Damping.getText()));
+            if(ctx.damping().Aging != null)
+                rule = rule.setAging(Double.parseDouble(ctx.damping().Aging.getText()));
+            if(ctx.damping().agingTarget() != null) {
+                if(ctx.damping().agingTarget() instanceof AgingNoBoundContext) {
+                    AgingNoBoundContext agingCtx = (AgingNoBoundContext) ctx.damping().agingTarget();
+                    rule = rule.setMaxAging(Double.parseDouble(agingCtx.MaxAging.getText()));
+                }
+                if(ctx.damping().agingTarget() instanceof AgingUpperBoundContext) {
+                    AgingUpperBoundContext agingCtx = (AgingUpperBoundContext) ctx.damping().agingTarget();
+                    rule = rule.setMaxAging(Double.parseDouble(agingCtx.MaxAging.getText()));
+                    rule.setAgingUpperBound(true);
+                }
+                if(ctx.damping().agingTarget() instanceof AgingLowerBoundContext) {
+                    AgingLowerBoundContext agingCtx = (AgingLowerBoundContext) ctx.damping().agingTarget();
+                    rule = rule.setMaxAging(Double.parseDouble(agingCtx.MaxAging.getText()));
+                    rule.setAgingLowerBound(true);
+                }
+            }
         }
 
         if (ctx.worldDeletions() != null) {

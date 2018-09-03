@@ -34,7 +34,7 @@ public class PlanFinderTests {
                 preconditions.deleteCharAt(preconditions.length() - 1);
             }
 
-            int numberOfDeletions = Math.abs(rnd.nextInt()) % 1;
+            int numberOfDeletions = Math.abs(rnd.nextInt()) % 2;
             StringBuilder deletions = new StringBuilder();
             for (int j = 0; j < numberOfDeletions; j++) {
                 deletions.append("-pre" + Math.abs(rnd.nextInt()) % maxNumberOfConditions + " ");
@@ -413,10 +413,10 @@ public class PlanFinderTests {
             List<Rule> topDownPlan = new TopDownPlanFinder().getAnyPlan(memory, rules);
             List<Rule> bottomPlan = new BottomUpPlanFinder().getAnyPlan(memory, rules);
             List<Rule> bestPlan = new BestPlanFinder().getAnyPlan(memory, rules);
-            assertTrue(topDownPlan == null ? bestPlan == null : true);
-            assertTrue(bestPlan == null ? topDownPlan == null : true);
-            assertTrue((bestPlan != null && topDownPlan != null) ? (bestPlan.size() >= topDownPlan.size()) : true);
-            assertTrue((bestPlan != null && topDownPlan != null) ? (new Plan(bestPlan).getWeight().compareTo(new Plan(topDownPlan).getWeight())) >= 0 : true);
+            assertTrue(topDownPlan != null || bestPlan == null);
+            assertTrue(bestPlan != null || topDownPlan == null);
+            assertTrue((bestPlan == null || topDownPlan == null) || (bestPlan.size() >= topDownPlan.size()));
+            assertTrue((bestPlan == null || topDownPlan == null) || (new Plan(bestPlan).getWeight().compareTo(new Plan(topDownPlan).getWeight())) >= 0);
             //assertTrue(bottomUpPlan != null ? bestPlan != null : true);
         }
     }

@@ -13,12 +13,19 @@ public class Rule extends Atom implements Comparable<Rule> {
     private final AlphaList alphaEntries;
     private final BigDecimal ruleGoal;
     private final String actionName;
-    private BigDecimal currentActivity = BigDecimal.valueOf(0.5);
+    private final BigDecimal dampingValue;
+    private final BigDecimal aging;
+    private final BigDecimal maxAging;
+    private final boolean agingUpperBound;
+    private final boolean agingLowerBound;
+
     private BigDecimal damping = BigDecimal.valueOf(0.5);
+    private BigDecimal currentActivity = BigDecimal.valueOf(0.5);
+
 
     private DiagnosticPosition diagnosticPosition;
 
-    public Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions, DiagnosticPosition diagnosticPosition) {
+    public Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions, double dampingValue, double aging, double maxAging, boolean agingUpperBound, boolean agingLowerBound, DiagnosticPosition diagnosticPosition) {
         if (action == null)
             throw new IllegalArgumentException("action can not be null");
 
@@ -34,6 +41,9 @@ public class Rule extends Atom implements Comparable<Rule> {
         if (preconditions == null)
             throw new IllegalArgumentException("preconditions can not be null");
 
+        if (agingUpperBound && agingLowerBound)
+            throw new IllegalArgumentException("agingUpperBound and agingLowerBound can't both be true");
+
         this.ruleGoal = BigDecimal.valueOf(ruleGoal);
         this.alphaEntries = alphaEntries;
         this.worldDeletions = worldDeletions;
@@ -42,6 +52,11 @@ public class Rule extends Atom implements Comparable<Rule> {
         this.preconditions = preconditions;
         this.actionName = action;
         this.diagnosticPosition = diagnosticPosition;
+        this.dampingValue = BigDecimal.valueOf(dampingValue);
+        this.aging = BigDecimal.valueOf(aging);
+        this.maxAging = BigDecimal.valueOf(maxAging);
+        this.agingUpperBound = agingUpperBound;
+        this.agingLowerBound = agingLowerBound;
     }
 
     public Rule(Rule rule) {
@@ -54,6 +69,12 @@ public class Rule extends Atom implements Comparable<Rule> {
         actionName = rule.actionName;
         currentActivity = rule.currentActivity;
         damping = rule.damping;
+        dampingValue = rule.dampingValue;
+        aging = rule.aging;
+        maxAging = rule.maxAging;
+        agingUpperBound = rule.agingUpperBound;
+        agingLowerBound = rule.agingLowerBound;
+        diagnosticPosition = rule.diagnosticPosition;
     }
 
     public List<Predicate> getPreconditions() {
@@ -174,15 +195,13 @@ public class Rule extends Atom implements Comparable<Rule> {
     }
 
     public void decreaseDamping() {
-        //damping = damping.divide(new BigDecimal(2));
-        damping = damping.subtract(new BigDecimal(0.1));
-        damping = damping.compareTo(new BigDecimal(0.1)) < 0.1 ? new BigDecimal(0.1) : damping;
+        damping = damping.subtract(dampingValue);
+        damping = damping.compareTo(dampingValue) == -1 ? dampingValue : damping;
     }
 
     public void increaseDamping() {
-        //damping = damping.add(new BigDecimal(1)).divide(new BigDecimal(2));
-        damping = damping.add(new BigDecimal(0.1));
-        damping = damping.compareTo(new BigDecimal(0.9)) > 0.9 ? new BigDecimal(0.9) : damping;
+        damping = damping.add(dampingValue);
+        damping = damping.compareTo(new BigDecimal(1).subtract(dampingValue)) == 1 ? new BigDecimal(1).subtract(dampingValue) : damping;
     }
 
     public void decreaseActivity() {
@@ -191,6 +210,15 @@ public class Rule extends Atom implements Comparable<Rule> {
 
     public void increaseActivity() {
         currentActivity = currentActivity.add(ruleGoal).divide(new BigDecimal(2));
+    }
+
+    public void ageRule() {
+        if(damping.compareTo(maxAging) == -1 && !agingLowerBound) {
+            damping = damping.add(aging);
+        }
+        if(damping.compareTo(maxAging) == 1 && !agingUpperBound){
+            damping = damping.subtract(aging);
+        }
     }
 
     public String getConstructor() {
@@ -205,6 +233,11 @@ public class Rule extends Atom implements Comparable<Rule> {
         builder.append((worldAddition == null ? "null" : "new Predicate(\"" + worldAddition.getName() + "\")") + ", ");
         params = preconditions.stream().map(p -> "new Predicate(\"" + p.getName() + "\")").collect(Collectors.joining(", "));
         builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "})), ");
+        builder.append( dampingValue + ", ");
+        builder.append( aging + ", ");
+        builder.append( maxAging + ", ");
+        builder.append( agingUpperBound + ", ");
+        builder.append( agingLowerBound + ", ");
         builder.append("new DiagnosticPosition(" + diagnosticPosition.getConstructorParameters() + "))");
         return builder.toString();
     }
