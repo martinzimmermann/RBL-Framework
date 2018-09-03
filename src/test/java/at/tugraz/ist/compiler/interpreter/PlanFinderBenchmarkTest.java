@@ -27,17 +27,18 @@ import java.util.stream.Collectors;
 import static junit.framework.TestCase.assertEquals;
 
 @RunWith(Parameterized.class)
+@Ignore
 public class PlanFinderBenchmarkTest {
 
     static final String resultFileName = "result.csv";
     private final static String folderPath = "src/test/resources/RandomRules/";
 
     static {
-        /*try {
+        try {
             generateRandomTestData();
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     private final String name;
