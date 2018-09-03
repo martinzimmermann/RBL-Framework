@@ -233,6 +233,11 @@ public class Rule extends Atom implements Comparable<Rule> {
         builder.append((worldAddition == null ? "null" : "new Predicate(\"" + worldAddition.getName() + "\")") + ", ");
         params = preconditions.stream().map(p -> "new Predicate(\"" + p.getName() + "\")").collect(Collectors.joining(", "));
         builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "})), ");
+        builder.append( dampingValue + ", ");
+        builder.append( aging + ", ");
+        builder.append( maxAging + ", ");
+        builder.append( agingUpperBound + ", ");
+        builder.append( agingLowerBound + ", ");
         builder.append("new DiagnosticPosition(" + diagnosticPosition.getConstructorParameters() + "))");
         return builder.toString();
     }
