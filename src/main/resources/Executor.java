@@ -56,26 +56,27 @@ public class Executor {
         if (plan == null)
             throw new NoPlanFoundException();
 
-        boolean success = interpreteRules(memory, plan);
+        boolean success = interpretRules(model, plan);
 
         for (Rule rule : model.getRules()) {
             if(plan.contains(rule))
                 rule.increaseActivity();
             else
                 rule.decreaseActivity();
+            rule.ageRule();
         }
         return success;
     }
 
-    private boolean interpreteRules(Memory memory, List<InterpreterRule> plan) {
+    private boolean interpretRules(Model model, List<InterpreterRule> plan) {
 
         for (InterpreterRule rule : plan) {
-            boolean result = rule.execute(memory);
+            boolean result = rule.execute(model);
             if (result) {
-                memory.update(rule);
+                model.getMemory().update(rule);
                 rule.decreaseDamping();
             } else {
-                rule.repairMemory(memory);
+                rule.repairMemory(model.getMemory());
                 rule.increaseDamping();
                 return false;
             }

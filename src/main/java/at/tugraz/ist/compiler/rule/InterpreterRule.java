@@ -1,6 +1,7 @@
 package at.tugraz.ist.compiler.rule;
 
 import at.tugraz.ist.compiler.interpreter.Memory;
+import at.tugraz.ist.compiler.interpreter.Model;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -24,9 +25,9 @@ public class InterpreterRule extends Rule {
         this.action = action;
     }
 
-    public boolean execute(Memory memory) {
-        assert (memory.containsAll(this.getPreconditions()));
-        return action.execute(memory);
+    public boolean execute(Model model) {
+        assert (model.getMemory().containsAll(this.getPreconditions()));
+        return action.execute(model);
     }
 
     public void repairMemory(Memory memory) {

@@ -1,10 +1,11 @@
 import at.tugraz.ist.compiler.interpreter.Memory;
+import at.tugraz.ist.compiler.rule.InterpreterRule;
 import at.tugraz.ist.compiler.rule.RuleAction;
 
 public class openWindow implements RuleAction {
 
     @Override
-    public boolean execute(Memory model) {
+    public boolean execute(Memory model, InterpreterRule interpreterRule) {
         return true;
     }
 

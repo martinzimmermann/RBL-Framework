@@ -398,6 +398,7 @@ public class PlanFinderTests {
     }
 
     @Test
+    @Ignore
     public void random_test() throws IOException {
         for (int i = 0; i < 100; i++) {
             String rulesString = generateRandomRules(7, 2, 5, 2);
