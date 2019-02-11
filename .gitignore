@@ -1,3 +1,5 @@
 .gradle/
 .idea/workspace.xml
 build/
+
+src/test/resources/RandomRules/

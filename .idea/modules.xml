@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rule-based-compiler.iml" filepath="$PROJECT_DIR$/.idea/modules/rule-based-compiler.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rule-based-compiler_main.iml" filepath="$PROJECT_DIR$/.idea/modules/rule-based-compiler_main.iml" group="rule-based-compiler" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rule-based-compiler_test.iml" filepath="$PROJECT_DIR$/.idea/modules/rule-based-compiler_test.iml" group="rule-based-compiler" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rbl.iml" filepath="$PROJECT_DIR$/.idea/modules/rbl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rbl_main.iml" filepath="$PROJECT_DIR$/.idea/modules/rbl_main.iml" group="rbl" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rbl_test.iml" filepath="$PROJECT_DIR$/.idea/modules/rbl_test.iml" group="rbl" />
     </modules>
   </component>
 </project>

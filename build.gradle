@@ -1,8 +1,8 @@
-group 'at.tugraz.ist'
-version '1.0-SNAPSHOT'
+plugins {
+    id 'java-library'
+}
 
-apply plugin: 'java'
-
+version = '0.3.0'
 sourceCompatibility = 1.8
 
 ext.antlr = [
@@ -52,17 +52,9 @@ compileJava {
 
 jar {
     manifest {
-        attributes('Main-Class': 'at.tugraz.ist.compiler.RuleBasedCompiler')
-    }
-}
-
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Implementation-Title': 'Rule Based Compiler',
+        attributes 'Implementation-Title': 'RBL Compiler',
                 'Implementation-Version': version,
                 'Main-Class': 'at.tugraz.ist.compiler.RuleBasedCompiler'
     }
-    baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }
