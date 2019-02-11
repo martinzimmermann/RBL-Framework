@@ -29,6 +29,7 @@ test:
   stage: test
   script:
   - ./gradlew test
+  - cat build/reports/jacoco/test/html/index.html
   artifacts:
     reports:
       junit: build/test-results/test/TEST-*.xml
