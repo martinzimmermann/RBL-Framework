@@ -1,0 +1,19 @@
+pre7, pre2 -> +pre3 -pre2  Actions.action.
+pre7, pre4 -> +pre2  Actions.action.
+pre0, pre2, pre1, pre1 -> +pre4 -pre2  Actions.action.
+pre1 -> +pre6 -pre0  Actions.action.
+ -> +pre5 -pre4  Actions.action.
+ -> +pre0 -pre1 -pre0  Actions.action.
+ -> +pre0  Actions.action.
+ -> +pre7 -pre5 -pre4  Actions.action.
+pre5 -> +pre6 -pre7  Actions.action.
+pre4, pre4, pre3, pre7, pre7 -> +pre7 -pre7 -pre7 -pre2  Actions.action.
+pre0 -> +pre5 -pre5  Actions.action.
+pre4, pre7, pre6, pre2 -> +pre7 -pre3  Actions.action.
+pre5, pre4 -> +pre1 -pre1  Actions.action.
+pre4, pre6, pre7 -> +pre6  Actions.action.
+pre1, pre0, pre1 -> +pre3  Actions.action.
+pre6, pre2, pre5, pre2 -> #pre0  Actions.action.
+pre4, pre5 -> #pre7  Actions.action.
+ -> #pre3  Actions.action.
+ -> #pre1  Actions.action.

@@ -17,6 +17,8 @@ public class RuleBuilder {
     private double maxAging = 0;
     private boolean agingUpperBound = false;
     private boolean agingLowerBound = false;
+    private double dampingSclaing = 1;
+    private double activityScaling = 1;
 
     public RuleBuilder setDiagnosticPosition(DiagnosticPosition diagnosticPosition) {
         this.diagnosticPosition = diagnosticPosition;
@@ -84,6 +86,16 @@ public class RuleBuilder {
     }
 
     public Rule createRule(){
-            return new Rule(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions, damping, aging, maxAging, agingUpperBound, agingLowerBound, diagnosticPosition);
+            return new Rule(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions, damping, aging, maxAging, agingUpperBound, agingLowerBound, activityScaling, dampingSclaing, diagnosticPosition);
+    }
+
+    public RuleBuilder setDampingScaling(double dampingScaling) {
+        this.dampingSclaing = dampingScaling;
+        return this;
+    }
+
+    public RuleBuilder setActivityScaling(double activityScaling) {
+        this.activityScaling = activityScaling;
+        return this;
     }
 }

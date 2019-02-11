@@ -98,14 +98,18 @@ public class RuleGeneratorVisitor extends RuleGrammarBaseVisitor<List<Atom>> {
                 if(ctx.damping().agingTarget() instanceof AgingUpperBoundContext) {
                     AgingUpperBoundContext agingCtx = (AgingUpperBoundContext) ctx.damping().agingTarget();
                     rule = rule.setMaxAging(Double.parseDouble(agingCtx.MaxAging.getText()));
-                    rule.setAgingUpperBound(true);
+                    rule = rule.setAgingUpperBound(true);
                 }
                 if(ctx.damping().agingTarget() instanceof AgingLowerBoundContext) {
                     AgingLowerBoundContext agingCtx = (AgingLowerBoundContext) ctx.damping().agingTarget();
                     rule = rule.setMaxAging(Double.parseDouble(agingCtx.MaxAging.getText()));
-                    rule.setAgingLowerBound(true);
+                    rule = rule.setAgingLowerBound(true);
                 }
             }
+            if(ctx.damping().ActivityScaling != null)
+                rule = rule.setActivityScaling(Double.parseDouble(ctx.damping().ActivityScaling.getText()));
+            if(ctx.damping().DampingScaling != null)
+                rule = rule.setDampingScaling(Double.parseDouble(ctx.damping().DampingScaling.getText()));
         }
 
         if (ctx.worldDeletions() != null) {

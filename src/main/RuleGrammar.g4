@@ -24,7 +24,7 @@ r_rule:     preconditions? '->' ('+' WorldAddtion=predicate | '#' Goal=predicate
 preconditions: predicate  (',' predicate )*;
 worldDeletions: (('-' predicate)*);
 rule_goal:  NUMBER;
-damping: '['Damping=NUMBER? ',' Aging=NUMBER? ',' agingTarget? ']';
+damping: '['Damping=NUMBER? ',' Aging=NUMBER? ',' agingTarget? ',' ActivityScaling=NUMBER? ',' DampingScaling=NUMBER? ']';
 agingTarget: MaxAging=NUMBER #AgingNoBound
      | '|' MaxAging=NUMBER #AgingLowerBound
      |  MaxAging=NUMBER '|' #AgingUpperBound

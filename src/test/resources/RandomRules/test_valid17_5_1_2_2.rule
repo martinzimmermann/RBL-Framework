@@ -1,0 +1,6 @@
+pre1 -> +pre1  Actions.action.
+pre0 -> +pre0 -pre0 -pre1  Actions.action.
+pre0 -> +pre0 -pre1  Actions.action.
+ -> +pre0 -pre1  Actions.action.
+ -> +pre0 -pre1 -pre1 -pre0  Actions.action.
+ -> #pre0  Actions.action.

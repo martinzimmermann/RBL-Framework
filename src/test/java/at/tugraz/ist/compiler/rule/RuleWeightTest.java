@@ -175,7 +175,7 @@ public class RuleWeightTest {
 
     @Test
     public void age_up_test() throws IOException {
-        String source = "pre -> action [0.1,0.1,1].";
+        String source = "pre -> action [0.1,0.1,1,,].";
         Rule rule = checkRule(source);
 
         rule.ageRule();
@@ -185,7 +185,7 @@ public class RuleWeightTest {
 
     @Test
     public void age_down_test() throws IOException {
-        String source = "pre -> action [0.1,0.1,0].";
+        String source = "pre -> action [0.1,0.1,0,,].";
         Rule rule = checkRule(source);
 
         rule.ageRule();
@@ -195,7 +195,7 @@ public class RuleWeightTest {
 
     @Test
     public void age_up_to_upperBound_test() throws IOException {
-        String source = "pre -> action [0.1,0.1,0.7|].";
+        String source = "pre -> action [0.1,0.1,0.7|,,].";
         Rule rule = checkRule(source);
 
         rule.ageRule();
@@ -213,7 +213,7 @@ public class RuleWeightTest {
 
     @Test
     public void age_down_to_lowerbound_test() throws IOException {
-        String source = "pre -> action [0.1,0.1,|0.3].";
+        String source = "pre -> action [0.1,0.1,|0.3,,].";
         Rule rule = checkRule(source);
 
         rule.ageRule();
