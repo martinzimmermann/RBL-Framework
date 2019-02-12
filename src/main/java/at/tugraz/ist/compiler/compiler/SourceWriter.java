@@ -20,7 +20,7 @@ public class SourceWriter {
 
     public SourceWriter(String outputPath, String packageName) {
         this.packageName = packageName;
-        packagePath = outputPath + (outputPath.endsWith("\\") ? "" : "\\") + (this.packageName == null ? "" : this.packageName.replace(".", "\\"));
+        packagePath = Paths.get(outputPath).resolve(this.packageName.replace(".", File.separator)).toAbsolutePath().toString();
     }
 
     public void writeSource(RuleGenerator generator, boolean deferClassGeneration, boolean libraryUsed) throws IOException {
