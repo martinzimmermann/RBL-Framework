@@ -2,93 +2,58 @@ package at.tugraz.ist.compiler.rule;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Rule extends Atom implements Comparable<Rule> {
+public class Rule extends Atom{
 
     private final List<Predicate> preconditions;
-    private final Predicate worldAddition;
+    private final List<Predicate> postConditions;
     private final String goal;
-    private final List<Predicate> worldDeletions;
-    private final AlphaList alphaEntries;
-    private final BigDecimal ruleGoal;
     private final String actionName;
-    private final BigDecimal dampingValue;
-    private final BigDecimal aging;
-    private final BigDecimal maxAging;
-    private final boolean agingUpperBound;
-    private final boolean agingLowerBound;
-    private final double dampingSclaing;
-    private final double activityScaling;
 
-    private BigDecimal damping = BigDecimal.valueOf(0.5);
-    private BigDecimal currentActivity = BigDecimal.valueOf(0.5);
-
+    private int pass_not_executed = 0;
+    private int fail_not_executed = 0;
+    private int pass_executed = 0;
+    private int fail_executed = 0;
 
     private DiagnosticPosition diagnosticPosition;
 
-    public Rule(String action, double ruleGoal, AlphaList alphaEntries, List<Predicate> worldDeletions, String goal, Predicate worldAddition, List<Predicate> preconditions, double dampingValue, double aging, double maxAging, boolean agingUpperBound, boolean agingLowerBound, double activityScaling, double dampingSclaing, DiagnosticPosition diagnosticPosition) {
+    public Rule(String action, String goal, List<Predicate> postConditions, List<Predicate> preconditions, DiagnosticPosition diagnosticPosition) {
         if (action == null)
             throw new IllegalArgumentException("action can not be null");
 
-        if (goal != null && worldAddition != null)
-            throw new IllegalArgumentException("goal and worldAddition can't be both not null");
-
-        if (alphaEntries == null)
-            throw new IllegalArgumentException("alphaEntries can not be null");
-
-        if (worldDeletions == null)
-            throw new IllegalArgumentException("worldDeletions can not be null");
+        if (postConditions == null)
+            throw new IllegalArgumentException("postConditions can not be null");
 
         if (preconditions == null)
             throw new IllegalArgumentException("preconditions can not be null");
 
-        if (agingUpperBound && agingLowerBound)
-            throw new IllegalArgumentException("agingUpperBound and agingLowerBound can't both be true");
-
-        this.ruleGoal = BigDecimal.valueOf(ruleGoal);
-        this.alphaEntries = alphaEntries;
-        this.worldDeletions = worldDeletions;
+        this.postConditions = postConditions;
         this.goal = goal;
-        this.worldAddition = worldAddition;
         this.preconditions = preconditions;
         this.actionName = action;
         this.diagnosticPosition = diagnosticPosition;
-        this.dampingValue = BigDecimal.valueOf(dampingValue);
-        this.aging = BigDecimal.valueOf(aging);
-        this.maxAging = BigDecimal.valueOf(maxAging);
-        this.agingUpperBound = agingUpperBound;
-        this.agingLowerBound = agingLowerBound;
-        this.activityScaling = activityScaling;
-        this.dampingSclaing = dampingSclaing;
     }
 
     public Rule(Rule rule) {
         preconditions = rule.preconditions;
-        worldAddition = rule.worldAddition;
+        postConditions = rule.postConditions;
         goal = rule.goal;
-        worldDeletions = rule.worldDeletions;
-        alphaEntries = rule.alphaEntries;
-        ruleGoal = rule.ruleGoal;
         actionName = rule.actionName;
-        currentActivity = rule.currentActivity;
-        damping = rule.damping;
-        dampingValue = rule.dampingValue;
-        aging = rule.aging;
-        maxAging = rule.maxAging;
-        agingUpperBound = rule.agingUpperBound;
-        agingLowerBound = rule.agingLowerBound;
         diagnosticPosition = rule.diagnosticPosition;
-        this.activityScaling = rule.activityScaling;
-        this.dampingSclaing = rule.dampingSclaing;
     }
 
     public List<Predicate> getPreconditions() {
         return preconditions;
     }
 
-    public Predicate getWorldAddition() {
-        return worldAddition;
+    public List<Predicate> getPostConditions() {
+        return postConditions;
+    }
+
+    public List<Predicate> getWorldAdditions() {
+        return postConditions.stream().filter(p -> p.isAddition()).collect(Collectors.toList());
     }
 
     public String getGoal() {
@@ -99,20 +64,8 @@ public class Rule extends Atom implements Comparable<Rule> {
         return goal != null;
     }
 
-    public boolean hasWorldAddition() {
-        return worldAddition != null;
-    }
-
     public List<Predicate> getWorldDeletions() {
-        return worldDeletions;
-    }
-
-    public AlphaList getAlphaList() {
-        return alphaEntries;
-    }
-
-    public double getRuleGoal() {
-        return ruleGoal.doubleValue();
+        return postConditions.stream().filter(p -> p.isDeletion()).collect(Collectors.toList());
     }
 
     public String getAction() {
@@ -132,20 +85,17 @@ public class Rule extends Atom implements Comparable<Rule> {
 
         string.append(" -> ");
 
-        if (hasWorldAddition())
-            string.append("+").append(getWorldAddition().getName()).append(" ");
-
         if (hasGoal())
             string.append("#").append(getGoal()).append(" ");
 
-        for (Predicate deletion : getWorldDeletions()) {
-            string.append("-").append(deletion.getName()).append(" ");
+        for (Predicate deletion : this.getPostConditions()) {
+            string.append(deletion.toString()).append(" ");
         }
 
         if (getWorldDeletions().size() != 0)
             string.deleteCharAt(string.length() - 1);
 
-        string.append(" " + actionName);
+        string.append((string.charAt(string.length()-1) == ' ' ? "" : " ") + actionName);
 
         string.append(".");
 
@@ -159,93 +109,55 @@ public class Rule extends Atom implements Comparable<Rule> {
 
         Rule rule = (Rule) o;
 
-        if (rule.ruleGoal.compareTo(ruleGoal) != 0) return false;
         if (!preconditions.equals(rule.preconditions)) return false;
-        if (worldAddition != null ? !worldAddition.equals(rule.worldAddition) : rule.worldAddition != null)
-            return false;
-        if (goal != null ? !goal.equals(rule.goal) : rule.goal != null) return false;
-        if (!worldDeletions.equals(rule.worldDeletions)) return false;
-        if (!alphaEntries.equals(rule.alphaEntries)) return false;
+        if (!postConditions.equals(rule.postConditions)) return false;
+        if (!Objects.equals(goal, rule.goal)) return false;
         return actionName.equals(rule.actionName);
     }
 
+    /*
     @Override
     public int hashCode() {
         int result;
-        long temp;
+        long temp = 0;
         result = preconditions.hashCode();
-        result = 31 * result + (worldAddition != null ? worldAddition.hashCode() : 0);
+        result = 31 * result + postConditions.hashCode();
         result = 31 * result + (goal != null ? goal.hashCode() : 0);
-        result = 31 * result + worldDeletions.hashCode();
-        result = 31 * result + alphaEntries.hashCode();
-        temp = ruleGoal.hashCode();
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + actionName.hashCode();
         return result;
     }
-
-    @Override
-    public int compareTo(Rule o) {
-
-        BigDecimal otherWeight = o.getWeight();
-        BigDecimal thisWeight = getWeight();
-
-        return otherWeight.compareTo(thisWeight);
-    }
+    */
 
     public BigDecimal getWeight() {
-        BigDecimal alpha = alphaEntries.calculateWeight(currentActivity);
-        BigDecimal activity = ruleGoal.subtract(currentActivity.multiply(new BigDecimal(activityScaling)));
-        BigDecimal invDamping = new BigDecimal(1).subtract(damping.multiply( new BigDecimal(dampingSclaing)));
-        return alpha.multiply(activity).multiply(invDamping);
+        if ( fail_executed == 0 || (fail_executed + fail_not_executed) == 0 ||(fail_executed + pass_executed) == 0)
+            return new BigDecimal(0.00000000001);
+        return new BigDecimal((1.0 * fail_executed) / (Math.sqrt((fail_executed + fail_not_executed) * (fail_executed + pass_executed))));
+        //return new BigDecimal(((1.0 * fail_executed) / (fail_executed + fail_not_executed)) /
+        //        ((1.0 * fail_executed / (fail_executed + fail_not_executed)) + (1.0 * pass_executed / (pass_executed + pass_not_executed))));
+        //return new BigDecimal((1.0 * fail_executed) / (fail_executed + fail_not_executed + pass_executed));
     }
 
-    public void decreaseDamping() {
-        damping = damping.subtract(dampingValue);
-        damping = damping.compareTo(dampingValue) == -1 ? dampingValue : damping;
-    }
-
-    public void increaseDamping() {
-        damping = damping.add(dampingValue);
-        damping = damping.compareTo(new BigDecimal(1).subtract(dampingValue)) == 1 ? new BigDecimal(1).subtract(dampingValue) : damping;
-    }
-
-    public void decreaseActivity() {
-        currentActivity = currentActivity.divide(new BigDecimal(2));
-    }
-
-    public void increaseActivity() {
-        currentActivity = currentActivity.add(ruleGoal).divide(new BigDecimal(2));
-    }
-
-    public void ageRule() {
-        if(damping.compareTo(maxAging) == -1 && !agingLowerBound) {
-            damping = damping.add(aging);
-        }
-        if(damping.compareTo(maxAging) == 1 && !agingUpperBound){
-            damping = damping.subtract(aging);
-        }
+    public void updateRule(boolean failed, boolean executed) {
+        if(failed  && executed)
+            fail_executed++;
+        if(failed  && !executed)
+            fail_not_executed++;
+        if(!failed  && executed)
+            pass_executed++;
+        if(!failed  && !executed)
+            pass_not_executed++;
     }
 
     public String getConstructor() {
         StringBuilder builder = new StringBuilder();
         builder.append("new Rule(");
         builder.append("\"" + actionName + "\", ");
-        builder.append(ruleGoal + ", ");
-        builder.append(alphaEntries.getConstructor() + ", ");
-        String params = worldDeletions.stream().map(p -> "new Predicate(\"" + p.getName() + "\")").collect(Collectors.joining(", "));
-        builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "})), ");
         builder.append((goal == null ? "null" : "\"" + goal + "\"") + ", ");
-        builder.append((worldAddition == null ? "null" : "new Predicate(\"" + worldAddition.getName() + "\")") + ", ");
-        params = preconditions.stream().map(p -> "new Predicate(\"" + p.getName() + "\")").collect(Collectors.joining(", "));
+        String params = postConditions.stream().map(p -> p.getConstructor()).collect(Collectors.joining(", "));
         builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "})), ");
-        builder.append( dampingValue + ", ");
-        builder.append( aging + ", ");
-        builder.append( maxAging + ", ");
-        builder.append( agingUpperBound + ", ");
-        builder.append( agingLowerBound + ", ");
-        builder.append( activityScaling + ", ");
-        builder.append( dampingSclaing + ", ");
+        params = preconditions.stream().map(p -> p.getConstructor()).collect(Collectors.joining(", "));
+        builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "})), ");
         builder.append("new DiagnosticPosition(" + diagnosticPosition.getConstructorParameters() + "))");
         return builder.toString();
     }
@@ -258,4 +170,4 @@ public class Rule extends Atom implements Comparable<Rule> {
         return "new " + actionName + "()";
     }
 
-    }
+}

@@ -4,6 +4,7 @@ import at.tugraz.ist.compiler.rule.Rule;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class BottomUpPlanFinder extends PlanFinder {
@@ -17,7 +18,7 @@ public class BottomUpPlanFinder extends PlanFinder {
 
         List<Rule> rules = new ArrayList<>(allRules);
         rules.remove(goal);
-        rules.sort(Rule::compareTo);
+        rules.sort(Comparator.comparing(Rule::getWeight));
 
         for (Rule rule : rules) {
             if (!newPlan.needs(rule, memory))
@@ -42,7 +43,7 @@ public class BottomUpPlanFinder extends PlanFinder {
         if (goals.size() == 0)
             return null;
 
-        goals.sort(Rule::compareTo);
+        goals.sort(Comparator.comparing(Rule::getWeight));
 
         List<Rule> plan = getPlanForGoalBottomUp(goals.get(0), memory, allRules, new Plan());
         if (plan == null)

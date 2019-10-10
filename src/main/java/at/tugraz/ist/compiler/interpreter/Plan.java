@@ -31,7 +31,7 @@ class Plan {
         if(rules.size() <= 1)
             laterAdded = new ArrayList<>();
         else
-            laterAdded= rules.subList(1, rules.size() - 1).stream().filter(Rule::hasWorldAddition).map(Rule::getWorldAddition).collect(Collectors.toList());
+            laterAdded= rules.subList(1, rules.size() - 1).stream().flatMap(r -> r.getWorldAdditions().stream()).collect(Collectors.toList());
 
         deletions.removeAll(laterAdded);
 
@@ -52,29 +52,26 @@ class Plan {
     }
 
     public boolean needs(Rule rule, Memory memory) {
-        if (!rule.hasWorldAddition()) return false;
+        if (rule.getWorldAdditions().size() == 0) return false;
 
         List<Predicate> toReach = toReach();
         toReach.removeAll(memory.getAllPredicates());
-        return toReach.contains(rule.getWorldAddition());
+        return toReach.stream().anyMatch(p -> rule.getWorldAdditions().contains(p));
     }
 
     private List<Predicate> toReach() {
         Set<Predicate> preconditions = rules.stream().flatMap(r -> r.getPreconditions().stream()).collect(Collectors.toSet());
-        Set<Predicate> posEffects = new HashSet<>(rules.stream().filter(Rule::hasWorldAddition).map(Rule::getWorldAddition).collect(Collectors.toList()));
+        Set<Predicate> posEffects = new HashSet<>(rules.stream().flatMap(r -> r.getWorldAdditions().stream()).collect(Collectors.toList()));
 
         preconditions.removeAll(posEffects);
         return new ArrayList<>(preconditions);
     }
 
     public BigDecimal getWeight() {
-        BigDecimal sum = new BigDecimal(2);
+        BigDecimal sum = new BigDecimal(0);
 
-        for(int pos = 1; pos < rules.size(); pos++)
-        {
-            BigDecimal a = new BigDecimal(1).divide(new BigDecimal(10).pow(pos * 10));
-            BigDecimal b = rules.get((rules.size() - 1) - pos).getWeight();
-            sum = sum.add(a.multiply(b));
+        for (Rule rule : rules) {
+            sum = sum.add(rule.getWeight());
         }
         return sum;
     }

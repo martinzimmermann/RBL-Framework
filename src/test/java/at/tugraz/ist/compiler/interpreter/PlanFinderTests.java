@@ -83,7 +83,7 @@ public class PlanFinderTests {
 
     @Test
     public void with_1precondition_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("pre1." +
+        RuleLexer ruleLexer = new RuleLexer("pre1.\n" +
                 "pre1 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -103,8 +103,8 @@ public class PlanFinderTests {
 
     @Test
     public void with_2steps_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> +pre2 Actions.action." +
+        RuleLexer ruleLexer = new RuleLexer("pre1.\n" +
+                "pre1 -> +pre2 Actions.action.\n" +
                 "pre2 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -125,9 +125,9 @@ public class PlanFinderTests {
 
     @Test
     public void with_2preconditions_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> +pre2 Actions.action." +
-                "pre1 -> +pre3 Actions.action." +
+        RuleLexer ruleLexer = new RuleLexer("pre1.\n" +
+                "pre1 -> +pre2 Actions.action.\n" +
+                "pre1 -> +pre3 Actions.action.\n" +
                 "pre2, pre3 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -146,10 +146,10 @@ public class PlanFinderTests {
 
     @Test
     public void rules_out_of_order_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre2 -> +pre4 Actions.action." +
-                "pre1 -> +pre2 Actions.action." +
-                "pre1 -> +pre3 Actions.action." +
+        RuleLexer ruleLexer = new RuleLexer("pre1.\n" +
+                "pre2 -> +pre4 Actions.action.\n" +
+                "pre1 -> +pre2 Actions.action.\n" +
+                "pre1 -> +pre3 Actions.action.\n" +
                 "pre3, pre4 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -168,13 +168,13 @@ public class PlanFinderTests {
 
     @Test
     public void dead_end_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("pre7." +
-                "pre2 -> +pre1 Actions.action." +
-                "pre4 -> +pre2 Actions.action." +
-                "pre7 -> +pre3 Actions.action." +
-                "pre6 -> +pre3 Actions.action." +
-                "pre3 -> +pre1 Actions.action." +
-                "pre1 -> #goal Actions.action." +
+        RuleLexer ruleLexer = new RuleLexer("pre7.\n" +
+                "pre2 -> +pre1 Actions.action.\n" +
+                "pre4 -> +pre2 Actions.action.\n" +
+                "pre7 -> +pre3 Actions.action.\n" +
+                "pre6 -> +pre3 Actions.action.\n" +
+                "pre3 -> +pre1 Actions.action.\n" +
+                "pre1 -> #goal Actions.action.\n" +
                 "pre5 -> +pre2 Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -193,10 +193,10 @@ public class PlanFinderTests {
 
     @Test
     public void withDeletions_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> +pre2 Actions.action." +
-                "pre1 -> +pre2 -pre1 Actions.action." +
-                "pre1, pre2 -> #goal Actions.action.");
+        RuleLexer ruleLexer = new RuleLexer("pre1.\n" +
+                "pre1 -> +pre2 Actions.action.\n" +
+                "pre1 -> +pre2 -pre1 Actions.action.\n" +
+                "pre1, pre2 -> #goal Actions.action.\n");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
@@ -214,9 +214,9 @@ public class PlanFinderTests {
 
     @Test
     public void not_fulfillable_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "fail -> +pre2 -pre1 Actions.action." +
-                "fail -> +pre2 Actions.action." +
+        RuleLexer ruleLexer = new RuleLexer("pre1.\n" +
+                "fail -> +pre2 -pre1 Actions.action.\n" +
+                "fail -> +pre2 Actions.action.\n" +
                 "pre1, pre2 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -235,10 +235,10 @@ public class PlanFinderTests {
     public void delete_but_later_would_add_test() throws IOException {
         // This is also not possible in the original algorithm, because it is not possible to delete predicates that you
         // need later on, even thought you could add them again.
-        RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> +pre2 -pre1 Actions.action." +
-                "pre2 -> +pre1 Actions.action." +
-                "pre1, pre2 -> #goal Actions.action." +
+        RuleLexer ruleLexer = new RuleLexer("pre1.\n" +
+                "pre1 -> +pre2 -pre1 Actions.action.\n" +
+                "pre2 -> +pre1 Actions.action.\n" +
+                "pre1, pre2 -> #goal Actions.action.\n" +
                 "");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -278,10 +278,9 @@ public class PlanFinderTests {
     @Test
     public void find_rule_with_greater_weight_test() throws IOException {
         RuleLexer ruleLexer = new RuleLexer(
-                "-> +pre1 Actions.action (0.5)." +
-                        "-> +pre1 Actions.action (1)." +
-                        "pre1-> #goal Actions.action." +
-                        "");
+                "-> +pre1 Actions.action.\n" +
+                        "-> +pre1 Actions.action.\n" +
+                        "pre1-> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
@@ -290,9 +289,48 @@ public class PlanFinderTests {
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();
-        List<Rule> goals = BestPlanFinder.getGoalRules(rules);
-
         List<Rule> plan = new TopDownPlanFinder().getAnyPlan(memory, rules);
+        assertNotNull(plan);
+        assertEquals(2, plan.size());
+        assertEquals(rules.get(0), plan.get(0));
+        assertEquals(rules.get(2), plan.get(1));
+
+        rules.get(0).updateRule(true, true);
+        rules.get(1).updateRule(true, false);
+        rules.get(2).updateRule(true, true);
+
+        plan = new TopDownPlanFinder().getAnyPlan(memory, rules);
+        assertNotNull(plan);
+        assertEquals(2, plan.size());
+        assertEquals(rules.get(1), plan.get(0));
+        assertEquals(rules.get(2), plan.get(1));
+    }
+
+    @Test
+    public void find_rule_with_greater_weight2_test() throws IOException {
+        RuleLexer ruleLexer = new RuleLexer(
+                "-> +pre1 Actions.action.\n" +
+                        "-> +pre1 Actions.action.\n" +
+                        "pre1-> #goal Actions.action.");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+
+        Memory memory = gen.getMemory();
+        List<Rule> rules = gen.getRules();
+        List<Rule> plan = new TopDownPlanFinder().getAnyPlan(memory, rules);
+        assertNotNull(plan);
+        assertEquals(2, plan.size());
+        assertEquals(rules.get(0), plan.get(0));
+        assertEquals(rules.get(2), plan.get(1));
+
+        rules.get(0).updateRule(false, true);
+        rules.get(1).updateRule(false, false);
+        rules.get(2).updateRule(false, true);
+
+        plan = new TopDownPlanFinder().getAnyPlan(memory, rules);
         assertNotNull(plan);
         assertEquals(2, plan.size());
         assertEquals(rules.get(1), plan.get(0));
@@ -371,30 +409,6 @@ public class PlanFinderTests {
         List<Rule> bottomPlan = new BottomUpPlanFinder().getAnyPlan(memory, rules);
         List<Rule> bestPlan = new BestPlanFinder().getAnyPlan(memory, rules);
         Assert.assertTrue(true);
-    }
-
-    @Test
-    @Ignore
-    public void simple_quick_test() throws IOException {
-        RuleLexer ruleLexer = new RuleLexer("-> +door_open actions.OpenDoor.\n" +
-                "-> +window_open actions.OpenWindow.\n" +
-                "\n" +
-                "door_open -> #exitDoor -window_open -door_open actions.ExitDoor (0 <= a <= 1: a + 1.0 + 2 - -3 *(4 / -8)).\n" +
-                "window_open -> #exitWindow -window_open -door_open actions.ExitWindow.\n");
-        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
-        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
-        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
-
-        Memory memory = gen.getMemory();
-        List<Rule> rules = gen.getRules();
-        List<Rule> goals = BestPlanFinder.getGoalRules(rules);
-
-        List<Rule> plan = new TopDownPlanFinder().getAnyPlan(memory, rules);
-        assertNotNull(plan);
-        assertEquals(1, plan.size());
-        assertEquals(rules.get(1), plan.get(0));
     }
 
     @Test

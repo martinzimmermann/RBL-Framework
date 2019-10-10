@@ -1,7 +1,0 @@
-pre1 -> +pre2 -pre3  Actions.action.
-pre3 -> +pre3 -pre0 -pre0 -pre1  Actions.action.
-pre0 -> +pre3 -pre3  Actions.action.
- -> +pre3 -pre1  Actions.action.
-pre1 -> +pre0  Actions.action.
-pre1 -> #pre2  Actions.action.
-pre3, pre2 -> #pre1  Actions.action.

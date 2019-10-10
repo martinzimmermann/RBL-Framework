@@ -6,19 +6,9 @@ import java.util.List;
 public class RuleBuilder {
     private String action;
     private DiagnosticPosition diagnosticPosition;
-    private double ruleGoal = 1;
-    private AlphaList alphaEntries = AlphaList.getDefaultAlphaList();
-    private List<Predicate> worldDeletions = new ArrayList<>();
     private String goal = null;
-    private Predicate worldAddition = null;
+    private List<Predicate> postConditions = new ArrayList<>();
     private List<Predicate> preconditions = new ArrayList<>();
-    private double damping = 0.1;
-    private double aging = 0;
-    private double maxAging = 0;
-    private boolean agingUpperBound = false;
-    private boolean agingLowerBound = false;
-    private double dampingSclaing = 1;
-    private double activityScaling = 1;
 
     public RuleBuilder setDiagnosticPosition(DiagnosticPosition diagnosticPosition) {
         this.diagnosticPosition = diagnosticPosition;
@@ -30,18 +20,8 @@ public class RuleBuilder {
         return this;
     }
 
-    public RuleBuilder setRuleGoal(double ruleGoal) {
-        this.ruleGoal = ruleGoal;
-        return this;
-    }
-
-    public RuleBuilder setAlphaList(AlphaList alphaEntries) {
-        this.alphaEntries = alphaEntries;
-        return this;
-    }
-
-    public RuleBuilder setWorldDeletions(List<Predicate> worldDeletions) {
-        this.worldDeletions = worldDeletions;
+    public RuleBuilder setPostConditions(List<Predicate> postConditions) {
+        this.postConditions = postConditions;
         return this;
     }
 
@@ -50,52 +30,12 @@ public class RuleBuilder {
         return this;
     }
 
-    public RuleBuilder setWorldAddition(Predicate worldAddition) {
-        this.worldAddition = worldAddition;
-        return this;
-    }
-
     public RuleBuilder setPreconditions(List<Predicate> preconditions) {
         this.preconditions = preconditions;
         return this;
     }
 
-    public RuleBuilder setDamping(double damping) {
-        this.damping = damping;
-        return this;
-    }
-
-    public RuleBuilder setAging(double aging) {
-        this.aging = aging;
-        return this;
-    }
-
-    public RuleBuilder setMaxAging(double maxAging) {
-        this.maxAging = maxAging;
-        return this;
-    }
-
-    public RuleBuilder setAgingUpperBound(boolean agingUpperBound) {
-        this.agingUpperBound = agingUpperBound;
-        return this;
-    }
-
-    public RuleBuilder setAgingLowerBound(boolean agingLowerBound) {
-        this.agingLowerBound = agingLowerBound;
-        return this;
-    }
-
     public Rule createRule(){
-            return new Rule(action, ruleGoal, alphaEntries, worldDeletions, goal, worldAddition, preconditions, damping, aging, maxAging, agingUpperBound, agingLowerBound, activityScaling, dampingSclaing, diagnosticPosition);
-    }
-
-    public RuleBuilder setDampingScaling(double dampingScaling) {
-        this.dampingSclaing = dampingScaling;
-        return this;
-    }
-
-    public RuleBuilder setActivityScaling(double activityScaling) {
-        this.activityScaling = activityScaling;
-        return this;
+            return new Rule(action, goal, postConditions, preconditions, diagnosticPosition);
     }
 }

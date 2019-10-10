@@ -74,7 +74,7 @@ public class TopDownPlanFinder extends PlanFinder {
 
         // prioritize Goal rules
         Comparator<Rule> comparator = Comparator.comparing(r -> !(r.hasGoal() && (goal == null || goal.getGoal().equals(r.getGoal()))));
-        comparator = comparator.thenComparing(Rule::compareTo);
+        comparator = comparator.thenComparing(Rule::getWeight);
         rules.sort(comparator);
 
         for (Rule rule : rules) {

@@ -1,5 +1,9 @@
 .gradle/
-.idea/workspace.xml
+.idea/
 build/
+.project
+.settings
+.vscode
 
+src/main/gen/
 src/test/resources/RandomRules/

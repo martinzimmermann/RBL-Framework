@@ -12,37 +12,20 @@ fragment LOWERCASE : 'a'..'z';
 LT: '<';
 LTE: '<=';
 
+LINEEND : DOT (NEWLINE | EOF);
+fragment DOT   : '.';
+fragment NEWLINE   : '\r' '\n' | '\n' | '\r';
+
 WS : [ \n\t\r] -> channel(HIDDEN);
 
-program:    memory? r_rules EOF;
+program:        ((fact |  r_rule) LINEEND)*;
+fact:           predicate;
+predicate:      ID;
+r_rule:         preconditions? '->' ('#' Goal=predicate)? postconditions action;
+preconditions:  predicate  (',' predicate )*;
+postconditions: postcondition*;
+postcondition:  (worldAddition | worldDeletion);
+worldAddition:  '+' predicate;
+worldDeletion:  '-' predicate;
 
-memory:     (predicate '.')+;
-predicate:  ID;
-
-r_rules:    (r_rule '.')+;
-r_rule:     preconditions? '->' ('+' WorldAddtion=predicate | '#' Goal=predicate)? worldDeletions action alist? rule_goal? damping?;
-preconditions: predicate  (',' predicate )*;
-worldDeletions: (('-' predicate)*);
-rule_goal:  NUMBER;
-damping: '['Damping=NUMBER? ',' Aging=NUMBER? ',' agingTarget? ',' ActivityScaling=NUMBER? ',' DampingScaling=NUMBER? ']';
-agingTarget: MaxAging=NUMBER #AgingNoBound
-     | '|' MaxAging=NUMBER #AgingLowerBound
-     |  MaxAging=NUMBER '|' #AgingUpperBound
-     ;
-alist:      '('(( alistentry (',' alistentry)* (',' expr)?) | expr )')';
-alistentry: NUMBER (LT|LTE) 'a' (LT|LTE) NUMBER ':' expr;
-action:     ID('.'ID)*;
-
-expr: sign value #UnarySignExpr
-    | LHS=expr mulop RHS=expr #MulopExpr
-    | LHS=expr sign RHS=expr #SignExpr
-    | value #ValueExpr
-    ;
-
-sign: '+' | '-';
-mulop: '*' | '/';
-
-value: 'a' #VarValue
-     | NUMBER #NumValue
-     | '(' expr ')' #BraceValue
-     ;
+action:         ID('.'ID)*;

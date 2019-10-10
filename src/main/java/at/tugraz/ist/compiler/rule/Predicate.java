@@ -3,14 +3,23 @@ package at.tugraz.ist.compiler.rule;
 public class Predicate extends Atom {
 
     private final String name;
+    private final Boolean deletion;
 
     public Predicate(String name) {
+        this(name, false);
+    }
+
+    public Predicate(String name, Boolean deletion) {
         this.name = name;
+        this.deletion = deletion;
     }
 
     public String getName() {
         return name;
     }
+
+    public Boolean isDeletion() {return deletion;}
+    public Boolean isAddition() {return !deletion;}
 
     @Override
     public boolean equals(Object other) {
@@ -34,6 +43,10 @@ public class Predicate extends Atom {
 
     @Override
     public String toString() {
-        return name + ".";
+        return (deletion ? "-" : "+") + name;
+    }
+
+    public String getConstructor() {
+        return "new Predicate(\"" + name + "\", " + deletion + ")";
     }
 }

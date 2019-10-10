@@ -3,6 +3,6 @@
 temperature_collected, humidity_collected -> +data_prepared -temperature_collected
  					      -humidity_collected prepareData.
 
--> +connected connectGSM 0.2.
+-> +connected connectGSM.
 -> +connected connectWifi.
 connected, data_prepared -> #send -temperature_collected -data_prepared sendData.

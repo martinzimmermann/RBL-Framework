@@ -22,14 +22,14 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         Executor executor = new Executor(new BottomUpPlanFinder());
-        executor.executeOnce(model);
+        LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        executor.executeOnce();
     }
 
 
     @Test
     public void with_1precondition_test() throws IOException, NoPlanFoundException {
-        RuleLexer ruleLexer = new RuleLexer("pre1." +
+        RuleLexer ruleLexer = new RuleLexer("pre1.\n" +
                 "pre1 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -38,14 +38,14 @@ public class ExecutorTest {
         RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        Executor executor = new Executor(new BottomUpPlanFinder());
-        executor.executeNTimes(model, 100);
+        LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        executor.executeNTimes(100);
     }
 
     @Test
     public void with_2steps_test() throws IOException, NoPlanFoundException {
-        RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> +pre2 Actions.action." +
+        RuleLexer ruleLexer = new RuleLexer("pre1.\n" +
+                "pre1 -> +pre2 Actions.action.\n" +
                 "pre2 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -54,15 +54,15 @@ public class ExecutorTest {
 
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         Executor executor = new Executor(new BottomUpPlanFinder());
-        executor.executeOnce(model);
+         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        executor.executeOnce();
     }
 
     @Test
     public void with_2preconditions_test() throws IOException, NoPlanFoundException {
-        RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> +pre2 Actions.action." +
-                "pre1 -> +pre3 Actions.action." +
+        RuleLexer ruleLexer = new RuleLexer("pre1.\n" +
+                "pre1 -> +pre2 Actions.action.\n" +
+                "pre1 -> +pre3 Actions.action.\n" +
                 "pre2, pre3 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -71,16 +71,16 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         Executor executor = new Executor(new BottomUpPlanFinder());
-        executor.executeOnce(model);
+        LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        executor.executeOnce();
     }
 
     @Test
     public void rules_out_of_order_test() throws IOException, NoPlanFoundException {
-        RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre2 -> +pre4 Actions.action." +
-                "pre1 -> +pre2 Actions.action." +
-                "pre1 -> +pre3 Actions.action." +
+        RuleLexer ruleLexer = new RuleLexer("pre1.\n" +
+                "pre2 -> +pre4 Actions.action.\n" +
+                "pre1 -> +pre2 Actions.action.\n" +
+                "pre1 -> +pre3 Actions.action.\n" +
                 "pre3, pre4 -> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -89,19 +89,19 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         Executor executor = new Executor(new BottomUpPlanFinder());
-        executor.executeOnce(model);
+        LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        executor.executeOnce();
     }
 
     @Test
     public void dead_end_test() throws IOException, NoPlanFoundException {
-        RuleLexer ruleLexer = new RuleLexer("pre7." +
-                "pre2 -> +pre1 Actions.action." +
-                "pre4 -> +pre2 Actions.action." +
-                "pre7 -> +pre3 Actions.action." +
-                "pre6 -> +pre3 Actions.action." +
-                "pre3 -> +pre1 Actions.action." +
-                "pre1 -> #goal Actions.action." +
+        RuleLexer ruleLexer = new RuleLexer("pre7.\n" +
+                "pre2 -> +pre1 Actions.action.\n" +
+                "pre4 -> +pre2 Actions.action.\n" +
+                "pre7 -> +pre3 Actions.action.\n" +
+                "pre6 -> +pre3 Actions.action.\n" +
+                "pre3 -> +pre1 Actions.action.\n" +
+                "pre1 -> #goal Actions.action.\n" +
                 "pre5 -> +pre2 Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
@@ -110,16 +110,16 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         Executor executor = new Executor(new BottomUpPlanFinder());
-        executor.executeOnce(model);
+         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        executor.executeOnce();
     }
 
     @Test
     public void withDeletions_test() throws IOException, NoPlanFoundException {
-        RuleLexer ruleLexer = new RuleLexer("pre1." +
-                "pre1 -> +pre2 Actions.action." +
-                "pre1 -> +pre2 -pre1 Actions.action." +
-                "pre1, pre2 -> #goal Actions.action.");
+        RuleLexer ruleLexer = new RuleLexer("pre1.\n" +
+                "pre1 -> +pre2 Actions.action.\n" +
+                "pre1 -> +pre2 -pre1 Actions.action.\n" +
+                "pre1, pre2 -> #goal Actions.action.\n");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
@@ -127,17 +127,16 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         Executor executor = new Executor(new BottomUpPlanFinder());
-        executor.executeOnce(model);
+         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        executor.executeOnce();
     }
 
     @Test
     public void find_rule_with_greater_weight_test() throws IOException, NoPlanFoundException {
         RuleLexer ruleLexer = new RuleLexer(
-                "-> +pre1 Actions.action (0.5)." +
-                        "-> +pre1 Actions.action (1)." +
-                        "pre1-> #goal Actions.action." +
-                        "");
+                "-> +pre1 Actions.action.\n" +
+                        "-> +pre1 Actions.action.\n" +
+                        "pre1-> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
@@ -145,17 +144,16 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         Executor executor = new Executor(new BottomUpPlanFinder());
-        executor.executeOnce(model);
+         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        executor.executeOnce();
     }
 
     @Test
     public void find_rule_with_greater_weight2_test() throws IOException, NoPlanFoundException {
         RuleLexer ruleLexer = new RuleLexer(
-                "-> +pre1 Actions.action (1)." +
-                        "-> +pre1 Actions.action (0.5)." +
-                        "pre1-> #goal Actions.action." +
-                        "");
+                "-> +pre1 Actions.action.\n" +
+                        "-> +pre1 Actions.action.\n" +
+                        "pre1-> #goal Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
@@ -163,8 +161,8 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         Executor executor = new Executor(new BottomUpPlanFinder());
-        executor.executeOnce(model);
+         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        executor.executeOnce();
     }
 
     @Test
@@ -172,10 +170,9 @@ public class ExecutorTest {
         // This is also not possible in the original algorithm, because it is not possible to delete predicates that you
         // need later on, even thought you could add them again.
         RuleLexer ruleLexer = new RuleLexer(
-                "-> +pre1 Actions.action (0.5)." +
-                        "-> +pre1 Actions.action (0.6)." +
-                        "pre1-> #goal -pre1 Actions.action." +
-                        "");
+                "-> +pre1 Actions.action.\n" +
+                        "-> +pre1 Actions.action.\n" +
+                        "pre1-> #goal -pre1 Actions.action.");
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
@@ -183,8 +180,8 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         Executor executor = new Executor(new BottomUpPlanFinder());
-        executor.executeNTimes(model, 2);
+         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        executor.executeNTimes(2);
     }
 
 
@@ -198,8 +195,8 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         Executor executor = new Executor(new BottomUpPlanFinder());
-        executor.executeOnce(model);
+         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        executor.executeOnce();
     }
 
     @Test
@@ -212,7 +209,7 @@ public class ExecutorTest {
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         Executor executor = new Executor(new BottomUpPlanFinder());
-        executor.executeOnce(model);
+         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        executor.executeOnce();
     }
 }

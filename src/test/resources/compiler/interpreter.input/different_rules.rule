@@ -1,4 +1,4 @@
--> +pre actions.action1 1.
--> +pre actions.action2 0.6.
+-> +pre actions.action1.
+-> +pre actions.action2.
 
 pre -> #goal -pre actions.goal.

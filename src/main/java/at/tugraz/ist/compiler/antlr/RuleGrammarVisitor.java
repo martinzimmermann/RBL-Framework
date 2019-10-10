@@ -17,23 +17,17 @@ public interface RuleGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(RuleGrammarParser.ProgramContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RuleGrammarParser#memory}.
+	 * Visit a parse tree produced by {@link RuleGrammarParser#fact}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMemory(RuleGrammarParser.MemoryContext ctx);
+	T visitFact(RuleGrammarParser.FactContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RuleGrammarParser#predicate}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPredicate(RuleGrammarParser.PredicateContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RuleGrammarParser#r_rules}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitR_rules(RuleGrammarParser.R_rulesContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RuleGrammarParser#r_rule}.
 	 * @param ctx the parse tree
@@ -47,121 +41,33 @@ public interface RuleGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPreconditions(RuleGrammarParser.PreconditionsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RuleGrammarParser#worldDeletions}.
+	 * Visit a parse tree produced by {@link RuleGrammarParser#postconditions}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitWorldDeletions(RuleGrammarParser.WorldDeletionsContext ctx);
+	T visitPostconditions(RuleGrammarParser.PostconditionsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RuleGrammarParser#rule_goal}.
+	 * Visit a parse tree produced by {@link RuleGrammarParser#postcondition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRule_goal(RuleGrammarParser.Rule_goalContext ctx);
+	T visitPostcondition(RuleGrammarParser.PostconditionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RuleGrammarParser#damping}.
+	 * Visit a parse tree produced by {@link RuleGrammarParser#worldAddition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDamping(RuleGrammarParser.DampingContext ctx);
+	T visitWorldAddition(RuleGrammarParser.WorldAdditionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code AgingNoBound}
-	 * labeled alternative in {@link RuleGrammarParser#agingTarget}.
+	 * Visit a parse tree produced by {@link RuleGrammarParser#worldDeletion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAgingNoBound(RuleGrammarParser.AgingNoBoundContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code AgingLowerBound}
-	 * labeled alternative in {@link RuleGrammarParser#agingTarget}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAgingLowerBound(RuleGrammarParser.AgingLowerBoundContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code AgingUpperBound}
-	 * labeled alternative in {@link RuleGrammarParser#agingTarget}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAgingUpperBound(RuleGrammarParser.AgingUpperBoundContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RuleGrammarParser#alist}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAlist(RuleGrammarParser.AlistContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RuleGrammarParser#alistentry}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAlistentry(RuleGrammarParser.AlistentryContext ctx);
+	T visitWorldDeletion(RuleGrammarParser.WorldDeletionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RuleGrammarParser#action}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAction(RuleGrammarParser.ActionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code SignExpr}
-	 * labeled alternative in {@link RuleGrammarParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSignExpr(RuleGrammarParser.SignExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code ValueExpr}
-	 * labeled alternative in {@link RuleGrammarParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitValueExpr(RuleGrammarParser.ValueExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code UnarySignExpr}
-	 * labeled alternative in {@link RuleGrammarParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUnarySignExpr(RuleGrammarParser.UnarySignExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code MulopExpr}
-	 * labeled alternative in {@link RuleGrammarParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMulopExpr(RuleGrammarParser.MulopExprContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RuleGrammarParser#sign}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSign(RuleGrammarParser.SignContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RuleGrammarParser#mulop}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMulop(RuleGrammarParser.MulopContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code VarValue}
-	 * labeled alternative in {@link RuleGrammarParser#value}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarValue(RuleGrammarParser.VarValueContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code NumValue}
-	 * labeled alternative in {@link RuleGrammarParser#value}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNumValue(RuleGrammarParser.NumValueContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code BraceValue}
-	 * labeled alternative in {@link RuleGrammarParser#value}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBraceValue(RuleGrammarParser.BraceValueContext ctx);
 }

@@ -4,25 +4,26 @@ import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Memory {
 
-    private final List<Predicate> start_predicates;
-    private List<Predicate> predicates;
+    private final Set<Predicate> start_predicates;
+    private Set<Predicate> predicates;
 
     public Memory(List<Predicate> predicates) {
 
-        this.predicates = new ArrayList<>(predicates);
-        this.start_predicates = new ArrayList<>(predicates);
+        this.predicates = new HashSet<>(predicates);
+        this.start_predicates = new HashSet<>(this.predicates);
     }
 
     public Memory(Memory memory) {
-
-        this.predicates = new ArrayList<>(memory.predicates);
-        this.start_predicates = new ArrayList<>(memory.start_predicates);
+        this.predicates = new HashSet<>(memory.predicates);
+        this.start_predicates = new HashSet<>(memory.start_predicates);
     }
-
 
     public boolean contains(Predicate precondition) {
         return predicates.contains(precondition);
@@ -32,18 +33,21 @@ public class Memory {
         return predicates.containsAll(preconditions);
     }
 
-    public List<Predicate> getAllPredicates() {
+    public Set<Predicate> getAllPredicates() {
         return predicates;
     }
 
     public void update(Rule rule) {
-        predicates.removeAll(rule.getWorldDeletions());
-        if (rule.hasWorldAddition())
-            predicates.add(rule.getWorldAddition());
+        for(Predicate pred : rule.getPostConditions()) {
+            if(pred.isAddition())
+                predicates.add(pred);
+            else
+                predicates.remove(pred);
+        }
     }
 
     public void reset() {
-        this.predicates = new ArrayList<>(start_predicates);
+        this.predicates = new HashSet<>(start_predicates);
     }
 
     public void remove(String predicate) {

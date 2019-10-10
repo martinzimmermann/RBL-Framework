@@ -18,15 +18,15 @@ public interface RuleGrammarListener extends ParseTreeListener {
 	 */
 	void exitProgram(RuleGrammarParser.ProgramContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RuleGrammarParser#memory}.
+	 * Enter a parse tree produced by {@link RuleGrammarParser#fact}.
 	 * @param ctx the parse tree
 	 */
-	void enterMemory(RuleGrammarParser.MemoryContext ctx);
+	void enterFact(RuleGrammarParser.FactContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RuleGrammarParser#memory}.
+	 * Exit a parse tree produced by {@link RuleGrammarParser#fact}.
 	 * @param ctx the parse tree
 	 */
-	void exitMemory(RuleGrammarParser.MemoryContext ctx);
+	void exitFact(RuleGrammarParser.FactContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link RuleGrammarParser#predicate}.
 	 * @param ctx the parse tree
@@ -37,16 +37,6 @@ public interface RuleGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPredicate(RuleGrammarParser.PredicateContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RuleGrammarParser#r_rules}.
-	 * @param ctx the parse tree
-	 */
-	void enterR_rules(RuleGrammarParser.R_rulesContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RuleGrammarParser#r_rules}.
-	 * @param ctx the parse tree
-	 */
-	void exitR_rules(RuleGrammarParser.R_rulesContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link RuleGrammarParser#r_rule}.
 	 * @param ctx the parse tree
@@ -68,91 +58,45 @@ public interface RuleGrammarListener extends ParseTreeListener {
 	 */
 	void exitPreconditions(RuleGrammarParser.PreconditionsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RuleGrammarParser#worldDeletions}.
+	 * Enter a parse tree produced by {@link RuleGrammarParser#postconditions}.
 	 * @param ctx the parse tree
 	 */
-	void enterWorldDeletions(RuleGrammarParser.WorldDeletionsContext ctx);
+	void enterPostconditions(RuleGrammarParser.PostconditionsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RuleGrammarParser#worldDeletions}.
+	 * Exit a parse tree produced by {@link RuleGrammarParser#postconditions}.
 	 * @param ctx the parse tree
 	 */
-	void exitWorldDeletions(RuleGrammarParser.WorldDeletionsContext ctx);
+	void exitPostconditions(RuleGrammarParser.PostconditionsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RuleGrammarParser#rule_goal}.
+	 * Enter a parse tree produced by {@link RuleGrammarParser#postcondition}.
 	 * @param ctx the parse tree
 	 */
-	void enterRule_goal(RuleGrammarParser.Rule_goalContext ctx);
+	void enterPostcondition(RuleGrammarParser.PostconditionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RuleGrammarParser#rule_goal}.
+	 * Exit a parse tree produced by {@link RuleGrammarParser#postcondition}.
 	 * @param ctx the parse tree
 	 */
-	void exitRule_goal(RuleGrammarParser.Rule_goalContext ctx);
+	void exitPostcondition(RuleGrammarParser.PostconditionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RuleGrammarParser#damping}.
+	 * Enter a parse tree produced by {@link RuleGrammarParser#worldAddition}.
 	 * @param ctx the parse tree
 	 */
-	void enterDamping(RuleGrammarParser.DampingContext ctx);
+	void enterWorldAddition(RuleGrammarParser.WorldAdditionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RuleGrammarParser#damping}.
+	 * Exit a parse tree produced by {@link RuleGrammarParser#worldAddition}.
 	 * @param ctx the parse tree
 	 */
-	void exitDamping(RuleGrammarParser.DampingContext ctx);
+	void exitWorldAddition(RuleGrammarParser.WorldAdditionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code AgingNoBound}
-	 * labeled alternative in {@link RuleGrammarParser#agingTarget}.
+	 * Enter a parse tree produced by {@link RuleGrammarParser#worldDeletion}.
 	 * @param ctx the parse tree
 	 */
-	void enterAgingNoBound(RuleGrammarParser.AgingNoBoundContext ctx);
+	void enterWorldDeletion(RuleGrammarParser.WorldDeletionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code AgingNoBound}
-	 * labeled alternative in {@link RuleGrammarParser#agingTarget}.
+	 * Exit a parse tree produced by {@link RuleGrammarParser#worldDeletion}.
 	 * @param ctx the parse tree
 	 */
-	void exitAgingNoBound(RuleGrammarParser.AgingNoBoundContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code AgingLowerBound}
-	 * labeled alternative in {@link RuleGrammarParser#agingTarget}.
-	 * @param ctx the parse tree
-	 */
-	void enterAgingLowerBound(RuleGrammarParser.AgingLowerBoundContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code AgingLowerBound}
-	 * labeled alternative in {@link RuleGrammarParser#agingTarget}.
-	 * @param ctx the parse tree
-	 */
-	void exitAgingLowerBound(RuleGrammarParser.AgingLowerBoundContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code AgingUpperBound}
-	 * labeled alternative in {@link RuleGrammarParser#agingTarget}.
-	 * @param ctx the parse tree
-	 */
-	void enterAgingUpperBound(RuleGrammarParser.AgingUpperBoundContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code AgingUpperBound}
-	 * labeled alternative in {@link RuleGrammarParser#agingTarget}.
-	 * @param ctx the parse tree
-	 */
-	void exitAgingUpperBound(RuleGrammarParser.AgingUpperBoundContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RuleGrammarParser#alist}.
-	 * @param ctx the parse tree
-	 */
-	void enterAlist(RuleGrammarParser.AlistContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RuleGrammarParser#alist}.
-	 * @param ctx the parse tree
-	 */
-	void exitAlist(RuleGrammarParser.AlistContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RuleGrammarParser#alistentry}.
-	 * @param ctx the parse tree
-	 */
-	void enterAlistentry(RuleGrammarParser.AlistentryContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RuleGrammarParser#alistentry}.
-	 * @param ctx the parse tree
-	 */
-	void exitAlistentry(RuleGrammarParser.AlistentryContext ctx);
+	void exitWorldDeletion(RuleGrammarParser.WorldDeletionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link RuleGrammarParser#action}.
 	 * @param ctx the parse tree
@@ -163,108 +107,4 @@ public interface RuleGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAction(RuleGrammarParser.ActionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code SignExpr}
-	 * labeled alternative in {@link RuleGrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterSignExpr(RuleGrammarParser.SignExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code SignExpr}
-	 * labeled alternative in {@link RuleGrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitSignExpr(RuleGrammarParser.SignExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ValueExpr}
-	 * labeled alternative in {@link RuleGrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterValueExpr(RuleGrammarParser.ValueExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ValueExpr}
-	 * labeled alternative in {@link RuleGrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitValueExpr(RuleGrammarParser.ValueExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code UnarySignExpr}
-	 * labeled alternative in {@link RuleGrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterUnarySignExpr(RuleGrammarParser.UnarySignExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code UnarySignExpr}
-	 * labeled alternative in {@link RuleGrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitUnarySignExpr(RuleGrammarParser.UnarySignExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code MulopExpr}
-	 * labeled alternative in {@link RuleGrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterMulopExpr(RuleGrammarParser.MulopExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code MulopExpr}
-	 * labeled alternative in {@link RuleGrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitMulopExpr(RuleGrammarParser.MulopExprContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RuleGrammarParser#sign}.
-	 * @param ctx the parse tree
-	 */
-	void enterSign(RuleGrammarParser.SignContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RuleGrammarParser#sign}.
-	 * @param ctx the parse tree
-	 */
-	void exitSign(RuleGrammarParser.SignContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RuleGrammarParser#mulop}.
-	 * @param ctx the parse tree
-	 */
-	void enterMulop(RuleGrammarParser.MulopContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RuleGrammarParser#mulop}.
-	 * @param ctx the parse tree
-	 */
-	void exitMulop(RuleGrammarParser.MulopContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code VarValue}
-	 * labeled alternative in {@link RuleGrammarParser#value}.
-	 * @param ctx the parse tree
-	 */
-	void enterVarValue(RuleGrammarParser.VarValueContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code VarValue}
-	 * labeled alternative in {@link RuleGrammarParser#value}.
-	 * @param ctx the parse tree
-	 */
-	void exitVarValue(RuleGrammarParser.VarValueContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code NumValue}
-	 * labeled alternative in {@link RuleGrammarParser#value}.
-	 * @param ctx the parse tree
-	 */
-	void enterNumValue(RuleGrammarParser.NumValueContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code NumValue}
-	 * labeled alternative in {@link RuleGrammarParser#value}.
-	 * @param ctx the parse tree
-	 */
-	void exitNumValue(RuleGrammarParser.NumValueContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code BraceValue}
-	 * labeled alternative in {@link RuleGrammarParser#value}.
-	 * @param ctx the parse tree
-	 */
-	void enterBraceValue(RuleGrammarParser.BraceValueContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code BraceValue}
-	 * labeled alternative in {@link RuleGrammarParser#value}.
-	 * @param ctx the parse tree
-	 */
-	void exitBraceValue(RuleGrammarParser.BraceValueContext ctx);
 }

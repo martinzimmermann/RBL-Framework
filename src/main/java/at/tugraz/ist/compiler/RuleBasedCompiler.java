@@ -46,8 +46,8 @@ class RuleBasedCompiler {
                     ErrorHandler.Instance().printErrorCount();
                     System.exit(1);
                 }
-                Executor executor = new Executor(new BottomUpPlanFinder());
-                executor.executeNTimes(model, setting.getNumberOfRuns());
+                LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+                executor.executeNTimes(setting.getNumberOfRuns());
             }
 
         } catch (IOException e) {

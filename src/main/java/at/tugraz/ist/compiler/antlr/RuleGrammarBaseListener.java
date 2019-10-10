@@ -28,13 +28,13 @@ public class RuleGrammarBaseListener implements RuleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMemory(RuleGrammarParser.MemoryContext ctx) { }
+	@Override public void enterFact(RuleGrammarParser.FactContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMemory(RuleGrammarParser.MemoryContext ctx) { }
+	@Override public void exitFact(RuleGrammarParser.FactContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -47,18 +47,6 @@ public class RuleGrammarBaseListener implements RuleGrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPredicate(RuleGrammarParser.PredicateContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterR_rules(RuleGrammarParser.R_rulesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitR_rules(RuleGrammarParser.R_rulesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -88,97 +76,49 @@ public class RuleGrammarBaseListener implements RuleGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWorldDeletions(RuleGrammarParser.WorldDeletionsContext ctx) { }
+	@Override public void enterPostconditions(RuleGrammarParser.PostconditionsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitWorldDeletions(RuleGrammarParser.WorldDeletionsContext ctx) { }
+	@Override public void exitPostconditions(RuleGrammarParser.PostconditionsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRule_goal(RuleGrammarParser.Rule_goalContext ctx) { }
+	@Override public void enterPostcondition(RuleGrammarParser.PostconditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRule_goal(RuleGrammarParser.Rule_goalContext ctx) { }
+	@Override public void exitPostcondition(RuleGrammarParser.PostconditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDamping(RuleGrammarParser.DampingContext ctx) { }
+	@Override public void enterWorldAddition(RuleGrammarParser.WorldAdditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDamping(RuleGrammarParser.DampingContext ctx) { }
+	@Override public void exitWorldAddition(RuleGrammarParser.WorldAdditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAgingNoBound(RuleGrammarParser.AgingNoBoundContext ctx) { }
+	@Override public void enterWorldDeletion(RuleGrammarParser.WorldDeletionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAgingNoBound(RuleGrammarParser.AgingNoBoundContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAgingLowerBound(RuleGrammarParser.AgingLowerBoundContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAgingLowerBound(RuleGrammarParser.AgingLowerBoundContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAgingUpperBound(RuleGrammarParser.AgingUpperBoundContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAgingUpperBound(RuleGrammarParser.AgingUpperBoundContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAlist(RuleGrammarParser.AlistContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAlist(RuleGrammarParser.AlistContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAlistentry(RuleGrammarParser.AlistentryContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAlistentry(RuleGrammarParser.AlistentryContext ctx) { }
+	@Override public void exitWorldDeletion(RuleGrammarParser.WorldDeletionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -191,114 +131,6 @@ public class RuleGrammarBaseListener implements RuleGrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAction(RuleGrammarParser.ActionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSignExpr(RuleGrammarParser.SignExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSignExpr(RuleGrammarParser.SignExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterValueExpr(RuleGrammarParser.ValueExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitValueExpr(RuleGrammarParser.ValueExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterUnarySignExpr(RuleGrammarParser.UnarySignExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitUnarySignExpr(RuleGrammarParser.UnarySignExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMulopExpr(RuleGrammarParser.MulopExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMulopExpr(RuleGrammarParser.MulopExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSign(RuleGrammarParser.SignContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSign(RuleGrammarParser.SignContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMulop(RuleGrammarParser.MulopContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMulop(RuleGrammarParser.MulopContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterVarValue(RuleGrammarParser.VarValueContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVarValue(RuleGrammarParser.VarValueContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNumValue(RuleGrammarParser.NumValueContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNumValue(RuleGrammarParser.NumValueContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBraceValue(RuleGrammarParser.BraceValueContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBraceValue(RuleGrammarParser.BraceValueContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
