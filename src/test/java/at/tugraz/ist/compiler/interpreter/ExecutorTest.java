@@ -54,7 +54,7 @@ public class ExecutorTest {
 
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
         executor.executeOnce();
     }
 

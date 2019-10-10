@@ -3,12 +3,12 @@ package at.tugraz.ist.compiler.interpreter;
 import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class BestPlanFinder extends PlanFinder {
 
@@ -19,43 +19,66 @@ public class BestPlanFinder extends PlanFinder {
 
     @Override
     public List<Rule> getPlanForGoal(Rule goal, Memory memory, List<Rule> allRules) {
-
-        List<Plan> plans = getPlansForGoal(goal, memory, allRules, new Plan());
+        List<Plan> plans = getPlansForGoal(goal, null, memory, allRules, new Plan());
 
         if (plans.size() == 0)
             return null; // plan couldn't be fulfilled on this path
 
-        Plan bestPlan = plans.stream().min(Comparator.comparing(Plan::getWeight)).get();
+        List<Plan> reasonablePaht = plans.stream().filter(p -> !isReduceable(p, memory)).collect(Collectors.toList());
 
+        Plan bestPlan = reasonablePaht.stream().min(Comparator.comparing(Plan::getWeight)).get();
         return bestPlan.getRules();
+    }
+
+    private boolean isReduceable(Plan plan, Memory memory) {
+        for (Rule rule : plan.getRules()) {
+            Plan newPlan = new Plan(plan);
+            newPlan.remove(rule);
+            if (isInterpreadable(newPlan, memory))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean isInterpreadable(Plan plan, Memory memory) {
+        Memory newMemory = new Memory(memory);
+        for (Rule rule : plan.getRules()) {
+            boolean result = newMemory.containsAll(rule.getPreconditions());
+            if (result) {
+                newMemory.update(rule);
+                if (rule.hasGoal())
+                    return true;
+            } else {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     private List<Rule> getRulesThatArePossible(Memory memory, List<Rule> allRules) {
         return allRules.stream().filter(rule -> memory.getAllPredicates().containsAll(rule.getPreconditions())).collect(Collectors.toList());
     }
 
-    private List<Plan> getPlansForGoal(Rule goal, Memory memory, List<Rule> allRules, Plan currentPlan) {
+    private List<Plan> getPlansForGoal(Rule goal, Rule currentRule, Memory memory, List<Rule> allRules, Plan currentPlan) {
 
         List<Rule> rules = getRulesThatArePossible(memory, allRules);
 
         List<Plan> plans = new ArrayList<>();
         for (Rule rule : rules) {
+            Memory newMemory = new Memory(memory);
+            List<Rule> remainingRules = new ArrayList<>(allRules);
             Plan newPlan = new Plan(currentPlan);
+
+            newMemory.update(rule);
+            remainingRules.remove(rule);
             newPlan.add(rule);
 
-            if (rule.hasGoal() && (goal == null || rule.equals(goal))) {
+            if (rule.hasGoal() && (goal == null ? true : rule.equals(goal))) {
                 plans.add(newPlan);
-                continue;
             }
 
-            Memory newMemory = new Memory(memory);
-            newMemory.update(rule);
-
-            List<Rule> remainingRules = new ArrayList<>(allRules);
-            remainingRules.remove(rule);
-
-
-            List<Plan> newPlans = getPlansForGoal(goal, newMemory, remainingRules, newPlan);
+            List<Plan> newPlans = getPlansForGoal(goal, rule, newMemory, remainingRules, newPlan);
             plans.addAll(newPlans);
         }
 

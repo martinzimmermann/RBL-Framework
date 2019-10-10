@@ -2,6 +2,7 @@ package at.tugraz.ist.compiler.interpreter;
 
 import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
+import at.tugraz.ist.compiler.rule.InterpreterRule;
 import at.tugraz.ist.compiler.rule.Rule;
 import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
 import org.junit.Assert;
@@ -10,6 +11,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -61,6 +63,73 @@ public class PlanFinderTests {
         return builder.toString();
     }
 
+    private List<Rule> toRules(List<InterpreterRule> rules) {
+        return rules == null ? null : new ArrayList<>(rules);
+    }
+
+    @Test
+    public void live_test_success_test() throws IOException, NoPlanFoundException {
+        RuleLexer ruleLexer = new RuleLexer("-> +pre Actions.action.\n" +
+                " -> +pre Actions.action.\n" +
+                "pre -> #goal -pre Actions.action.");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        Memory memory = gen.getMemory();
+        List<Rule> rules = gen.getRules();
+        Model model = new Model(memory, rules);
+        PlanFinder pf = new BestPlanFinder();
+
+        List<Rule> plan = pf.getAnyPlan(memory, rules);
+        assertNotNull(plan);
+        assertEquals(2, plan.size());
+        assertEquals(rules.get(0), plan.get(0));
+        assertEquals(rules.get(2), plan.get(1));
+
+        LibExecutor executor = new LibExecutor(model, pf);
+        executor.executeOnce();
+
+        rules = toRules(model.getRules());
+        plan = pf.getAnyPlan(memory, rules);
+        assertNotNull(plan);
+        assertEquals(2, plan.size());
+        assertEquals(rules.get(0), plan.get(0));
+        assertEquals(rules.get(2), plan.get(1));
+    }
+
+    @Test
+    public void live_test_fail_test() throws IOException, NoPlanFoundException {
+        RuleLexer ruleLexer = new RuleLexer("-> +pre Actions.failAction.\n" +
+                " -> +pre Actions.action.\n" +
+                "pre -> #goal -pre Actions.action.");
+        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
+        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
+        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
+        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ClassCompiler.compileClasses("src/test/resources/Actions");
+        Memory memory = gen.getMemory();
+        List<Rule> rules = gen.getRules();
+        Model model = new Model(memory, rules);
+        PlanFinder pf = new BestPlanFinder();
+
+        List<Rule> plan = pf.getAnyPlan(memory, rules);
+        assertNotNull(plan);
+        assertEquals(2, plan.size());
+        assertEquals(rules.get(0), plan.get(0));
+        assertEquals(rules.get(2), plan.get(1));
+
+        LibExecutor executor = new LibExecutor(model, pf);
+        executor.executeOnce();
+
+        rules = toRules(model.getRules());
+        plan = pf.getAnyPlan(memory, rules);
+        assertNotNull(plan);
+        assertEquals(2, plan.size());
+        assertEquals(rules.get(1), plan.get(0));
+        assertEquals(rules.get(2), plan.get(1));
+    }
 
     @Test
     public void simple_test() throws IOException {

@@ -1,11 +1,14 @@
 package at.tugraz.ist.compiler.interpreter;
 
+import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class BottomUpPlanFinder extends PlanFinder {
 
@@ -18,7 +21,7 @@ public class BottomUpPlanFinder extends PlanFinder {
 
         List<Rule> rules = new ArrayList<>(allRules);
         rules.remove(goal);
-        rules.sort(Comparator.comparing(Rule::getWeight));
+        rules.sort(Rule::compareTo);
 
         for (Rule rule : rules) {
             if (!newPlan.needs(rule, memory))
@@ -43,7 +46,7 @@ public class BottomUpPlanFinder extends PlanFinder {
         if (goals.size() == 0)
             return null;
 
-        goals.sort(Comparator.comparing(Rule::getWeight));
+        goals.sort(Rule::compareTo);
 
         List<Rule> plan = getPlanForGoalBottomUp(goals.get(0), memory, allRules, new Plan());
         if (plan == null)

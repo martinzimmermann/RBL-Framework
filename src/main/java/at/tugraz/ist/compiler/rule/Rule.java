@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Rule extends Atom{
+public class Rule extends Atom implements Comparable<Rule> {
 
     private final List<Predicate> preconditions;
     private final List<Predicate> postConditions;
@@ -128,6 +128,15 @@ public class Rule extends Atom{
         return result;
     }
     */
+
+    @Override
+    public int compareTo(Rule o) {
+
+        BigDecimal otherWeight = o.getWeight();
+        BigDecimal thisWeight = this.getWeight();
+
+        return thisWeight.compareTo(otherWeight);
+    }
 
     public BigDecimal getWeight() {
         if ( fail_executed == 0 || (fail_executed + fail_not_executed) == 0 ||(fail_executed + pass_executed) == 0)
