@@ -62,8 +62,3 @@ jar {
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
-
-task copyToTestCompiler(dependsOn: jar, type: Copy) {
-    from file("$buildDir\\libs\\rbl-0.3.1.jar")
-    into file("C:\\Users\\mzimmerm\\Documents\\Projects\\TestRBL\\JavaFMI")
-}
