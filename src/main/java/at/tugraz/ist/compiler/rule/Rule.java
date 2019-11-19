@@ -1,21 +1,24 @@
 package at.tugraz.ist.compiler.rule;
 
 import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class Rule extends Atom implements Comparable<Rule> {
+
 
     private final List<Predicate> preconditions;
     private final List<Predicate> postConditions;
     private final String goal;
     private final String actionName;
 
-    private int pass_not_executed = 0;
-    private int fail_not_executed = 0;
-    private int pass_executed = 0;
-    private int fail_executed = 0;
+    private Queue<Integer> pass_not_executed = new LinkedList<>();
+    private Queue<Integer> fail_not_executed = new LinkedList<>();
+    private Queue<Integer> pass_executed = new LinkedList<>();
+    private Queue<Integer> fail_executed = new LinkedList<>();
 
     private DiagnosticPosition diagnosticPosition;
 
@@ -139,23 +142,57 @@ public class Rule extends Atom implements Comparable<Rule> {
     }
 
     public BigDecimal getWeight() {
-        if ( fail_executed == 0 || (fail_executed + fail_not_executed) == 0 ||(fail_executed + pass_executed) == 0)
+        int fe = fail_executed.isEmpty() ? 0 : fail_executed.stream().reduce((a,b)->a+b).get();
+        int fn = fail_not_executed.isEmpty() ? 0 : fail_not_executed.stream().reduce((a,b)->a+b).get();
+        int pe = pass_executed.isEmpty() ? 0 : pass_executed.stream().reduce((a,b)->a+b).get();
+        int pn = pass_not_executed.isEmpty() ? 0 : pass_not_executed.stream().reduce((a,b)->a+b).get();
+
+        try {
+            // Ochiai
+            //return new BigDecimal((1.0 * pe) / (Math.sqrt((fe + fn) * (fe + pe))));
+
+            //Tarantula
+            //return new BigDecimal(((1.0 * fe) / 1.0 *(fe + fn)) /
+            //        ((1.0 * fe / 1.0 *(fe + fn)) + (1.0 * pe / 1.0 *(pe + pn))));
+
+            // Jaccard
+            return new BigDecimal((1.0 * fe) / (fe + fn + pe));
+
+            // SMC
+            //return new BigDecimal((1.0 * (fe + pn)) / 1.0 * (fe + fn + pe + pn));
+        }
+        catch (NumberFormatException e) {
             return new BigDecimal(0.00000000001);
-        return new BigDecimal((1.0 * fail_executed) / (Math.sqrt((fail_executed + fail_not_executed) * (fail_executed + pass_executed))));
-        //return new BigDecimal(((1.0 * fail_executed) / (fail_executed + fail_not_executed)) /
-        //        ((1.0 * fail_executed / (fail_executed + fail_not_executed)) + (1.0 * pass_executed / (pass_executed + pass_not_executed))));
-        //return new BigDecimal((1.0 * fail_executed) / (fail_executed + fail_not_executed + pass_executed));
+        }
     }
 
     public void updateRule(boolean failed, boolean executed) {
         if(failed  && executed)
-            fail_executed++;
+            fail_executed.add(1);
+        else
+            fail_executed.add(0);
+
         if(failed  && !executed)
-            fail_not_executed++;
+            fail_not_executed.add(1);
+        else
+            fail_not_executed.add(0);
+
         if(!failed  && executed)
-            pass_executed++;
+            pass_executed.add(1);
+        else
+            pass_executed.add(0);
+
         if(!failed  && !executed)
-            pass_not_executed++;
+            pass_not_executed.add(1);
+        else
+            pass_not_executed.add(0);
+
+        /*if(fail_executed.size() > 20) {
+            fail_executed.remove();
+            fail_not_executed.remove();
+            pass_executed.remove();
+            pass_not_executed.remove();
+        }*/
     }
 
     public String getConstructor() {

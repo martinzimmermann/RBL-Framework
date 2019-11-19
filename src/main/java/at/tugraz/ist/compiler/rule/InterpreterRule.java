@@ -19,12 +19,12 @@ public class InterpreterRule extends Rule {
             throw new ClassNotFoundException();
         }
     }
-    /*
+
     public InterpreterRule(RuleAction action, Rule rule) {
         super(rule);
         this.action = action;
     }
-    */
+
     public boolean execute(Model model) {
         assert (model.getMemory().containsAll(this.getPreconditions()));
         return action.execute(model);
