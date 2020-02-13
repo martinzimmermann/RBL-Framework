@@ -16,8 +16,7 @@ class RuleBasedCompiler {
     public static void main(String[] args) throws NoPlanFoundException {
         Setting setting = generateSetting(args);
         if (setting == null) return;
-
-
+        
         try {
             Parser parser = new Parser();
             parser.parse(setting.getPathToDomainFile(), setting.getPathToProblemFile());
@@ -29,7 +28,7 @@ class RuleBasedCompiler {
             
             RuleGenerator gen = new RuleGenerator(parser.getDomain(), parser.getProblem());
             SourceWriter writer = new SourceWriter(setting.getOutputPath(), setting.getPackageName());
-            writer.writeSource(gen, setting.isDeferred(),true);
+            writer.writeSource(gen, setting.isDeferred(), true);
         } catch (IOException ex) {
             throw new IllegalStateException("Could not read PDDL file for parsing", ex);
         }
@@ -62,7 +61,7 @@ class RuleBasedCompiler {
             return null;
         }
 
-        int currentIndex = 1;
+        int currentIndex = 0;
         if (args.length > (currentIndex + 1) && args[currentIndex].equals("-o")) {
             currentIndex++;
             outputPath = args[currentIndex++];

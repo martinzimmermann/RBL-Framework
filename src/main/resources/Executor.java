@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import at.tugraz.ist.compiler.interpreter.LibExecutor;
+import at.tugraz.ist.compiler.interpreter.goal;
 
 public class Executor extends LibExecutor {
 

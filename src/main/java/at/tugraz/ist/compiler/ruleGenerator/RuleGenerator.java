@@ -11,6 +11,7 @@ import at.tugraz.ist.compiler.pddl.ProblemGoalVisitor;
 import at.tugraz.ist.compiler.pddl.ProblemInitVisitor;
 import at.tugraz.ist.compiler.pddl.ProblemObjectVisitor;
 import at.tugraz.ist.compiler.rule.Atom;
+import at.tugraz.ist.compiler.rule.DiagnosticPosition;
 import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 import fr.uga.pddl4j.parser.Connective;
@@ -97,7 +98,7 @@ public class RuleGenerator {
                 assertTrue(false);
             }
         }
-        rules.add(new Rule("", "goal", new ArrayList<>(), goalCond, null));
+        rules.add(new Rule("goal", "goal", new ArrayList<>(), goalCond, new DiagnosticPosition(0, 0, 0, 0, "")));
     }
 
     private List<Rule> getGroundedRule(List<String> objects, Op op) {
@@ -119,7 +120,7 @@ public class RuleGenerator {
             } else {
                 assertTrue(false);
             }
-            rules.add(new Rule(action, null, groundedPostCond, groundedPreCond, null));
+            rules.add(new Rule(action, null, groundedPostCond, groundedPreCond, new DiagnosticPosition(0, 0, 0, 0, "")));
         }
         return rules;
     }
