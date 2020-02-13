@@ -1,6 +1,5 @@
 package at.tugraz.ist.compiler.ruleGenerator;
 
-import at.tugraz.ist.compiler.ErrorHandler;
 import at.tugraz.ist.compiler.antlr.RuleGrammarBaseVisitor;
 import at.tugraz.ist.compiler.antlr.RuleGrammarParser.*;
 import at.tugraz.ist.compiler.rule.*;

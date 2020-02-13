@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import at.tugraz.ist.compiler.interpreter.LibExecutor;
+
 public class Executor extends LibExecutor {
 
     static Model generateModel() throws ClassNotFoundException {
