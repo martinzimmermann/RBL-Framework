@@ -25,4 +25,5 @@ jar {
                 'Main-Class': 'at.tugraz.ist.compiler.RuleBasedCompiler'
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    from sourceSets.main.allSource
 }

@@ -119,8 +119,8 @@ public class RuleGenerator {
         int par_size = parameters.size();
         int obj_size = objects.size();
 
-        HashMap<String, String> replace = new HashMap<String, String>();
-        for (int i = 0; i < par_size * obj_size; i++) {
+        for (int i = 0; i < Math.pow(obj_size, par_size); i++) {
+            HashMap<String, String> replace = new HashMap<String, String>();
             int temp = i;
             for (int parIndex = 0; parIndex < par_size; parIndex++) {
                 int objIndex = temp % obj_size;
