@@ -7,3 +7,5 @@ build/
 
 src/main/gen/
 src/test/resources/RandomRules/
+
+bin/

@@ -1,13 +1,9 @@
 package at.tugraz.ist.compiler;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Paths;
 
 import at.tugraz.ist.compiler.compiler.SourceWriter;
 import at.tugraz.ist.compiler.interpreter.NoPlanFoundException;
-import at.tugraz.ist.compiler.parser.RuleLexer;
-import at.tugraz.ist.compiler.parser.RuleParser;
 import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
 import fr.uga.pddl4j.parser.Message;
 import fr.uga.pddl4j.parser.Parser;
@@ -32,21 +28,6 @@ class RuleBasedCompiler {
         } catch (IOException ex) {
             throw new IllegalStateException("Could not read PDDL file for parsing", ex);
         }
-    }
-
-    private static RuleParser parsFile(String pathToFile) throws IOException {
-        RuleLexer ruleLexer = new RuleLexer(Paths.get(pathToFile));
-        if (ruleLexer.getErrorCount() != 0) {
-            ErrorHandler.Instance().printErrorCount();
-            System.exit(1);
-        }
-
-        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
-        if (ruleParser.getErrorCount() != 0) {
-            ErrorHandler.Instance().printErrorCount();
-            System.exit(1);
-        }
-        return ruleParser;
     }
 
     private static Setting generateSetting(String[] args) {

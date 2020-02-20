@@ -1,16 +1,13 @@
 package at.tugraz.ist.compiler.ruleGenerator;
 
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import at.tugraz.ist.compiler.interpreter.Memory;
-import at.tugraz.ist.compiler.pddl.DomainActionsVisitor;
-import at.tugraz.ist.compiler.pddl.DomainPredicateVisitor;
-import at.tugraz.ist.compiler.pddl.PddlAction;
-import at.tugraz.ist.compiler.pddl.PddlGroundedPredicate;
-import at.tugraz.ist.compiler.pddl.PddlObject;
-import at.tugraz.ist.compiler.pddl.PddlPredicate;
-import at.tugraz.ist.compiler.pddl.ProblemGoalVisitor;
-import at.tugraz.ist.compiler.pddl.ProblemInitVisitor;
-import at.tugraz.ist.compiler.pddl.ProblemObjectVisitor;
-import at.tugraz.ist.compiler.rule.Atom;
 import at.tugraz.ist.compiler.rule.DiagnosticPosition;
 import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
@@ -20,17 +17,8 @@ import fr.uga.pddl4j.parser.Exp;
 import fr.uga.pddl4j.parser.Op;
 import fr.uga.pddl4j.parser.Problem;
 import fr.uga.pddl4j.parser.Symbol;
-import fr.uga.pddl4j.parser.TypedSymbol;
 import fr.uga.pddl4j.parser.Symbol.Kind;
-
-import org.antlr.v4.runtime.tree.ParseTree;
-
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
+import fr.uga.pddl4j.parser.TypedSymbol;
 
 public class RuleGenerator {
     private List<Predicate> predicates = new ArrayList<>();
