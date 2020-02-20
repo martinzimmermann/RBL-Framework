@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SourceWriter {
@@ -64,16 +65,26 @@ public class SourceWriter {
         Charset charset = StandardCharsets.UTF_8;
         String content = new String(Files.readAllBytes(path), charset);
 
-        String rules = buildRuleString(gen.getRules(), deferClassGeneration);
+        String rulesFunctions = buildGenerateRuleFunctions(gen.getRules(), deferClassGeneration);
+        String rulesFunctionCalls = buildGenerateRuleFunctionCalls((int) Math.ceil(gen.getRules().size()/100.0));
         String predicates = buildPredicateString(gen.getMemory());
 
         if(libraryUsed)
             content = content.replaceAll("// <replace with import>", getImports());
 
-        content = content.replaceAll("// <replace with rules>", rules);
+        content = content.replaceAll("// <replace with generateRules>", rulesFunctions);
+        content = content.replaceAll("// <replace with generateRulesX>", rulesFunctionCalls);
         content = content.replaceAll("// <replace with predicates>", predicates);
 
         Files.write(path, content.getBytes(charset));
+    }
+
+    private String buildGenerateRuleFunctionCalls(int size) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < size; i++) {
+            builder.append("        generateRules" + i + "();\n");
+        }
+        return builder.toString();
     }
 
     private String getImports() {
@@ -82,14 +93,26 @@ public class SourceWriter {
                 "import at.tugraz.ist.compiler.rule.*;";
     }
 
-    private String buildRuleString(List<Rule> rules, boolean deferClassGeneration) {
+    private String buildGenerateRuleFunctions(List<Rule> rules, boolean deferClassGeneration) {
         StringBuilder builder = new StringBuilder();
-        for (Rule rule :rules) {
+        int functionNumber = 0;
+        builder.append("    static void generateRules" + functionNumber + "() {\n");
+
+        for (int i = 0; i < rules.size(); i++) {
+            Rule rule = rules.get(i);
             if(deferClassGeneration)
-                builder.append("        rules.add(" + rule.getConstructor() + ");\n");
+            builder.append("        rules.add(" + rule.getConstructor() + ");\n");
             else
-                builder.append("        rules.add(new InterpreterRule("  + rule.getActionConstructor() + ", " + rule.getConstructor() + "));\n");
+            builder.append("        rules.add(new InterpreterRule("  + rule.getActionConstructor() + ", " + rule.getConstructor() + "));\n");
+            
+            if ((i+1) % 100 == 0) {
+                builder.append("    }\n");
+                functionNumber++;
+                builder.append("    static void generateRules" + functionNumber + "() {\n");
+            }
         }
+        
+        builder.append("    }");
         return builder.toString();
     }
 

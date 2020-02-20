@@ -9,11 +9,14 @@ import at.tugraz.ist.compiler.interpreter.goal;
 
 public class Executor extends LibExecutor {
 
+    static List<Rule> rules = new ArrayList<>();
+
+// <replace with generateRules>
+
     static Model generateModel() throws ClassNotFoundException {
         Arrays.asList(); // Just so the import won't get removed at a code cleanup
         new BigDecimal(0); // Just so the import won't get removed at a code cleanup
-        List<Rule> rules = new ArrayList<>();
-// <replace with rules>
+// <replace with generateRulesX>
 
         List<Predicate> predicates = new ArrayList<>();
 // <replace with predicates>
