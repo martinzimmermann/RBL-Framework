@@ -27,10 +27,10 @@ public class InterpreterRule extends Rule {
 
     public boolean execute(Model model) {
         assert (model.getMemory().containsAll(this.getPreconditions()));
-        return action.execute(model);
+        return action.execute(model, this.getParameters());
     }
 
     public void repairMemory(Memory memory) {
-        action.repair(memory);
+        action.repair(memory, this.getParameters());
     }
 }

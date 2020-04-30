@@ -1,10 +1,7 @@
 package at.tugraz.ist.compiler.rule;
 
 import java.math.BigDecimal;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Rule extends Atom implements Comparable<Rule> {
@@ -14,6 +11,7 @@ public class Rule extends Atom implements Comparable<Rule> {
     private final List<Predicate> postConditions;
     private final String goal;
     private final String actionName;
+    private final Map<String, String> parameters;
 
     private Queue<Integer> pass_not_executed = new LinkedList<>();
     private Queue<Integer> fail_not_executed = new LinkedList<>();
@@ -22,7 +20,7 @@ public class Rule extends Atom implements Comparable<Rule> {
 
     private DiagnosticPosition diagnosticPosition;
 
-    public Rule(String action, String goal, List<Predicate> postConditions, List<Predicate> preconditions, DiagnosticPosition diagnosticPosition) {
+    public Rule(String action, String goal, List<Predicate> postConditions, List<Predicate> preconditions, Map<String, String> parameters, DiagnosticPosition diagnosticPosition) {
         if (action == null)
             throw new IllegalArgumentException("action can not be null");
 
@@ -32,9 +30,13 @@ public class Rule extends Atom implements Comparable<Rule> {
         if (preconditions == null)
             throw new IllegalArgumentException("preconditions can not be null");
 
+        if (parameters == null)
+            throw new IllegalArgumentException("preconditions can not be null");
+
         this.postConditions = postConditions;
         this.goal = goal;
         this.preconditions = preconditions;
+        this.parameters = parameters;
         this.actionName = action;
         this.diagnosticPosition = diagnosticPosition;
     }
@@ -42,6 +44,7 @@ public class Rule extends Atom implements Comparable<Rule> {
     public Rule(Rule rule) {
         preconditions = rule.preconditions;
         postConditions = rule.postConditions;
+        parameters = rule.parameters;
         goal = rule.goal;
         actionName = rule.actionName;
         diagnosticPosition = rule.diagnosticPosition;
@@ -53,6 +56,10 @@ public class Rule extends Atom implements Comparable<Rule> {
 
     public List<Predicate> getPostConditions() {
         return postConditions;
+    }
+
+    public Map<String, String> getParameters() {
+        return parameters;
     }
 
     public List<Predicate> getWorldAdditions() {
@@ -204,10 +211,10 @@ public class Rule extends Atom implements Comparable<Rule> {
         builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "})), ");
         params = preconditions.stream().map(p -> p.getConstructor()).collect(Collectors.joining(", "));
         builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "})), ");
+        builder.append("Map.ofEntries(" + parameters.entrySet().stream().map( e -> "entry(\"" + e.getKey() + "\", \""+ e.getValue() + "\")").collect(Collectors.joining(", ")) + "), ");
         builder.append("new DiagnosticPosition(" + diagnosticPosition.getConstructorParameters() + "))");
         return builder.toString();
     }
-
     public DiagnosticPosition getDiagnosticPosition() {
         return diagnosticPosition;
     }
@@ -215,5 +222,4 @@ public class Rule extends Atom implements Comparable<Rule> {
     public String getActionConstructor() {
         return "new " + actionName + "()";
     }
-
 }

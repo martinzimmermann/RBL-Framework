@@ -3,6 +3,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import static java.util.Map.entry;
 
 import at.tugraz.ist.compiler.interpreter.LibExecutor;
 import at.tugraz.ist.compiler.interpreter.goal;

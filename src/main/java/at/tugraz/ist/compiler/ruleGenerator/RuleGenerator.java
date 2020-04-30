@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import at.tugraz.ist.compiler.interpreter.Memory;
@@ -86,7 +87,7 @@ public class RuleGenerator {
                 assertTrue(false);
             }
         }
-        rules.add(new Rule("goal", "goal", new ArrayList<>(), goalCond, new DiagnosticPosition(0, 0, 0, 0, "")));
+        rules.add(new Rule("goal", "goal", new ArrayList<>(), goalCond, new HashMap<>(), new DiagnosticPosition(0, 0, 0, 0, "")));
     }
 
     private List<Rule> getGroundedRule(List<String> objects, Op op) {
@@ -108,7 +109,12 @@ public class RuleGenerator {
             } else {
                 assertTrue(false);
             }
-            rules.add(new Rule(action, null, groundedPostCond, groundedPreCond, new DiagnosticPosition(0, 0, 0, 0, "")));
+            Map<String, String> parameters = new HashMap<String, String>();
+
+            for(Symbol sym : op.getParameters()) {
+                parameters.put(sym.getImage().substring(1), symbolSet.replace(sym.getImage()));
+            }
+            rules.add(new Rule(action, null, groundedPostCond, groundedPreCond, parameters, new DiagnosticPosition(0, 0, 0, 0, "")));
         }
         return rules;
     }

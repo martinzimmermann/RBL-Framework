@@ -53,4 +53,7 @@ public class Memory {
     public void remove(String predicate) {
         predicates.remove(new Predicate(predicate));
     }
+    public void add(String predicate) {
+        predicates.add(new Predicate(predicate));
+    }
 }

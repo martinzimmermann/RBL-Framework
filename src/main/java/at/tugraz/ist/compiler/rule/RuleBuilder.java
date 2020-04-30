@@ -35,7 +35,7 @@ public class RuleBuilder {
         return this;
     }
 
-    public Rule createRule(){
-            return new Rule(action, goal, postConditions, preconditions, diagnosticPosition);
-    }
+    //public Rule createRule(){
+    //        return new Rule(action, goal, postConditions, preconditions, diagnosticPosition);
+    //}
 }
