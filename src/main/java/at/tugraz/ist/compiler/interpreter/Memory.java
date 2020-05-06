@@ -56,4 +56,14 @@ public class Memory {
     public void add(String predicate) {
         predicates.add(new Predicate(predicate));
     }
+
+    public boolean equals(Object anObject) {
+        if (this == anObject) {
+            return true;
+        }
+        if (anObject instanceof Memory) {
+            return  predicates.equals(((Memory) anObject).predicates);
+        }
+        return false;
+    }
 }
