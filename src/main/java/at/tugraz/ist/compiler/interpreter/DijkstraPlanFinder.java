@@ -15,8 +15,40 @@ public class DijkstraPlanFinder extends PlanFinder {
 
     @Override
     public List<Rule> getPlanForGoal(Rule goal, Memory memory, List<Rule> allRules) {
-        List<Rule> plan = getPlanForGoal(goal, null, memory, allRules, new Plan());
-        return plan == null ? null : plan;
+        Node root = new Node();
+        root.memory = new Memory(memory);
+        root.totalWeight = BigDecimal.ZERO;
+        List<Node> nodes = new ArrayList<>();
+        nodes.add(root);
+        PriorityQueue<Node> queue = new PriorityQueue<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            Node current = queue.poll();
+            List<Node> next_nodes = getNodesThatArePossible(current, allRules, nodes);
+            current.visited = true;
+            queue.addAll(next_nodes);
+            //System.out.println("Current: " + (current.connections_in == null ? "root" : current.connections_in.rule.toString()) + " Added: " + next_nodes.stream().map(n -> n.connections_in.rule.toString()).reduce("", (s1, s2) -> s1 + "; " +s2));
+        }
+        //System.out.println("All Rules");
+        //System.out.println(allRules.stream().map(rule -> rule.toString()).reduce("", (s1, s2) -> s1 + "\n " +s2));
+
+        //System.out.println("Nodes");
+        //System.out.println(nodes.stream().map(n -> n.connections_in == null ? "root" : n.connections_in.rule.toString()).reduce("", (s1, s2) -> s1 + "\n " +s2));
+
+        Optional<Node> node = nodes.stream().filter(n -> n.connections_in != null).filter(n -> goal == null ? n.connections_in.rule.hasGoal() : goal == n.connections_in.rule).findFirst();
+        if (node.isPresent()) {
+            Node current = node.get();
+            List<Rule> rules = new ArrayList<>();
+            while (current.connections_in != null) {
+                rules.add(current.connections_in.rule);
+                current = current.connections_in.start;
+            }
+            Collections.reverse(rules);
+            return rules;
+        } else {
+            return null;
+        }
     }
 
     private List<Node> getNodesThatArePossible(Node current, List<Rule> allRules, List<Node> nodes) {
@@ -31,7 +63,6 @@ public class DijkstraPlanFinder extends PlanFinder {
                 n.totalWeight = current.totalWeight.add(rule.getWeight());
                 n.connections_in = con;
                 n.memory = new Memory(current.memory);
-                n.goal = true;
                 nodes.add(n);
                 continue;
             }
@@ -66,44 +97,6 @@ public class DijkstraPlanFinder extends PlanFinder {
         return nextNodes;
     }
 
-    private List<Rule> getPlanForGoal(Rule goal, Rule currentRule, Memory memory, List<Rule> allRules, Plan currentPlan) {
-
-        Node root = new Node();
-        root.memory = new Memory(memory);
-        root.totalWeight = BigDecimal.ZERO;
-        List<Node> nodes = new ArrayList<>();
-        nodes.add(root);
-        PriorityQueue<Node> queue = new PriorityQueue<>();
-        queue.add(root);
-
-        while (!queue.isEmpty()) {
-            Node current = queue.poll();
-            List<Node> next_nodes = getNodesThatArePossible(current, allRules, nodes);
-            current.visited = true;
-            queue.addAll(next_nodes);
-            //System.out.println("Current: " + (current.connections_in == null ? "root" : current.connections_in.rule.toString()) + " Added: " + next_nodes.stream().map(n -> n.connections_in.rule.toString()).reduce("", (s1, s2) -> s1 + "; " +s2));
-        }
-        //System.out.println("All Rules");
-        //System.out.println(allRules.stream().map(rule -> rule.toString()).reduce("", (s1, s2) -> s1 + "\n " +s2));
-
-        //System.out.println("Nodes");
-        //System.out.println(nodes.stream().map(n -> n.connections_in == null ? "root" : n.connections_in.rule.toString()).reduce("", (s1, s2) -> s1 + "\n " +s2));
-
-        Optional<Node> node = nodes.stream().filter(n -> n.goal).findFirst();
-        if (node.isPresent()) {
-            Node current = node.get();
-            List<Rule> rules = new ArrayList<>();
-            while (current.connections_in != null) {
-                rules.add(current.connections_in.rule);
-                current = current.connections_in.start;
-            }
-            Collections.reverse(rules);
-            return rules;
-        } else {
-            return null;
-        }
-    }
-
     class Connection {
         public Node start;
         public Node end;
@@ -120,7 +113,6 @@ public class DijkstraPlanFinder extends PlanFinder {
         public Connection connections_in;
         Memory memory;
         boolean visited = false;
-        boolean goal = false;
 
         @Override
         public int compareTo(Node o) {

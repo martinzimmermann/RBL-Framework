@@ -1,11 +1,18 @@
 package at.tugraz.ist.compiler.interpreter;
 
+import at.tugraz.ist.compiler.rule.DiagnosticPosition;
 import at.tugraz.ist.compiler.rule.InterpreterRule;
+import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
+import fr.uga.pddl4j.parser.Exp;
+import fr.uga.pddl4j.parser.Symbol;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.junit.Assert.assertTrue;
 
 public class LibExecutor {
 
@@ -21,7 +28,38 @@ public class LibExecutor {
         return model;
     }
 
-    public boolean executeOnce() throws NoPlanFoundException {
+    public boolean execute(List<String> goalState) throws NoPlanFoundException {
+
+        List<Predicate> goalCond = new ArrayList<>();
+        for (String pre : goalState) {
+            goalCond.add(new Predicate(pre));
+        }
+
+        InterpreterRule iRule = new InterpreterRule(new goal(), new Rule("goal", "goal", new ArrayList<>(), goalCond, new HashMap<>(), new DiagnosticPosition(0, 0, 0, 0, "")));
+        model.getRules().add(iRule);
+
+        List<Rule> rules = toRules(model.getRules());
+        Memory memory = model.getMemory();
+
+        List<InterpreterRule> plan = toInterpreterRules(planFinder.getPlanForGoal(iRule, memory, rules));
+        getModel().getRules().remove(iRule);
+
+        if (plan == null)
+            throw new NoPlanFoundException();
+
+        boolean success = interpretRules(plan);
+
+        List<InterpreterRule> plan_complement =  new ArrayList<>(model.getRules());
+        plan_complement.removeAll(plan);
+
+        for (Rule rule : plan_complement) {
+            rule.updateRule(!success, false);
+        }
+
+        return success;
+    }
+
+    public boolean execute() throws NoPlanFoundException {
         List<Rule> rules = toRules(model.getRules());
 
         Memory memory = model.getMemory();
@@ -82,9 +120,9 @@ public class LibExecutor {
         return rules == null ? null : new ArrayList<>(rules);
     }
 
-    public void executeNTimes(int n) throws NoPlanFoundException {
-        for (int i = 0; i < n; i++) {
-            executeOnce();
-        }
-    }
+    //public void executeNTimes(int n) throws NoPlanFoundException {
+    //    for (int i = 0; i < n; i++) {
+    //        executeOnce();
+    //    }
+    //}
 }
