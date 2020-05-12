@@ -86,12 +86,29 @@ public class Rule extends Atom implements Comparable<Rule> {
     public String toString() {
         StringBuilder string = new StringBuilder();
 
-        for (Predicate precondition : getPreconditions()) {
-            string.append(precondition.getName()).append(",");
+        string.append(actionName + " ");
+        for (Map.Entry<String,String> entry : getParameters().entrySet()) {
+            string.append("?");
+            string.append(entry.getKey());
+            string.append(" - ");
+            string.append(entry.getValue());
+            string.append(", ");
         }
 
-        if (getPreconditions().size() != 0)
+        if (getParameters().size() != 0) {
             string.deleteCharAt(string.length() - 1);
+            string.deleteCharAt(string.length() - 1);
+        }
+
+        string.append(": ");
+        for (Predicate precondition : getPreconditions()) {
+            string.append(precondition.getName()).append(", ");
+        }
+
+        if (getPreconditions().size() != 0) {
+            string.deleteCharAt(string.length() - 1);
+            string.deleteCharAt(string.length() - 1);
+        }
 
         string.append(" -> ");
 
@@ -105,9 +122,6 @@ public class Rule extends Atom implements Comparable<Rule> {
         if (getWorldDeletions().size() != 0)
             string.deleteCharAt(string.length() - 1);
 
-        string.append((string.charAt(string.length()-1) == ' ' ? "" : " ") + actionName);
-
-        string.append(".");
 
         return string.toString();
     }

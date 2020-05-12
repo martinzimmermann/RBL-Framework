@@ -54,7 +54,7 @@ public class RuleGenerator {
     public RuleGenerator(Domain domain, Problem problem) {
         for (Exp exp : problem.getInit()) {
             if (exp.getAtom().get(0).getKind() == Kind.PREDICATE) {
-                String initGrounded = String.join("_",
+                String initGrounded = String.join(" ",
                         exp.getAtom().stream().map(p -> p.getImage()).collect(Collectors.toList()));
                 predicates.add(new Predicate(initGrounded));
             } else {
@@ -82,7 +82,7 @@ public class RuleGenerator {
                         assertTrue(false);
                     }
                 }
-                goalCond.add(new Predicate(String.join("_", grounded)));
+                goalCond.add(new Predicate(String.join(" ", grounded)));
             } else {
                 assertTrue(false);
             }
@@ -156,7 +156,7 @@ public class RuleGenerator {
                         grounded.add(symbolSet.replace(atom.getImage()));
                     }
                 }
-                groundedCond.add(new Predicate(String.join("_", grounded), deletion));
+                groundedCond.add(new Predicate(String.join(" ", grounded), deletion));
             } else {
                 assertTrue(false);
             }
