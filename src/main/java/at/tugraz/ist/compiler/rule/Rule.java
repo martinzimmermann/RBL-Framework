@@ -13,10 +13,14 @@ public class Rule extends Atom implements Comparable<Rule> {
     private final String actionName;
     private final Map<String, String> parameters;
 
-    private Queue<Integer> pass_not_executed = new LinkedList<>();
-    private Queue<Integer> fail_not_executed = new LinkedList<>();
-    private Queue<Integer> pass_executed = new LinkedList<>();
-    private Queue<Integer> fail_executed = new LinkedList<>();
+    //private Queue<Integer> pass_not_executed = new LinkedList<>();
+    //private Queue<Integer> fail_not_executed = new LinkedList<>();
+    //private Queue<Integer> pass_executed = new LinkedList<>();
+    //private Queue<Integer> fail_executed = new LinkedList<>();
+    private int pass_not_executed = 0;
+    private int fail_not_executed = 0;
+    private int pass_executed = 0;
+    private int fail_executed = 0;
 
     private DiagnosticPosition diagnosticPosition;
 
@@ -163,10 +167,10 @@ public class Rule extends Atom implements Comparable<Rule> {
     }
 
     public BigDecimal getWeight() {
-        int fe = fail_executed.isEmpty() ? 0 : fail_executed.stream().reduce((a,b)->a+b).get();
-        int fn = fail_not_executed.isEmpty() ? 0 : fail_not_executed.stream().reduce((a,b)->a+b).get();
-        int pe = pass_executed.isEmpty() ? 0 : pass_executed.stream().reduce((a,b)->a+b).get();
-        int pn = pass_not_executed.isEmpty() ? 0 : pass_not_executed.stream().reduce((a,b)->a+b).get();
+        int fe = fail_executed; //.isEmpty() ? 0 : fail_executed.stream().reduce((a,b)->a+b).get();
+        int fn = fail_not_executed; //.isEmpty() ? 0 : fail_not_executed.stream().reduce((a,b)->a+b).get();
+        int pe = pass_executed; //.isEmpty() ? 0 : pass_executed.stream().reduce((a,b)->a+b).get();
+        int pn = pass_not_executed; //.isEmpty() ? 0 : pass_not_executed.stream().reduce((a,b)->a+b).get();
 
         try {
             // Ochiai
@@ -189,24 +193,32 @@ public class Rule extends Atom implements Comparable<Rule> {
 
     public void updateRule(boolean failed, boolean executed) {
         if(failed  && executed)
-            fail_executed.add(1);
+            fail_executed += 1;
+            //fail_executed.add(1);
         else
-            fail_executed.add(0);
+            fail_executed += 0;
+            //fail_executed.add(0);
 
         if(failed  && !executed)
-            fail_not_executed.add(1);
+            fail_not_executed += 1;
+            //fail_not_executed.add(1);
         else
-            fail_not_executed.add(0);
+            fail_not_executed += 0;
+            //fail_not_executed.add(0);
 
         if(!failed  && executed)
-            pass_executed.add(1);
+            pass_executed += 1;
+            //pass_executed.add(1);
         else
-            pass_executed.add(0);
+            pass_executed += 0;
+            //pass_executed.add(0);
 
         if(!failed  && !executed)
-            pass_not_executed.add(1);
+            pass_not_executed += 1;
+            //pass_not_executed.add(1);
         else
-            pass_not_executed.add(0);
+            pass_not_executed += 0;
+            //pass_not_executed.add(0);
 
         /*if(fail_executed.size() > 20) {
             fail_executed.remove();

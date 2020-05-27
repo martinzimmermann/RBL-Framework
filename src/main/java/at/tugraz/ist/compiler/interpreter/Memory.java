@@ -3,26 +3,23 @@ package at.tugraz.ist.compiler.interpreter;
 import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Memory {
 
-    private final Set<Predicate> start_predicates;
-    private Set<Predicate> predicates;
+    private final SortedSet<Predicate> start_predicates;
+    private SortedSet<Predicate> predicates;
 
     public Memory(List<Predicate> predicates) {
 
-        this.predicates = new HashSet<>(predicates);
-        this.start_predicates = new HashSet<>(this.predicates);
+        this.predicates = new TreeSet<>(predicates);
+        this.start_predicates = new TreeSet<>(this.predicates);
     }
 
     public Memory(Memory memory) {
-        this.predicates = new HashSet<>(memory.predicates);
-        this.start_predicates = new HashSet<>(memory.start_predicates);
+        this.predicates = new TreeSet<>(memory.predicates);
+        this.start_predicates = new TreeSet<>(memory.start_predicates);
     }
 
     public boolean contains(Predicate precondition) {
@@ -33,7 +30,7 @@ public class Memory {
         return predicates.containsAll(preconditions);
     }
 
-    public Set<Predicate> getAllPredicates() {
+    public SortedSet<Predicate> getAllPredicates() {
         return predicates;
     }
 
@@ -42,12 +39,12 @@ public class Memory {
             if(pred.isAddition())
                 predicates.add(pred);
             else
-                predicates.remove(pred);
+                predicates.remove(new Predicate(pred.getName()));
         }
     }
 
     public void reset() {
-        this.predicates = new HashSet<>(start_predicates);
+        this.predicates = new TreeSet<>(start_predicates);
     }
 
     public void remove(String predicate) {
@@ -65,5 +62,10 @@ public class Memory {
             return  predicates.equals(((Memory) anObject).predicates);
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Memory{" + predicates.stream().map(p -> p.toString()).reduce("", (s1, s2) -> s1 + ", " + s2) + "}";
     }
 }

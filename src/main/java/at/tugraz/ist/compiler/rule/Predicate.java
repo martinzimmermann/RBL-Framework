@@ -1,6 +1,6 @@
 package at.tugraz.ist.compiler.rule;
 
-public class Predicate extends Atom {
+public class Predicate extends Atom implements Comparable<Predicate> {
 
     private final String name;
     private final Boolean deletion;
@@ -48,5 +48,10 @@ public class Predicate extends Atom {
 
     public String getConstructor() {
         return "new Predicate(\"" + name + "\", " + deletion + ")";
+    }
+
+    @Override
+    public int compareTo(Predicate o) {
+        return this.toString().compareTo(o.toString());
     }
 }

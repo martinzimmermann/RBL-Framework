@@ -1,5 +1,6 @@
 package at.tugraz.ist.compiler.interpreter;
 
+import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
 import java.math.BigDecimal;
@@ -25,10 +26,12 @@ public class DijkstraPlanFinder extends PlanFinder {
 
         while (!queue.isEmpty()) {
             Node current = queue.poll();
+            if(current.visited)
+                continue;
             List<Node> next_nodes = getNodesThatArePossible(current, allRules, nodes);
             current.visited = true;
             queue.addAll(next_nodes);
-            //System.out.println("Current: " + (current.connections_in == null ? "root" : current.connections_in.rule.toString()) + " Added: " + next_nodes.stream().map(n -> n.connections_in.rule.toString()).reduce("", (s1, s2) -> s1 + "; " +s2));
+            //System.out.println("Current: " + current.memory.toString() + " Added: \n" + next_nodes.stream().map(n -> n.memory.toString()).reduce("", (s1, s2) -> s1 + "\n" +s2));
         }
         //System.out.println("All Rules");
         //System.out.println(allRules.stream().map(rule -> rule.toString()).reduce("", (s1, s2) -> s1 + "\n " +s2));
@@ -52,20 +55,25 @@ public class DijkstraPlanFinder extends PlanFinder {
     }
 
     private List<Node> getNodesThatArePossible(Node current, List<Rule> allRules, List<Node> nodes) {
+        Set<Predicate> current_memory = current.memory.getAllPredicates();
         List<Rule> rules = allRules.stream()
-                .filter(rule -> current.memory.getAllPredicates().containsAll(rule.getPreconditions()))
+                .filter(rule -> current_memory.containsAll(rule.getPreconditions()))
                 .collect(Collectors.toList());
         List<Node> nextNodes = new ArrayList<>();
         for(Rule rule : rules) {
             if(rule.hasGoal()) {
+                if(rule.getPreconditions().isEmpty())
+                    continue; // TODO: Quickfix till real goal states are implemented
                 Node n = new Node();
                 Connection con = new Connection(current, n, rule);
                 n.totalWeight = current.totalWeight.add(rule.getWeight());
                 n.connections_in = con;
                 n.memory = new Memory(current.memory);
+                n.visited = true;
                 nodes.add(n);
                 continue;
             }
+
 
             Memory altered_memory = new Memory(current.memory);
             altered_memory.update(rule);
