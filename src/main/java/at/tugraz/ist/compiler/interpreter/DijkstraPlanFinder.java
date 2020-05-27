@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 public class DijkstraPlanFinder extends PlanFinder {
 
     @Override
-    public List<Rule> getAnyPlan(Memory memory, List<Rule> allRules) {
-        return getPlanForGoal(null, memory, allRules); // plan couldn't be fulfilled on this path
+    public List<Rule> getAnyPlan(Memory memory, RulesRepository rulesRepository) {
+        return getPlanForGoal(null, memory, rulesRepository); // plan couldn't be fulfilled on this path
     }
 
     @Override
-    public List<Rule> getPlanForGoal(Rule goal, Memory memory, List<Rule> allRules) {
+    public List<Rule> getPlanForGoal(Rule goal, Memory memory, RulesRepository rulesRepository) {
         Node root = new Node();
         root.memory = new Memory(memory);
         root.totalWeight = BigDecimal.ZERO;
@@ -28,7 +28,7 @@ public class DijkstraPlanFinder extends PlanFinder {
             Node current = queue.poll();
             if(current.visited)
                 continue;
-            List<Node> next_nodes = getNodesThatArePossible(current, allRules, nodes);
+            List<Node> next_nodes = getNodesThatArePossible(current, rulesRepository, nodes);
             current.visited = true;
             queue.addAll(next_nodes);
             //System.out.println("Current: " + current.memory.toString() + " Added: \n" + next_nodes.stream().map(n -> n.memory.toString()).reduce("", (s1, s2) -> s1 + "\n" +s2));
@@ -54,11 +54,9 @@ public class DijkstraPlanFinder extends PlanFinder {
         }
     }
 
-    private List<Node> getNodesThatArePossible(Node current, List<Rule> allRules, List<Node> nodes) {
+    private List<Node> getNodesThatArePossible(Node current, RulesRepository rulesRepository, List<Node> nodes) {
         Set<Predicate> current_memory = current.memory.getAllPredicates();
-        List<Rule> rules = allRules.stream()
-                .filter(rule -> current_memory.containsAll(rule.getPreconditions()))
-                .collect(Collectors.toList());
+        List<Rule> rules = rulesRepository.getPossibleRules(current_memory);
         List<Node> nextNodes = new ArrayList<>();
         for(Rule rule : rules) {
             if(rule.hasGoal()) {

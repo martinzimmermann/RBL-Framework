@@ -11,11 +11,13 @@ import java.util.stream.Collectors;
 public class Model {
 
     private final Memory memory;
-    private final List<InterpreterRule> rules;
+    private final RulesRepository rules;
+    //private final List<InterpreterRule> rules;
 
     public Model(Memory memory, List<Rule> rules) {
         this.memory = memory;
-        if(rules.stream().allMatch(r -> r instanceof InterpreterRule))
+        this.rules = new RulesRepository(rules);
+        /*if(rules.stream().allMatch(r -> r instanceof InterpreterRule))
             this.rules = rules.stream().map(r -> (InterpreterRule)r).collect(Collectors.toList());
         else {
             this.rules = new ArrayList<>();
@@ -26,14 +28,14 @@ public class Model {
                     ErrorHandler.Instance().reportError(ErrorHandler.Type.Interpreter, rule.getDiagnosticPosition(), "Class for action \"" + rule.getAction() + "\" could not be found");
                 }
             }
-        }
+        }*/
     }
 
     public Memory getMemory() {
         return memory;
     }
 
-    public List<InterpreterRule> getRules() {
+    public RulesRepository getRulesRepository() {
         return rules;
     }
 }

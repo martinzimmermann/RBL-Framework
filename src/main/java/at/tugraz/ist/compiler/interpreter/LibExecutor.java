@@ -36,20 +36,20 @@ public class LibExecutor {
         }
 
         InterpreterRule iRule = new InterpreterRule(new goal(), new Rule("goal", "goal", new ArrayList<>(), goalCond, new HashMap<>(), new DiagnosticPosition(0, 0, 0, 0, "")));
-        model.getRules().add(iRule);
+        model.getRulesRepository().add(iRule);
 
-        List<Rule> rules = toRules(model.getRules());
         Memory memory = model.getMemory();
+        RulesRepository repository = model.getRulesRepository();
 
-        List<InterpreterRule> plan = toInterpreterRules(planFinder.getPlanForGoal(iRule, memory, rules));
-        getModel().getRules().remove(iRule);
+        List<InterpreterRule> plan = toInterpreterRules(planFinder.getPlanForGoal(iRule, memory, repository));
+        repository.remove(iRule);
 
         if (plan == null)
             throw new NoPlanFoundException();
 
         boolean success = interpretRules(plan);
 
-        List<InterpreterRule> plan_complement =  new ArrayList<>(model.getRules());
+        List<Rule> plan_complement = repository.getRules();
         plan_complement.removeAll(plan);
 
         for (Rule rule : plan_complement) {
@@ -60,18 +60,18 @@ public class LibExecutor {
     }
 
     public boolean execute() throws NoPlanFoundException {
-        List<Rule> rules = toRules(model.getRules());
 
         Memory memory = model.getMemory();
+        RulesRepository repository = model.getRulesRepository();
 
-        List<InterpreterRule> plan = toInterpreterRules(planFinder.getAnyPlan(memory, rules));
+        List<InterpreterRule> plan = toInterpreterRules(planFinder.getAnyPlan(memory, repository));
 
         if (plan == null)
             throw new NoPlanFoundException();
 
         boolean success = interpretRules(plan);
 
-        List<InterpreterRule> plan_complement =  new ArrayList<>(model.getRules());
+        List<Rule> plan_complement = repository.getRules();
         plan_complement.removeAll(plan);
 
         for (Rule rule : plan_complement) {

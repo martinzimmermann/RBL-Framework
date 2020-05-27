@@ -1,24 +1,21 @@
 package at.tugraz.ist.compiler.interpreter;
 
-import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class BestPlanFinder extends PlanFinder {
 
     @Override
-    public List<Rule> getAnyPlan(Memory memory, List<Rule> allRules) {
-        return getPlanForGoal(null, memory, allRules);
+    public List<Rule> getAnyPlan(Memory memory, RulesRepository rulesRepository) {
+        return getPlanForGoal(null, memory, rulesRepository);
     }
 
     @Override
-    public List<Rule> getPlanForGoal(Rule goal, Memory memory, List<Rule> allRules) {
+    public List<Rule> getPlanForGoal(Rule goal, Memory memory, RulesRepository allRules) {
         List<Plan> plans = getPlansForGoal(goal, null, memory, allRules, new Plan());
 
         if (plans.size() == 0)

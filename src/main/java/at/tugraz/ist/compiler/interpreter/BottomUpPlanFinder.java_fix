@@ -1,14 +1,10 @@
 package at.tugraz.ist.compiler.interpreter;
 
-import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class BottomUpPlanFinder extends PlanFinder {
 
@@ -41,14 +37,14 @@ public class BottomUpPlanFinder extends PlanFinder {
     }
 
     @Override
-    public List<Rule> getAnyPlan(Memory memory, List<Rule> allRules) {
-        List<Rule> goals = getGoalRules(allRules);
+    public List<Rule> getAnyPlan(Memory memory, RulesRepository rulesRepository) {
+        List<Rule> goals = getGoalRules(rulesRepository);
         if (goals.size() == 0)
             return null;
 
         goals.sort(Rule::compareTo);
 
-        List<Rule> plan = getPlanForGoalBottomUp(goals.get(0), memory, allRules, new Plan());
+        List<Rule> plan = getPlanForGoalBottomUp(goals.get(0), memory, rulesRepository, new Plan());
         if (plan == null)
             return null;
         Collections.reverse(plan);
@@ -56,7 +52,7 @@ public class BottomUpPlanFinder extends PlanFinder {
     }
 
     @Override
-    public List<Rule> getPlanForGoal(Rule goal, Memory memory, List<Rule> allRules) {
+    public List<Rule> getPlanForGoal(Rule goal, Memory memory, RulesRepository allRules) {
         List<Rule> plan = getPlanForGoalBottomUp(goal, memory, allRules, new Plan());
         if (plan == null)
             return null;

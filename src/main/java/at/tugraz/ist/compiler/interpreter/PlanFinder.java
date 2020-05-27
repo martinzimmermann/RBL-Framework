@@ -10,7 +10,7 @@ public abstract class PlanFinder {
         return allRules.stream().filter(Rule::hasGoal).collect(Collectors.toList());
     }
 
-    public abstract List<Rule> getAnyPlan(Memory memory, List<Rule> allRules);
-    public abstract List<Rule> getPlanForGoal(Rule goal, Memory memory, List<Rule> allRules);
+    public abstract List<Rule> getAnyPlan(Memory memory, RulesRepository rulesRepository);
+    public abstract List<Rule> getPlanForGoal(Rule goal, Memory memory, RulesRepository rulesRepository);
 
 }
