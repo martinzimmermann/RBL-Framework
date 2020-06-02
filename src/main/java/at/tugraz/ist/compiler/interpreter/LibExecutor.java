@@ -53,7 +53,7 @@ public class LibExecutor {
         plan_complement.removeAll(plan);
 
         for (Rule rule : plan_complement) {
-            rule.updateRule(!success, false);
+            rule.updateRule(!success, false, false);
         }
 
         return success;
@@ -75,7 +75,7 @@ public class LibExecutor {
         plan_complement.removeAll(plan);
 
         for (Rule rule : plan_complement) {
-            rule.updateRule(!success, false);
+            rule.updateRule(!success, false, false);
         }
 
         return success;
@@ -100,12 +100,12 @@ public class LibExecutor {
         int count = 0;
         for (InterpreterRule rule : plan) {
             if (success)
-                rule.updateRule(false, true);
+                rule.updateRule(false, true, true);
             else
                 if (count <= failed_rule)
-                    rule.updateRule(true, true);
+                    rule.updateRule(true, true, count == failed_rule ? true : false);
                 else
-                    rule.updateRule(true, false);
+                    rule.updateRule(true, false, false);
             count++;
         }
 

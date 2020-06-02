@@ -17,10 +17,10 @@ public class Rule extends Atom implements Comparable<Rule> {
     //private Queue<Integer> fail_not_executed = new LinkedList<>();
     //private Queue<Integer> pass_executed = new LinkedList<>();
     //private Queue<Integer> fail_executed = new LinkedList<>();
-    private int pass_not_executed = 0;
-    private int fail_not_executed = 0;
-    private int pass_executed = 0;
-    private int fail_executed = 0;
+    private double pass_not_executed = 0;
+    private double fail_not_executed = 0;
+    private double pass_executed = 0;
+    private double fail_executed = 0;
 
     private DiagnosticPosition diagnosticPosition;
 
@@ -167,10 +167,10 @@ public class Rule extends Atom implements Comparable<Rule> {
     }
 
     public BigDecimal getWeight() {
-        int fe = fail_executed; //.isEmpty() ? 0 : fail_executed.stream().reduce((a,b)->a+b).get();
-        int fn = fail_not_executed; //.isEmpty() ? 0 : fail_not_executed.stream().reduce((a,b)->a+b).get();
-        int pe = pass_executed; //.isEmpty() ? 0 : pass_executed.stream().reduce((a,b)->a+b).get();
-        int pn = pass_not_executed; //.isEmpty() ? 0 : pass_not_executed.stream().reduce((a,b)->a+b).get();
+        double fe = fail_executed; //.isEmpty() ? 0 : fail_executed.stream().reduce((a,b)->a+b).get();
+        double fn = fail_not_executed; //.isEmpty() ? 0 : fail_not_executed.stream().reduce((a,b)->a+b).get();
+        double pe = pass_executed; //.isEmpty() ? 0 : pass_executed.stream().reduce((a,b)->a+b).get();
+        double pn = pass_not_executed; //.isEmpty() ? 0 : pass_not_executed.stream().reduce((a,b)->a+b).get();
 
         try {
             // Ochiai
@@ -187,13 +187,13 @@ public class Rule extends Atom implements Comparable<Rule> {
             //return new BigDecimal((1.0 * (fe + pn)) / 1.0 * (fe + fn + pe + pn));
         }
         catch (NumberFormatException e) {
-            return new BigDecimal(0.00000000001);
+            return new BigDecimal(0.5);
         }
     }
 
-    public void updateRule(boolean failed, boolean executed) {
+    public void updateRule(boolean failed, boolean executed, boolean last) {
         if(failed  && executed)
-            fail_executed += 1;
+            fail_executed += last ? 1 : 0.9;
             //fail_executed.add(1);
         else
             fail_executed += 0;
@@ -207,7 +207,7 @@ public class Rule extends Atom implements Comparable<Rule> {
             //fail_not_executed.add(0);
 
         if(!failed  && executed)
-            pass_executed += 1;
+            pass_executed += last ? 1 : 0.9;
             //pass_executed.add(1);
         else
             pass_executed += 0;

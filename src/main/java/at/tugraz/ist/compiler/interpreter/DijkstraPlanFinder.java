@@ -64,7 +64,7 @@ public class DijkstraPlanFinder extends PlanFinder {
                     continue; // TODO: Quickfix till real goal states are implemented
                 Node n = new Node();
                 Connection con = new Connection(current, n, rule);
-                n.totalWeight = current.totalWeight.add(rule.getWeight());
+                n.totalWeight = current.totalWeight.add(rule.getWeight()).multiply(new BigDecimal(0.5));
                 n.connections_in = con;
                 n.memory = new Memory(current.memory);
                 n.visited = true;
@@ -92,10 +92,10 @@ public class DijkstraPlanFinder extends PlanFinder {
                 continue;
 
             if (((n.totalWeight == null)
-                    || (n.totalWeight.compareTo(current.totalWeight.add(rule.getWeight()))) == 1)) {
+                    || (n.totalWeight.compareTo(current.totalWeight.add(rule.getWeight()).multiply(new BigDecimal(0.5)))) == 1)) {
 
                 Connection con = new Connection(current, n, rule);
-                n.totalWeight = current.totalWeight.add(rule.getWeight());
+                n.totalWeight = current.totalWeight.add(rule.getWeight()).multiply(new BigDecimal(0.5));
                 n.connections_in = con;
             }
             nextNodes.add(n);
