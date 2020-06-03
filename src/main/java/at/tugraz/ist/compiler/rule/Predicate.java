@@ -38,7 +38,7 @@ public class Predicate extends Atom implements Comparable<Predicate> {
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return name.hashCode() + deletion.hashCode();
     }
 
     @Override

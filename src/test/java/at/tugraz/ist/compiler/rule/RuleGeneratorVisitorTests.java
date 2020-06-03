@@ -5,12 +5,11 @@ import at.tugraz.ist.compiler.interpreter.ClassCompiler;
 import at.tugraz.ist.compiler.interpreter.Memory;
 import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
-import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
+import at.tugraz.ist.compiler.ruleGenerator.ModelGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 import static junit.framework.TestCase.*;
@@ -26,7 +25,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
 
         Memory memory = gen.getMemory();
         Assert.assertNotNull(memory);
@@ -61,7 +60,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
 
         List<Rule> atoms = gen.getRules();
         Assert.assertNotNull(atoms);
@@ -87,7 +86,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
 
         List<Rule> rules = gen.getRules();
         Assert.assertNotNull(rules);
@@ -113,7 +112,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
 
         List<Rule> atoms = gen.getRules();
         Assert.assertNotNull(atoms);
@@ -140,7 +139,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
 
         List<Rule> atoms = gen.getRules();
         Assert.assertNotNull(atoms);
@@ -166,7 +165,7 @@ public class RuleGeneratorVisitorTests {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
 
         List<Rule> atoms = gen.getRules();
         Assert.assertNotNull(atoms);

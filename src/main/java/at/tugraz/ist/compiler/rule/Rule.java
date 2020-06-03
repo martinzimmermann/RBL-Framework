@@ -1,15 +1,16 @@
 package at.tugraz.ist.compiler.rule;
 
+import at.tugraz.ist.compiler.interpreter.Memory;
+import at.tugraz.ist.compiler.interpreter.Model;
+
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Rule extends Atom implements Comparable<Rule> {
 
-
-    private final List<Predicate> preconditions;
-    private final List<Predicate> postConditions;
-    private final String goal;
+    private final SortedSet<Predicate> preconditions;
+    private final SortedSet<Predicate> postConditions;
     private final String actionName;
     private final Map<String, String> parameters;
 
@@ -22,9 +23,7 @@ public class Rule extends Atom implements Comparable<Rule> {
     private double pass_executed = 0;
     private double fail_executed = 0;
 
-    private DiagnosticPosition diagnosticPosition;
-
-    public Rule(String action, String goal, List<Predicate> postConditions, List<Predicate> preconditions, Map<String, String> parameters, DiagnosticPosition diagnosticPosition) {
+    public Rule(String action, SortedSet<Predicate> postConditions, SortedSet<Predicate> preconditions, Map<String, String> parameters) {
         if (action == null)
             throw new IllegalArgumentException("action can not be null");
 
@@ -38,27 +37,23 @@ public class Rule extends Atom implements Comparable<Rule> {
             throw new IllegalArgumentException("preconditions can not be null");
 
         this.postConditions = postConditions;
-        this.goal = goal;
         this.preconditions = preconditions;
         this.parameters = parameters;
         this.actionName = action;
-        this.diagnosticPosition = diagnosticPosition;
     }
 
     public Rule(Rule rule) {
         preconditions = rule.preconditions;
         postConditions = rule.postConditions;
         parameters = rule.parameters;
-        goal = rule.goal;
         actionName = rule.actionName;
-        diagnosticPosition = rule.diagnosticPosition;
     }
 
-    public List<Predicate> getPreconditions() {
+    public SortedSet<Predicate> getPreconditions() {
         return preconditions;
     }
 
-    public List<Predicate> getPostConditions() {
+    public SortedSet<Predicate> getPostConditions() {
         return postConditions;
     }
 
@@ -68,14 +63,6 @@ public class Rule extends Atom implements Comparable<Rule> {
 
     public List<Predicate> getWorldAdditions() {
         return postConditions.stream().filter(p -> p.isAddition()).collect(Collectors.toList());
-    }
-
-    public String getGoal() {
-        return goal;
-    }
-
-    public boolean hasGoal() {
-        return goal != null;
     }
 
     public List<Predicate> getWorldDeletions() {
@@ -116,9 +103,6 @@ public class Rule extends Atom implements Comparable<Rule> {
 
         string.append(" -> ");
 
-        if (hasGoal())
-            string.append("#").append(getGoal()).append(" ");
-
         for (Predicate deletion : this.getPostConditions()) {
             string.append(deletion.toString()).append(" ");
         }
@@ -139,23 +123,8 @@ public class Rule extends Atom implements Comparable<Rule> {
 
         if (!preconditions.equals(rule.preconditions)) return false;
         if (!postConditions.equals(rule.postConditions)) return false;
-        if (!Objects.equals(goal, rule.goal)) return false;
         return actionName.equals(rule.actionName);
     }
-
-    /*
-    @Override
-    public int hashCode() {
-        int result;
-        long temp = 0;
-        result = preconditions.hashCode();
-        result = 31 * result + postConditions.hashCode();
-        result = 31 * result + (goal != null ? goal.hashCode() : 0);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + actionName.hashCode();
-        return result;
-    }
-    */
 
     @Override
     public int compareTo(Rule o) {
@@ -228,24 +197,13 @@ public class Rule extends Atom implements Comparable<Rule> {
         }*/
     }
 
-    public String getConstructor() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("new Rule(");
-        builder.append("\"" + actionName + "\", ");
-        builder.append((goal == null ? "null" : "\"" + goal + "\"") + ", ");
-        String params = postConditions.stream().map(p -> p.getConstructor()).collect(Collectors.joining(", "));
-        builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "})), ");
-        params = preconditions.stream().map(p -> p.getConstructor()).collect(Collectors.joining(", "));
-        builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "})), ");
-        builder.append("Map.ofEntries(" + parameters.entrySet().stream().map( e -> "entry(\"" + e.getKey() + "\", \""+ e.getValue() + "\")").collect(Collectors.joining(", ")) + "), ");
-        builder.append("new DiagnosticPosition(" + diagnosticPosition.getConstructorParameters() + "))");
-        return builder.toString();
-    }
-    public DiagnosticPosition getDiagnosticPosition() {
-        return diagnosticPosition;
+    public boolean execute(Model model) {
+        //FIXME
+        //assert (model.getMemory().containsAll(this.getPreconditions()));
+        return true; //action.execute(model, this.getParameters());
     }
 
-    public String getActionConstructor() {
-        return "new " + actionName + "()";
+    public void repairMemory(Memory memory) {
+        return; //action.repair(memory, this.getParameters());
     }
 }

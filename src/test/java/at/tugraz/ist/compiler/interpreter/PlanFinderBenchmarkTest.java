@@ -4,7 +4,7 @@ import at.tugraz.ist.compiler.helper.TestHelper;
 import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
 import at.tugraz.ist.compiler.rule.Rule;
-import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
+import at.tugraz.ist.compiler.ruleGenerator.ModelGenerator;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -159,7 +159,7 @@ public class PlanFinderBenchmarkTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
 
         Memory memory = gen.getMemory();
         List<Rule> rules = gen.getRules();

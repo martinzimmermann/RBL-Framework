@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import static java.util.Map.entry;
 
-import at.tugraz.ist.compiler.interpreter.LibExecutor;
+import at.tugraz.ist.compiler.interpreter.Executor;
 import at.tugraz.ist.compiler.interpreter.goal;
 
 public class Executor extends LibExecutor {

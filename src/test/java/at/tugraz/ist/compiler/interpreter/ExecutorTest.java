@@ -2,7 +2,7 @@ package at.tugraz.ist.compiler.interpreter;
 
 import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
-import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
+import at.tugraz.ist.compiler.ruleGenerator.ModelGenerator;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -18,11 +18,11 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        Executor executor = new Executor(model, new BottomUpPlanFinder());
         executor.executeOnce();
     }
 
@@ -35,10 +35,10 @@ public class ExecutorTest {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        Executor executor = new Executor(model, new BottomUpPlanFinder());
         executor.executeNTimes(100);
     }
 
@@ -50,11 +50,11 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
 
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        Executor executor = new Executor(model, new BottomUpPlanFinder());
         executor.executeOnce();
     }
 
@@ -67,11 +67,11 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        Executor executor = new Executor(model, new BottomUpPlanFinder());
         executor.executeOnce();
     }
 
@@ -85,11 +85,11 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-        LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+        Executor executor = new Executor(model, new BottomUpPlanFinder());
         executor.executeOnce();
     }
 
@@ -106,11 +106,11 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+         Executor executor = new Executor(model, new BottomUpPlanFinder());
         executor.executeOnce();
     }
 
@@ -123,11 +123,11 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+         Executor executor = new Executor(model, new BottomUpPlanFinder());
         executor.executeOnce();
     }
 
@@ -140,11 +140,11 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+         Executor executor = new Executor(model, new BottomUpPlanFinder());
         executor.executeOnce();
     }
 
@@ -157,11 +157,11 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+         Executor executor = new Executor(model, new BottomUpPlanFinder());
         executor.executeOnce();
     }
 
@@ -176,11 +176,11 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+         Executor executor = new Executor(model, new BottomUpPlanFinder());
         executor.executeNTimes(2);
     }
 
@@ -191,11 +191,11 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+         Executor executor = new Executor(model, new BottomUpPlanFinder());
         executor.executeOnce();
     }
 
@@ -205,11 +205,11 @@ public class ExecutorTest {
         assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
         ClassCompiler.compileClasses("src/test/resources/Actions");
         Model model = new Model(gen.getMemory(), gen.getRules());
 
-         LibExecutor executor = new LibExecutor(model, new BottomUpPlanFinder());
+         Executor executor = new Executor(model, new BottomUpPlanFinder());
         executor.executeOnce();
     }
 }

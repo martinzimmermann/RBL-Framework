@@ -3,11 +3,10 @@ package at.tugraz.ist.compiler.rule;
 import at.tugraz.ist.compiler.interpreter.ClassCompiler;
 import at.tugraz.ist.compiler.parser.RuleLexer;
 import at.tugraz.ist.compiler.parser.RuleParser;
-import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
+import at.tugraz.ist.compiler.ruleGenerator.ModelGenerator;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -89,7 +88,7 @@ public class RuleTest {
         RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
         assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
         ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
+        ModelGenerator gen = new ModelGenerator(ruleParser.getParseTree());
         List<Rule> rules = gen.getRules();
         assertNotNull(rules);
         assertEquals("Should contain one rule", 1,  rules.size());

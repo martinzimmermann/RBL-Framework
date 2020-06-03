@@ -10,12 +10,7 @@ import java.util.stream.Collectors;
 public class DijkstraPlanFinder extends PlanFinder {
 
     @Override
-    public List<Rule> getAnyPlan(Memory memory, RulesRepository rulesRepository) {
-        return getPlanForGoal(null, memory, rulesRepository); // plan couldn't be fulfilled on this path
-    }
-
-    @Override
-    public List<Rule> getPlanForGoal(Rule goal, Memory memory, RulesRepository rulesRepository) {
+    public List<Rule> getPlanForGoal(List<Predicate> goalState, Memory memory, Model model) {
         Node root = new Node();
         root.memory = new Memory(memory);
         root.totalWeight = BigDecimal.ZERO;
@@ -28,18 +23,12 @@ public class DijkstraPlanFinder extends PlanFinder {
             Node current = queue.poll();
             if(current.visited)
                 continue;
-            List<Node> next_nodes = getNodesThatArePossible(current, rulesRepository, nodes);
+            List<Node> next_nodes = getNodesThatArePossible(current, model, nodes);
             current.visited = true;
             queue.addAll(next_nodes);
-            //System.out.println("Current: " + current.memory.toString() + " Added: \n" + next_nodes.stream().map(n -> n.memory.toString()).reduce("", (s1, s2) -> s1 + "\n" +s2));
         }
-        //System.out.println("All Rules");
-        //System.out.println(allRules.stream().map(rule -> rule.toString()).reduce("", (s1, s2) -> s1 + "\n " +s2));
 
-        //System.out.println("Nodes");
-        //System.out.println(nodes.stream().map(n -> n.connections_in == null ? "root" : n.connections_in.rule.toString()).reduce("", (s1, s2) -> s1 + "\n " +s2));
-
-        Optional<Node> node = nodes.stream().filter(n -> n.connections_in != null).filter(n -> goal == null ? n.connections_in.rule.hasGoal() : goal == n.connections_in.rule).findFirst();
+        Optional<Node> node = null; //FIXME nodes.stream().filter(n -> n.connections_in != null).filter(n -> goal == null ? n.connections_in.rule.hasGoal() : goal == n.connections_in.rule).findFirst();
         if (node.isPresent()) {
             Node current = node.get();
             List<Rule> rules = new ArrayList<>();
@@ -54,12 +43,11 @@ public class DijkstraPlanFinder extends PlanFinder {
         }
     }
 
-    private List<Node> getNodesThatArePossible(Node current, RulesRepository rulesRepository, List<Node> nodes) {
-        Set<Predicate> current_memory = current.memory.getAllPredicates();
-        List<Rule> rules = rulesRepository.getPossibleRules(current_memory);
+    private List<Node> getNodesThatArePossible(Node current, Model model, List<Node> nodes) {
+        List<Rule> rules = model.getPossibleRules(current.memory);
         List<Node> nextNodes = new ArrayList<>();
         for(Rule rule : rules) {
-            if(rule.hasGoal()) {
+            if( true ) { //FIXME rule.hasGoal()) {
                 if(rule.getPreconditions().isEmpty())
                     continue; // TODO: Quickfix till real goal states are implemented
                 Node n = new Node();

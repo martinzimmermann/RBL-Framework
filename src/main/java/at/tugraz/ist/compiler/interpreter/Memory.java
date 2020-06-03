@@ -8,18 +8,14 @@ import java.util.stream.Collectors;
 
 public class Memory {
 
-    private final SortedSet<Predicate> start_predicates;
     private SortedSet<Predicate> predicates;
 
-    public Memory(List<Predicate> predicates) {
-
+    public Memory(SortedSet<Predicate> predicates) {
         this.predicates = new TreeSet<>(predicates);
-        this.start_predicates = new TreeSet<>(this.predicates);
     }
 
     public Memory(Memory memory) {
         this.predicates = new TreeSet<>(memory.predicates);
-        this.start_predicates = new TreeSet<>(memory.start_predicates);
     }
 
     public boolean contains(Predicate precondition) {
@@ -41,10 +37,6 @@ public class Memory {
             else
                 predicates.remove(new Predicate(pred.getName()));
         }
-    }
-
-    public void reset() {
-        this.predicates = new TreeSet<>(start_predicates);
     }
 
     public void remove(String predicate) {
