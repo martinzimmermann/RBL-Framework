@@ -197,10 +197,8 @@ public class Rule extends Atom implements Comparable<Rule> {
         }*/
     }
 
-    public boolean execute(Model model) {
-        //FIXME
-        //assert (model.getMemory().containsAll(this.getPreconditions()));
-        return true; //action.execute(model, this.getParameters());
+    public boolean execute(Model model, RuleAction action) {
+        return action.execute(model, this.getParameters());
     }
 
     public void repairMemory(Memory memory) {

@@ -40,17 +40,23 @@ public class Action {
         String[] split = pred.getName().split(" ");
 
         for(AtomicFormula a : preconditions) {
-            if(a.getPredicate().getName().equals(split[0])) {
+            if(a.canBeGrounded(parameters))
+                continue;
+            else if(a.getPredicate().getName().equals(split[0])) {
                 for (int i = 1; i < split.length; i++) {
                     String variableName = a.getVariables().get(i-1);
-                    if(! (parameters.get(variableName) == null ||
-                            parameters.get(variableName).equals(split[i]))) {
-                        canConsume = false;
+                    if(parameters.get(variableName) != null &&
+                            !parameters.get(variableName).equals(split[i])) {
+                        return false;
                     }
                 }
+                return true;
             }
+            else
+                return false;
         }
-        return  canConsume;
+
+        return false;
     }
 
     public void consume(Predicate pred) {

@@ -37,7 +37,7 @@ public class Model {
                 else {
                     Action newAction = new Action(this.action);
                     newAction.consume(pred);
-                    Node node = new Node(action);
+                    Node node = new Node(newAction);
                     nextNodes.put(pred, node);
                     return node;
                 }
@@ -63,7 +63,18 @@ public class Model {
     }
 
     public List<Rule> getRules() {
-        return null;
+        List<Rule> rules = new ArrayList<>();
+        Queue<Node> queue = new LinkedList<>();
+        queue.addAll(roots);
+
+        while (!queue.isEmpty()) {
+            Node current = queue.poll();
+            if(current.isActionFullyAssigned())
+                rules.add(current.getRule());
+
+            queue.addAll(current.nextNodes.values());
+        }
+        return rules;
     }
 
     public List<Rule> getPossibleRules(Memory memory) {

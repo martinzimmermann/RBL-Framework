@@ -37,6 +37,8 @@ public class Executor {
                 }
             }
             ModelGenerator gen = new ModelGenerator(parser.getDomain(), parser.getProblem());
+            model = gen.getModel();
+            currentMemory = gen.getMemory();
 
         } catch (IOException ex) {
             throw new IllegalStateException("Could not read PDDL file for parsing", ex);
@@ -48,8 +50,7 @@ public class Executor {
     }
 
     public void registerAction(String action, RuleAction ruleAction){
-        if(ruleActions.containsKey(action))
-            ruleActions.put(action, ruleAction);
+        ruleActions.put(action, ruleAction);
     }
 
     public void removeAction(String action) {
@@ -83,7 +84,8 @@ public class Executor {
         boolean success = true;
         int failed_rule = 0;
         for (Rule rule : plan) {
-            boolean result = rule.execute(model);
+            RuleAction action = ruleActions.get(rule.getAction());
+            boolean result = rule.execute(model, action);
             if (result) {
                 currentMemory.update(rule);
             } else {

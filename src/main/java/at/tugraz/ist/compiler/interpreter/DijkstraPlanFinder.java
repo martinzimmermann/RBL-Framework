@@ -28,7 +28,7 @@ public class DijkstraPlanFinder extends PlanFinder {
             queue.addAll(next_nodes);
         }
 
-        Optional<Node> node = null; //FIXME nodes.stream().filter(n -> n.connections_in != null).filter(n -> goal == null ? n.connections_in.rule.hasGoal() : goal == n.connections_in.rule).findFirst();
+        Optional<Node> node = nodes.stream().filter(n -> n.memory.getAllPredicates().containsAll(goalState)).findFirst();
         if (node.isPresent()) {
             Node current = node.get();
             List<Rule> rules = new ArrayList<>();
@@ -47,7 +47,7 @@ public class DijkstraPlanFinder extends PlanFinder {
         List<Rule> rules = model.getPossibleRules(current.memory);
         List<Node> nextNodes = new ArrayList<>();
         for(Rule rule : rules) {
-            if( true ) { //FIXME rule.hasGoal()) {
+            /* if( true ) { //FIXME rule.hasGoal()) {
                 if(rule.getPreconditions().isEmpty())
                     continue; // TODO: Quickfix till real goal states are implemented
                 Node n = new Node();
@@ -58,7 +58,7 @@ public class DijkstraPlanFinder extends PlanFinder {
                 n.visited = true;
                 nodes.add(n);
                 continue;
-            }
+            }*/
 
 
             Memory altered_memory = new Memory(current.memory);
