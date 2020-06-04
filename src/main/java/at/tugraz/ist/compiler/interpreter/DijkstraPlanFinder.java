@@ -14,8 +14,8 @@ public class DijkstraPlanFinder extends PlanFinder {
         Node root = new Node();
         root.memory = new Memory(memory);
         root.totalWeight = BigDecimal.ZERO;
-        List<Node> nodes = new ArrayList<>();
-        nodes.add(root);
+        Map<Memory, Node> nodes = new HashMap<>();
+        nodes.put(root.memory, root);
         PriorityQueue<Node> queue = new PriorityQueue<>();
         queue.add(root);
 
@@ -28,7 +28,7 @@ public class DijkstraPlanFinder extends PlanFinder {
             queue.addAll(next_nodes);
         }
 
-        Optional<Node> node = nodes.stream().filter(n -> n.memory.getAllPredicates().containsAll(goalState)).findFirst();
+        Optional<Node> node = nodes.values().stream().filter(n -> n.memory.getAllPredicates().containsAll(goalState)).findFirst();
         if (node.isPresent()) {
             Node current = node.get();
             List<Rule> rules = new ArrayList<>();
@@ -43,7 +43,7 @@ public class DijkstraPlanFinder extends PlanFinder {
         }
     }
 
-    private List<Node> getNodesThatArePossible(Node current, Model model, List<Node> nodes) {
+    private List<Node> getNodesThatArePossible(Node current, Model model, Map<Memory, Node> nodes) {
         List<Rule> rules = model.getPossibleRules(current.memory);
         List<Node> nextNodes = new ArrayList<>();
         for(Rule rule : rules) {
@@ -63,18 +63,16 @@ public class DijkstraPlanFinder extends PlanFinder {
 
             Memory altered_memory = new Memory(current.memory);
             altered_memory.update(rule);
-            Optional<Node> node = nodes.stream().filter(n -> n.memory.equals(altered_memory)).findFirst();
-            Node n = null;
-
-            if (node.isPresent()) {
-                n = node.get();
+            Node n;
+            if (nodes.containsKey(altered_memory)) {
+                n = nodes.get(altered_memory);
                 if (n.visited) {
                     continue;
                 }
             } else {
                 n = new Node();
                 n.memory = altered_memory;
-                nodes.add(n);
+                nodes.put(n.memory, n);
             }
             if (n == null)
                 continue;

@@ -51,7 +51,15 @@ public class Memory {
             return true;
         }
         if (anObject instanceof Memory) {
-            return  predicates.equals(((Memory) anObject).predicates);
+            Iterator thisIt = predicates.iterator();
+            Iterator otherIt = ((Memory) anObject).predicates.iterator();
+            for(int i = 0; i < predicates.size(); i++) {
+                if(!(thisIt.hasNext() && otherIt.hasNext()))
+                    return false;
+                if(!thisIt.next().equals(otherIt.next()))
+                    return false;
+            }
+            return true;
         }
         return false;
     }
@@ -59,5 +67,10 @@ public class Memory {
     @Override
     public String toString() {
         return "Memory{" + predicates.stream().map(p -> p.toString()).reduce("", (s1, s2) -> s1 + ", " + s2) + "}";
+    }
+
+    @Override
+    public int hashCode() {
+        return predicates.hashCode();
     }
 }
