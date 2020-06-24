@@ -36,8 +36,7 @@ public class Action {
     }
 
     public boolean canConsume(Predicate pred) {
-        boolean canConsume = true;
-        String[] split = pred.getName().split(" ");
+        String[] split = pred.getExpression();
 
         for(AtomicFormula a : preconditions) {
             if(a.canBeGrounded(parameters))
@@ -55,12 +54,11 @@ public class Action {
             else
                 return false;
         }
-
         return false;
     }
 
     public void consume(Predicate pred) {
-        String[] split = pred.getName().split(" ");
+        String[] split = pred.getExpression();
         for(AtomicFormula a : preconditions) {
             if(a.getPredicate().getName().equals(split[0])) {
                 for (int i = 1; i < split.length; i++) {

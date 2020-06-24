@@ -2,6 +2,7 @@ package at.tugraz.ist.compiler.rule;
 
 public class Predicate extends Atom implements Comparable<Predicate> {
 
+    private String[] expression;
     private final String name;
     private final Boolean deletion;
 
@@ -11,11 +12,16 @@ public class Predicate extends Atom implements Comparable<Predicate> {
 
     public Predicate(String name, Boolean deletion) {
         this.name = name;
+        this.expression = name.split(" ");
         this.deletion = deletion;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String[] getExpression() {
+        return expression;
     }
 
     public Boolean isDeletion() {return deletion;}
@@ -44,10 +50,6 @@ public class Predicate extends Atom implements Comparable<Predicate> {
     @Override
     public String toString() {
         return (deletion ? "-" : "+") + name;
-    }
-
-    public String getConstructor() {
-        return "new Predicate(\"" + name + "\", " + deletion + ")";
     }
 
     @Override

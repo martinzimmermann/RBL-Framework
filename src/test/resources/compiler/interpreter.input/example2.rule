@@ -1,8 +1,0 @@
--> +temperature_collected actions.collectTemperature.
--> +humidity_collected actions.collectHumidity.
-temperature_collected, humidity_collected -> +data_prepared -temperature_collected
- 					      -humidity_collected actions.prepareData.
-
--> +connected actions.connectGSM.
--> +connected actions.connectWifi.
-connected, data_prepared -> #send -temperature_collected -data_prepared actions.sendData.

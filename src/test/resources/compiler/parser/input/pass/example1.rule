@@ -1,8 +1,0 @@
-window_open.
-door_closed.
-
-window_closed -> +window_open -window_closed openWindow.
-door_closed -> +door_open -door_closed openDoor .
-
-door_open -> #exit goThroughDoor.
-window_open -> #exit goThroughWindow.
