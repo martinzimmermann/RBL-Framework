@@ -17,12 +17,16 @@ public class PredicateTest {
 
         pred2 = new Predicate("pred", false);
         assertTrue(pred.equals(pred2));
+
+        assertFalse(pred.equals(null));
+
+        assertFalse(pred.equals(new Object()));
     }
 
     @Test
     public void GetName_test() {
         Predicate pred = new Predicate("pred");
-        assertEquals("pred", pred.getName());
+        assertEquals("pred", pred.getIdentifier());
     }
 
     @Test
@@ -59,7 +63,7 @@ public class PredicateTest {
     @Test
     public void toString_test() {
         Predicate pred = new Predicate("pred");
-        assertEquals("+pred", pred.toString());
+        assertEquals("pred", pred.toString());
 
         pred = new Predicate("pred", true);
         assertEquals("-pred", pred.toString());
@@ -77,7 +81,7 @@ public class PredicateTest {
     @Test
     public void getExpression_test() {
         Predicate pred = new Predicate("pred a b");
-        String[] expr = pred.getExpression();
+        String[] expr = pred.getExpressionSplit();
         assertEquals("pred", expr[0]);
         assertEquals("a", expr[1]);
         assertEquals("b", expr[2]);

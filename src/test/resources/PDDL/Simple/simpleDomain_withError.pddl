@@ -5,5 +5,5 @@
    :precondition (and (at ?from)
                       (connected ?from ?to))
    :effect (and (not (at ?from))
-                (at ?to)))
+                (at ?to))
 )

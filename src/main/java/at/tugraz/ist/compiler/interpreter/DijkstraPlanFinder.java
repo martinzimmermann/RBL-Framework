@@ -5,7 +5,6 @@ import at.tugraz.ist.compiler.rule.Rule;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DijkstraPlanFinder extends PlanFinder {
 
@@ -28,7 +27,9 @@ public class DijkstraPlanFinder extends PlanFinder {
             queue.addAll(next_nodes);
         }
 
-        Optional<Node> node = nodes.values().stream().filter(n -> n.memory.getAllPredicates().containsAll(goalState)).findFirst();
+        Optional<Node> node = nodes.values().stream()
+                .filter(n -> n.memory.getPredicates().containsAll(goalState))
+                .min(Node::compareTo);
         if (node.isPresent()) {
             Node current = node.get();
             List<Rule> rules = new ArrayList<>();
@@ -47,20 +48,6 @@ public class DijkstraPlanFinder extends PlanFinder {
         List<Rule> rules = model.getPossibleRules(current.memory);
         List<Node> nextNodes = new ArrayList<>();
         for(Rule rule : rules) {
-            /* if( true ) { //FIXME rule.hasGoal()) {
-                if(rule.getPreconditions().isEmpty())
-                    continue; // TODO: Quickfix till real goal states are implemented
-                Node n = new Node();
-                Connection con = new Connection(current, n, rule);
-                n.totalWeight = current.totalWeight.add(rule.getWeight()).multiply(new BigDecimal(0.5));
-                n.connections_in = con;
-                n.memory = new Memory(current.memory);
-                n.visited = true;
-                nodes.add(n);
-                continue;
-            }*/
-
-
             Memory altered_memory = new Memory(current.memory);
             altered_memory.update(rule);
             Node n;
@@ -74,8 +61,6 @@ public class DijkstraPlanFinder extends PlanFinder {
                 n.memory = altered_memory;
                 nodes.put(n.memory, n);
             }
-            if (n == null)
-                continue;
 
             if (((n.totalWeight == null)
                     || (n.totalWeight.compareTo(current.totalWeight.add(rule.getWeight()).multiply(new BigDecimal(0.5)))) == 1)) {

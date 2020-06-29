@@ -2,26 +2,32 @@ package at.tugraz.ist.compiler.rule;
 
 public class Predicate extends Atom implements Comparable<Predicate> {
 
-    private String[] expression;
-    private final String name;
+    private String[] expressionSplit;
+    private final String identifier;
+    private final String expression;
     private final Boolean deletion;
 
     public Predicate(String name) {
         this(name, false);
     }
 
-    public Predicate(String name, Boolean deletion) {
-        this.name = name;
-        this.expression = name.split(" ");
+    public Predicate(String expresion, Boolean deletion) {
+        this.identifier = expresion.split(" ")[0];
+        this.expression = expresion;
+        this.expressionSplit = expresion.split(" ");
         this.deletion = deletion;
     }
 
-    public String getName() {
-        return name;
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public String[] getExpression() {
+    public String getExpression() {
         return expression;
+    }
+
+    public String[] getExpressionSplit() {
+        return expressionSplit;
     }
 
     public Boolean isDeletion() {return deletion;}
@@ -39,17 +45,17 @@ public class Predicate extends Atom implements Comparable<Predicate> {
             return false;
 
         Predicate otherPredicate = (Predicate) other;
-        return name.equals(otherPredicate.getName());
+        return expression.equals(otherPredicate.getExpression());
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode() ^ deletion.hashCode();
+        return expression.hashCode() ^ deletion.hashCode();
     }
 
     @Override
     public String toString() {
-        return (deletion ? "-" : "+") + name;
+        return (deletion ? "-" : "") + expression;
     }
 
     @Override

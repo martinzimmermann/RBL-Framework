@@ -1,5 +1,6 @@
 package at.tugraz.ist.compiler.rule;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,7 +10,7 @@ public class AtomicFormula implements Comparable<AtomicFormula> {
 
     public AtomicFormula(Predicate predicate, List<String> variables) {
         this.predicate = predicate;
-        this.variables = variables;
+        this.variables = new ArrayList<>(variables);
     }
 
     public Predicate getPredicate() {
@@ -22,7 +23,7 @@ public class AtomicFormula implements Comparable<AtomicFormula> {
 
     public Predicate toGroundedPredicate(HashMap<String, String> parameters) {
         StringBuilder builder = new StringBuilder();
-        builder.append(predicate.getName());
+        builder.append(predicate.getIdentifier());
         for(String var : variables) {
             builder.append(" ");
             builder.append(parameters.get(var));
@@ -33,7 +34,7 @@ public class AtomicFormula implements Comparable<AtomicFormula> {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(predicate.getName());
+        builder.append(predicate.getIdentifier());
         for(String var : variables) {
             builder.append(" ");
             builder.append(var);

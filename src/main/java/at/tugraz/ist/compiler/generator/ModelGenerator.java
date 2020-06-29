@@ -1,4 +1,4 @@
-package at.tugraz.ist.compiler.ruleGenerator;
+package at.tugraz.ist.compiler.generator;
 
 import static org.junit.Assert.assertTrue;
 
@@ -16,6 +16,7 @@ import fr.uga.pddl4j.parser.Problem;
 import fr.uga.pddl4j.parser.Symbol;
 import fr.uga.pddl4j.parser.Symbol.Kind;
 import fr.uga.pddl4j.parser.TypedSymbol;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class ModelGenerator {
     private SortedSet<Predicate> predicates = new TreeSet<>();
@@ -31,7 +32,7 @@ public class ModelGenerator {
                         exp.getAtom().stream().map(p -> p.getImage()).collect(Collectors.toList()));
                 predicates.add(new Predicate(initGrounded));
             } else {
-                assertTrue(false);
+                throw new NotImplementedException();
             }
         }
 
@@ -50,12 +51,12 @@ public class ModelGenerator {
                     if (atom.getKind() == Kind.PREDICATE || atom.getKind() == Kind.CONSTANT)
                         grounded.add(atom.getImage());
                     else{
-                        assertTrue(false);
+                        throw new NotImplementedException();
                     }
                 }
                 goalState.add(new Predicate(String.join(" ", grounded)));
             } else {
-                assertTrue(false);
+                throw new NotImplementedException();
             }
         }
     }
@@ -69,13 +70,13 @@ public class ModelGenerator {
         if (op.getPreconditions().getConnective().equals(Connective.AND)) {
             preCond = getAtomicFormulas(op.getPreconditions(), false);
         } else {
-            assertTrue(false);
+            throw new NotImplementedException();
         }
 
         if (op.getEffects().getConnective().equals(Connective.AND)) {
             effects = getAtomicFormulas(op.getEffects(), true);
         } else {
-            assertTrue(false);
+            throw new NotImplementedException();
         }
         return new Action(name, new TreeSet<>(parameters), new TreeSet<>(preCond), new TreeSet<>(effects));
     }
@@ -95,7 +96,7 @@ public class ModelGenerator {
                 if (pre.getAtom().get(0).getKind() == Kind.PREDICATE)
                     predicate = pre.getAtom().get(0).getImage();
                 else
-                    assertTrue(false);
+                    throw new NotImplementedException();
 
                 for (int i = 1; i < pre.getAtom().size(); i++)  {
                     Symbol atom = pre.getAtom().get(i);
@@ -103,11 +104,11 @@ public class ModelGenerator {
                         variables.add(atom.getImage());
                     }
                     else {
-                        assertTrue(false);
+                        throw new NotImplementedException();
                     }
                 }
             } else {
-                assertTrue(false);
+                throw new NotImplementedException();
             }
             formulas.add(new AtomicFormula(new Predicate(predicate, deletion), variables));
         }

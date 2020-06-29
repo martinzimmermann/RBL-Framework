@@ -5,7 +5,6 @@ import at.tugraz.ist.compiler.interpreter.Model;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Rule extends Atom implements Comparable<Rule> {
 
@@ -14,28 +13,12 @@ public class Rule extends Atom implements Comparable<Rule> {
     private final String actionName;
     private final Map<String, String> parameters;
 
-    //private Queue<Integer> pass_not_executed = new LinkedList<>();
-    //private Queue<Integer> fail_not_executed = new LinkedList<>();
-    //private Queue<Integer> pass_executed = new LinkedList<>();
-    //private Queue<Integer> fail_executed = new LinkedList<>();
     private double pass_not_executed = 0;
     private double fail_not_executed = 0;
     private double pass_executed = 0;
     private double fail_executed = 0;
 
     public Rule(String action, SortedSet<Predicate> postConditions, SortedSet<Predicate> preconditions, Map<String, String> parameters) {
-        if (action == null)
-            throw new IllegalArgumentException("action can not be null");
-
-        if (postConditions == null)
-            throw new IllegalArgumentException("postConditions can not be null");
-
-        if (preconditions == null)
-            throw new IllegalArgumentException("preconditions can not be null");
-
-        if (parameters == null)
-            throw new IllegalArgumentException("preconditions can not be null");
-
         this.postConditions = postConditions;
         this.preconditions = preconditions;
         this.parameters = parameters;
@@ -61,14 +44,6 @@ public class Rule extends Atom implements Comparable<Rule> {
         return parameters;
     }
 
-    public List<Predicate> getWorldAdditions() {
-        return postConditions.stream().filter(p -> p.isAddition()).collect(Collectors.toList());
-    }
-
-    public List<Predicate> getWorldDeletions() {
-        return postConditions.stream().filter(p -> p.isDeletion()).collect(Collectors.toList());
-    }
-
     public String getAction() {
         return actionName;
     }
@@ -79,7 +54,6 @@ public class Rule extends Atom implements Comparable<Rule> {
 
         string.append(actionName + " ");
         for (Map.Entry<String,String> entry : getParameters().entrySet()) {
-            string.append("?");
             string.append(entry.getKey());
             string.append(" - ");
             string.append(entry.getValue());
@@ -93,7 +67,7 @@ public class Rule extends Atom implements Comparable<Rule> {
 
         string.append(": ");
         for (Predicate precondition : getPreconditions()) {
-            string.append(precondition.getName()).append(", ");
+            string.append(precondition.toString()).append(", ");
         }
 
         if (getPreconditions().size() != 0) {
@@ -103,12 +77,14 @@ public class Rule extends Atom implements Comparable<Rule> {
 
         string.append(" -> ");
 
-        for (Predicate deletion : this.getPostConditions()) {
-            string.append(deletion.toString()).append(" ");
+        for (Predicate postCond : this.getPostConditions()) {
+            string.append(postCond.toString()).append(", ");
         }
 
-        if (getWorldDeletions().size() != 0)
+        if (getPostConditions().size() != 0) {
             string.deleteCharAt(string.length() - 1);
+            string.deleteCharAt(string.length() - 1);
+        }
 
 
         return string.toString();
@@ -141,7 +117,7 @@ public class Rule extends Atom implements Comparable<Rule> {
         double pe = pass_executed; //.isEmpty() ? 0 : pass_executed.stream().reduce((a,b)->a+b).get();
         double pn = pass_not_executed; //.isEmpty() ? 0 : pass_not_executed.stream().reduce((a,b)->a+b).get();
 
-        try {
+        //try {
             // Ochiai
             //return new BigDecimal((1.0 * pe) / (Math.sqrt((fe + fn) * (fe + pe))));
 
@@ -150,58 +126,45 @@ public class Rule extends Atom implements Comparable<Rule> {
             //        ((1.0 * fe / 1.0 *(fe + fn)) + (1.0 * pe / 1.0 *(pe + pn))));
 
             // Jaccard
+            if(fe == 0)
+                return new BigDecimal(0.5);
             return new BigDecimal((1.0 * fe) / (fe + fn + pe));
 
             // SMC
             //return new BigDecimal((1.0 * (fe + pn)) / 1.0 * (fe + fn + pe + pn));
-        }
-        catch (NumberFormatException e) {
-            return new BigDecimal(0.5);
-        }
+        //}
+        //catch (NumberFormatException e) {
+        //    return new BigDecimal(0.5);
+        //}
     }
 
     public void updateRule(boolean failed, boolean executed, boolean last) {
         if(failed  && executed)
             fail_executed += last ? 1 : 0.9;
-            //fail_executed.add(1);
         else
             fail_executed += 0;
-            //fail_executed.add(0);
 
         if(failed  && !executed)
             fail_not_executed += 1;
-            //fail_not_executed.add(1);
         else
             fail_not_executed += 0;
-            //fail_not_executed.add(0);
 
         if(!failed  && executed)
             pass_executed += last ? 1 : 0.9;
-            //pass_executed.add(1);
         else
             pass_executed += 0;
-            //pass_executed.add(0);
 
         if(!failed  && !executed)
             pass_not_executed += 1;
-            //pass_not_executed.add(1);
         else
             pass_not_executed += 0;
-            //pass_not_executed.add(0);
-
-        /*if(fail_executed.size() > 20) {
-            fail_executed.remove();
-            fail_not_executed.remove();
-            pass_executed.remove();
-            pass_not_executed.remove();
-        }*/
     }
 
     public boolean execute(Model model, RuleAction action) {
         return action.execute(model, this.getParameters());
     }
 
-    public void repairMemory(Memory memory) {
-        return; //action.repair(memory, this.getParameters());
+    public void repairMemory(Memory memory, RuleAction action) {
+        action.repair(memory, this.getParameters());
     }
 }

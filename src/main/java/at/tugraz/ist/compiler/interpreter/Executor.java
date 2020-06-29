@@ -1,7 +1,7 @@
 package at.tugraz.ist.compiler.interpreter;
 
 import at.tugraz.ist.compiler.rule.*;
-import at.tugraz.ist.compiler.ruleGenerator.ModelGenerator;
+import at.tugraz.ist.compiler.generator.ModelGenerator;
 import fr.uga.pddl4j.parser.Message;
 import fr.uga.pddl4j.parser.Parser;
 
@@ -35,6 +35,7 @@ public class Executor {
                 for (Message msg : parser.getErrorManager().getMessages()) {
                     System.out.println(msg.toString());
                 }
+                throw new IllegalStateException("Error while parsing PDDL File");
             }
             ModelGenerator gen = new ModelGenerator(parser.getDomain(), parser.getProblem());
             model = gen.getModel();
@@ -89,7 +90,7 @@ public class Executor {
             if (result) {
                 currentMemory.update(rule);
             } else {
-                rule.repairMemory(currentMemory);
+                rule.repairMemory(currentMemory, action) ;
                 success = false;
                 break;
             }

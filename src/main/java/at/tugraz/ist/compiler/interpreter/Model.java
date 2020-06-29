@@ -81,7 +81,7 @@ public class Model {
         List<Node> horizond = new ArrayList<>();
         horizond.addAll(roots);
 
-        for(Predicate pred : memory.getAllPredicates()) {
+        for(Predicate pred : memory.getPredicates()) {
             List<Node> toAdd = new ArrayList<>();
             for(Node node : horizond) {
                 Node new_node = node.getNextNode(pred);
