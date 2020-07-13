@@ -1,22 +1,19 @@
 package at.tugraz.ist.compiler.generator;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
 import at.tugraz.ist.compiler.interpreter.Memory;
 import at.tugraz.ist.compiler.interpreter.Model;
-import at.tugraz.ist.compiler.rule.*;
-import fr.uga.pddl4j.parser.Connective;
-import fr.uga.pddl4j.parser.Domain;
-import fr.uga.pddl4j.parser.Exp;
-import fr.uga.pddl4j.parser.Op;
-import fr.uga.pddl4j.parser.Problem;
-import fr.uga.pddl4j.parser.Symbol;
+import at.tugraz.ist.compiler.rule.Action;
+import at.tugraz.ist.compiler.rule.AtomicFormula;
+import at.tugraz.ist.compiler.rule.Predicate;
+import fr.uga.pddl4j.parser.*;
 import fr.uga.pddl4j.parser.Symbol.Kind;
-import fr.uga.pddl4j.parser.TypedSymbol;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class ModelGenerator {
     private SortedSet<Predicate> predicates = new TreeSet<>();
@@ -26,7 +23,7 @@ public class ModelGenerator {
     private List<String> objects = new ArrayList<>();
 
     public ModelGenerator(Domain domain, Problem problem) {
-        for (Exp exp : problem.getInit()) {
+        for(Exp exp : problem.getInit()) {
             if (exp.getAtom().get(0).getKind() == Kind.PREDICATE) {
                 String initGrounded = String.join(" ",
                         exp.getAtom().stream().map(p -> p.getImage()).collect(Collectors.toList()));
@@ -36,21 +33,21 @@ public class ModelGenerator {
             }
         }
 
-        for (TypedSymbol object : problem.getObjects()) {
+        for(TypedSymbol object : problem.getObjects()) {
             objects.add(object.getImage());
         }
 
-        for (Op op : domain.getOperators()) {
+        for(Op op : domain.getOperators()) {
             actions.add(getAction(op));
         }
 
-        for (Exp pre : problem.getGoal().getChildren()) {
+        for(Exp pre : problem.getGoal().getChildren()) {
             if (pre.getAtom().get(0).getKind() == Kind.PREDICATE) {
                 List<String> grounded = new ArrayList<>();
-                for (Symbol atom : pre.getAtom()) {
+                for(Symbol atom : pre.getAtom()) {
                     if (atom.getKind() == Kind.PREDICATE || atom.getKind() == Kind.CONSTANT)
                         grounded.add(atom.getImage());
-                    else{
+                    else {
                         throw new NotImplementedException();
                     }
                 }
@@ -83,7 +80,7 @@ public class ModelGenerator {
 
     private List<AtomicFormula> getAtomicFormulas(Exp condition, boolean allowNot) {
         List<AtomicFormula> formulas = new ArrayList<>();
-        for (Exp pre : condition.getChildren()) {
+        for(Exp pre : condition.getChildren()) {
             boolean deletion = false;
             if (allowNot && pre.getConnective().equals(Connective.NOT)) {
                 pre = pre.getChildren().get(0);
@@ -98,12 +95,11 @@ public class ModelGenerator {
                 else
                     throw new NotImplementedException();
 
-                for (int i = 1; i < pre.getAtom().size(); i++)  {
+                for(int i = 1; i < pre.getAtom().size(); i++) {
                     Symbol atom = pre.getAtom().get(i);
                     if (atom.getKind() == Kind.VARIABLE) {
                         variables.add(atom.getImage());
-                    }
-                    else {
+                    } else {
                         throw new NotImplementedException();
                     }
                 }

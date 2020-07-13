@@ -154,7 +154,7 @@ public class RuleTest {
     @Test
     public void getWeight_test() {
         Rule rule = TestHelper.getRule();
-        assertEquals(new BigDecimal(0.5), rule.getWeight());
+        assertEquals(new BigDecimal(0.00001), rule.getWeight());
     }
 
     @Test

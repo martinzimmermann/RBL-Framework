@@ -1,6 +1,7 @@
 package at.tugraz.ist.compiler.interpreter;
 
 import at.tugraz.ist.compiler.rule.Action;
+import at.tugraz.ist.compiler.rule.AtomicFormula;
 import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
@@ -18,8 +19,8 @@ public class Model {
             this.action = action;
         }
 
-        public boolean canConsume(Predicate pred) {
-            return action.canConsume(pred);
+        public AtomicFormula canBeConsumedBy(Predicate pred) {
+            return action.canBeConsumedBy(pred);
         }
 
         public Rule getRule() {
@@ -29,24 +30,22 @@ public class Model {
         }
 
         public Node getNextNode(Predicate pred) {
-
-            if(canConsume(pred)) {
-                if(nextNodes.containsKey(pred)) {
-                    return nextNodes.get(pred);
-                }
-                else {
-                    Action newAction = new Action(this.action);
-                    newAction.consume(pred);
-                    Node node = new Node(newAction);
-                    nextNodes.put(pred, node);
-                    return node;
-                }
+            if(nextNodes.containsKey(pred)) {
+                return nextNodes.get(pred);
+            }
+            AtomicFormula a = canBeConsumedBy(pred);
+            if(a != null) {
+                Action newAction = new Action(this.action);
+                newAction.consume(a, pred);
+                Node node = new Node(newAction);
+                nextNodes.put(pred, node);
+                return node;
             }
             return null;
         }
 
-        public boolean isActionFullyAssigned() {
-            return action.isFullyAssigned();
+        public boolean preconditionsFulfilled() {
+            return action.preconditionsFulfilled();
         }
     }
 
@@ -69,7 +68,7 @@ public class Model {
 
         while (!queue.isEmpty()) {
             Node current = queue.poll();
-            if(current.isActionFullyAssigned())
+            if(current.preconditionsFulfilled())
                 rules.add(current.getRule());
 
             queue.addAll(current.nextNodes.values());
@@ -84,6 +83,8 @@ public class Model {
         for(Predicate pred : memory.getPredicates()) {
             List<Node> toAdd = new ArrayList<>();
             for(Node node : horizond) {
+                if(node.action.preconditionsFulfilled())
+                    continue;
                 Node new_node = node.getNextNode(pred);
                 if(new_node != null)
                     toAdd.add(new_node);
@@ -93,7 +94,7 @@ public class Model {
 
         List<Rule> rules = new ArrayList<>();
         for(Node node : horizond) {
-            if(node.isActionFullyAssigned()){
+            if(node.preconditionsFulfilled()){
                 rules.add(node.getRule());
             }
         }

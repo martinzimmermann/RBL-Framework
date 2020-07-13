@@ -40,6 +40,29 @@ public class MemoryTest {
     }
 
     @Test
+    public void removePredicate_test() {
+        SortedSet<Predicate> predicates = new TreeSet<>();
+        predicates.add(new Predicate("pred a b"));
+        Memory mem = new Memory(predicates);
+        assertEquals(predicates, mem.getPredicates());
+
+        mem.removePredicate("pred a b");
+        assertEquals(new TreeSet<>(), mem.getPredicates());
+    }
+
+    @Test
+    public void addPredicate_test() {
+        SortedSet<Predicate> predicates = new TreeSet<>();
+        predicates.add(new Predicate("pred a b"));
+        Memory mem = new Memory(predicates);
+        assertEquals(predicates, mem.getPredicates());
+
+        mem.addPredicate("pred2 a b");
+        predicates.add(new Predicate("pred2 a b"));
+        assertEquals(predicates, mem.getPredicates());
+    }
+
+    @Test
     public void equals_test() {
         SortedSet<Predicate> predicates = new TreeSet<>();
         predicates.add(new Predicate("pred a b"));

@@ -31,6 +31,14 @@ public class Memory {
         }
     }
 
+    public void addPredicate(String predicate) {
+        predicates.add(new Predicate(predicate));
+    }
+
+    public void removePredicate(String predicate) {
+        predicates.remove(new Predicate(predicate));
+    }
+
     public boolean equals(Object anObject) {
         if (this == anObject) {
             return true;

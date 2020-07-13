@@ -1,18 +1,15 @@
 package at.tugraz.ist.compiler.interpreter;
 
 import at.tugraz.ist.compiler.helper.TestHelper;
-import at.tugraz.ist.compiler.rule.RuleAction;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static junit.framework.Assert.*;
-import static junit.framework.TestCase.assertEquals;
 
 public class ExecutorTest {
 
@@ -69,6 +66,28 @@ public class ExecutorTest {
     }
 
     @Test
+    public void removePredicate_test() {
+        Path pddlDomainfile = Paths.get("src/test/resources/PDDL/Simple/simpleDomain.pddl");
+        Path pddlProblemfile = Paths.get("src/test/resources/PDDL/Simple/simpleProblem.pddl");
+        Executor executor = new Executor(pddlDomainfile.toString(), pddlProblemfile.toString());
+        assertTrue(executor.getPredicates().contains("at room_0_0"));
+
+        executor.removePredicate("at room_0_0");
+
+        assertFalse(executor.getPredicates().contains("at room_0_0"));
+    }
+
+    @Test
+    public void addPredicate_test() {
+        Path pddlDomainfile = Paths.get("src/test/resources/PDDL/Simple/simpleDomain.pddl");
+        Path pddlProblemfile = Paths.get("src/test/resources/PDDL/Simple/simpleProblem.pddl");
+        Executor executor = new Executor(pddlDomainfile.toString(), pddlProblemfile.toString());
+        assertFalse(executor.getPredicates().contains("at2 room_0_0"));
+        executor.addPredicate("at2 room_0_0");
+        assertTrue(executor.getPredicates().contains("at2 room_0_0"));
+    }
+
+    @Test
     public void executeFail_test() throws NoPlanFoundException {
         Path pddlDomainfile = Paths.get("src/test/resources/PDDL/Simple/simpleDomain.pddl");
         Path pddlProblemfile = Paths.get("src/test/resources/PDDL/Simple/simpleProblem.pddl");
@@ -100,4 +119,16 @@ public class ExecutorTest {
         boolean res = executor.execute(goals);
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void execute_without_register_test() throws NoPlanFoundException {
+        Path pddlDomainfile = Paths.get("src/test/resources/PDDL/Simple/simpleDomain.pddl");
+        Path pddlProblemfile = Paths.get("src/test/resources/PDDL/Simple/simpleProblem.pddl");
+        Executor executor = new Executor(pddlDomainfile.toString(), pddlProblemfile.toString());
+
+        TestHelper.TestAction action = new TestHelper.TestAction();
+
+        List<String> goals = new ArrayList<>();
+        goals.add("at room_1_1");
+        boolean res = executor.execute(goals);
+    }
 }

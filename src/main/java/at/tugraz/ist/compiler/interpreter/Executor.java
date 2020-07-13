@@ -6,10 +6,8 @@ import fr.uga.pddl4j.parser.Message;
 import fr.uga.pddl4j.parser.Parser;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertTrue;
 
@@ -50,6 +48,16 @@ public class Executor {
         return model;
     }
 
+    public void addPredicate(String predicate) {
+        currentMemory.addPredicate(predicate);
+    }
+
+    public void removePredicate(String predicate) {
+        currentMemory.removePredicate(predicate);
+    }
+
+    public Set<String> getPredicates() { return currentMemory.getPredicates().stream().map(p -> p.toString()).collect(Collectors.toSet());}
+
     public void registerAction(String action, RuleAction ruleAction){
         ruleActions.put(action, ruleAction);
     }
@@ -85,6 +93,8 @@ public class Executor {
         boolean success = true;
         int failed_rule = 0;
         for (Rule rule : plan) {
+            if(!ruleActions.containsKey(rule.getAction()))
+                throw new NoSuchElementException("Nothing registered for action: " + rule.getAction());
             RuleAction action = ruleActions.get(rule.getAction());
             boolean result = rule.execute(model, action);
             if (result) {

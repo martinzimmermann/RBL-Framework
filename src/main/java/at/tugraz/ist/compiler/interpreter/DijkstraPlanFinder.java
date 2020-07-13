@@ -17,19 +17,22 @@ public class DijkstraPlanFinder extends PlanFinder {
         nodes.put(root.memory, root);
         PriorityQueue<Node> queue = new PriorityQueue<>();
         queue.add(root);
+        List<Node> goalNodes = new ArrayList<>();
 
         while (!queue.isEmpty()) {
             Node current = queue.poll();
-            if(current.visited)
+            if (current.visited)
                 continue;
+            if (current.memory.getPredicates().containsAll(goalState)) {
+                goalNodes.add(current);
+                continue;
+            }
             List<Node> next_nodes = getNodesThatArePossible(current, model, nodes);
             current.visited = true;
             queue.addAll(next_nodes);
         }
 
-        Optional<Node> node = nodes.values().stream()
-                .filter(n -> n.memory.getPredicates().containsAll(goalState))
-                .min(Node::compareTo);
+        Optional<Node> node = goalNodes.stream().min(Node::compareTo);
         if (node.isPresent()) {
             Node current = node.get();
             List<Rule> rules = new ArrayList<>();
@@ -63,10 +66,10 @@ public class DijkstraPlanFinder extends PlanFinder {
             }
 
             if (((n.totalWeight == null)
-                    || (n.totalWeight.compareTo(current.totalWeight.add(rule.getWeight()).multiply(new BigDecimal(0.5)))) == 1)) {
+                    || (n.totalWeight.compareTo(current.totalWeight.add(rule.getWeight()))) == 1)) {
 
                 Connection con = new Connection(current, n, rule);
-                n.totalWeight = current.totalWeight.add(rule.getWeight()).multiply(new BigDecimal(0.5));
+                n.totalWeight = current.totalWeight.add(rule.getWeight());
                 n.connections_in = con;
             }
             nextNodes.add(n);
@@ -78,6 +81,7 @@ public class DijkstraPlanFinder extends PlanFinder {
         public Node start;
         public Node end;
         public Rule rule;
+
         public Connection(Node start, Node end, Rule rule) {
             this.start = start;
             this.rule = rule;

@@ -127,10 +127,12 @@ public class Rule extends Atom implements Comparable<Rule> {
 
             // Jaccard
             if(fe == 0)
-                return new BigDecimal(0.5);
+                return new BigDecimal(0.00001);
             return new BigDecimal((1.0 * fe) / (fe + fn + pe));
 
             // SMC
+            //if(fe + pn == 0)
+            //    return new BigDecimal(0.00001);
             //return new BigDecimal((1.0 * (fe + pn)) / 1.0 * (fe + fn + pe + pn));
         //}
         //catch (NumberFormatException e) {
@@ -140,7 +142,7 @@ public class Rule extends Atom implements Comparable<Rule> {
 
     public void updateRule(boolean failed, boolean executed, boolean last) {
         if(failed  && executed)
-            fail_executed += last ? 1 : 0.9;
+            fail_executed += last ? 1 : 1;
         else
             fail_executed += 0;
 
@@ -150,7 +152,7 @@ public class Rule extends Atom implements Comparable<Rule> {
             fail_not_executed += 0;
 
         if(!failed  && executed)
-            pass_executed += last ? 1 : 0.9;
+            pass_executed += last ? 1 : 1;
         else
             pass_executed += 0;
 
