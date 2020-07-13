@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.*;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertSame;
 
 public class DijkstraPlanFinderTest {
     @Test

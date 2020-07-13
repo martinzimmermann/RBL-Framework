@@ -1,6 +1,7 @@
 package at.tugraz.ist.compiler.rule;
 
 import org.junit.Test;
+
 import static junit.framework.TestCase.*;
 
 public class PredicateTest {

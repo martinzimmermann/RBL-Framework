@@ -4,7 +4,9 @@ import at.tugraz.ist.compiler.helper.TestHelper;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashMap;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import static junit.framework.Assert.*;
 

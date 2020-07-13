@@ -7,5 +7,6 @@ import java.util.Map;
 
 public interface RuleAction {
     boolean execute(Model model, Map<String, String> parameters);
+
     void repair(Memory model, Map<String, String> parameters);
 }

@@ -2,10 +2,10 @@ package at.tugraz.ist.compiler.rule;
 
 public class Predicate extends Atom implements Comparable<Predicate> {
 
-    private String[] expressionSplit;
     private final String identifier;
     private final String expression;
     private final Boolean deletion;
+    private final String[] expressionSplit;
 
     public Predicate(String name) {
         this(name, false);
@@ -30,8 +30,13 @@ public class Predicate extends Atom implements Comparable<Predicate> {
         return expressionSplit;
     }
 
-    public Boolean isDeletion() {return deletion;}
-    public Boolean isAddition() {return !deletion;}
+    public Boolean isDeletion() {
+        return deletion;
+    }
+
+    public Boolean isAddition() {
+        return !deletion;
+    }
 
     @Override
     public boolean equals(Object other) {

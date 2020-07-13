@@ -3,12 +3,14 @@ package at.tugraz.ist.compiler.interpreter;
 import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class Memory {
 
-    private SortedSet<Predicate> predicates;
+    private final SortedSet<Predicate> predicates;
 
     public Memory(SortedSet<Predicate> predicates) {
         this.predicates = new TreeSet<>(predicates);
@@ -24,7 +26,7 @@ public class Memory {
 
     public void update(Rule rule) {
         for(Predicate pred : rule.getPostConditions()) {
-            if(pred.isAddition())
+            if (pred.isAddition())
                 predicates.add(pred);
             else
                 predicates.remove(new Predicate(pred.getExpression()));
@@ -46,12 +48,12 @@ public class Memory {
         if (anObject instanceof Memory) {
             Iterator thisIt = predicates.iterator();
             Iterator otherIt = ((Memory) anObject).predicates.iterator();
-            while(true) {
-                if(!thisIt.hasNext() && !otherIt.hasNext())
+            while (true) {
+                if (!thisIt.hasNext() && !otherIt.hasNext())
                     return true;
-                if(!(thisIt.hasNext() && otherIt.hasNext()))
+                if (!(thisIt.hasNext() && otherIt.hasNext()))
                     return false;
-                if(!thisIt.next().equals(otherIt.next()))
+                if (!thisIt.next().equals(otherIt.next()))
                     return false;
             }
         }

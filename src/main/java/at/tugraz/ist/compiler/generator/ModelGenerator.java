@@ -16,11 +16,11 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class ModelGenerator {
-    private SortedSet<Predicate> predicates = new TreeSet<>();
-    private SortedSet<Predicate> goalState = new TreeSet<>();
+    private final SortedSet<Predicate> predicates = new TreeSet<>();
+    private final SortedSet<Predicate> goalState = new TreeSet<>();
 
-    private List<Action> actions = new ArrayList<>();
-    private List<String> objects = new ArrayList<>();
+    private final List<Action> actions = new ArrayList<>();
+    private final List<String> objects = new ArrayList<>();
 
     public ModelGenerator(Domain domain, Problem problem) {
         for(Exp exp : problem.getInit()) {

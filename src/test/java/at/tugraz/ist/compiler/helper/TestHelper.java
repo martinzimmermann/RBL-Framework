@@ -9,7 +9,8 @@ import java.util.*;
 
 public class TestHelper {
 
-    private TestHelper() {}
+    private TestHelper() {
+    }
 
     public static class TestAction implements RuleAction {
 
@@ -45,13 +46,12 @@ public class TestHelper {
         }
     }
 
-    public static List<String> getAllFilesInPath(String path)
-    {
+    public static List<String> getAllFilesInPath(String path) {
         List<String> paths = new ArrayList<>();
 
         File folder = new File(path);
         File[] listOfFiles = folder.listFiles();
-        for (File file : listOfFiles) {
+        for(File file : listOfFiles) {
             if (file.isFile()) {
                 paths.add(file.getPath());
             }

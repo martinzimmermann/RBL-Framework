@@ -1,15 +1,15 @@
 package at.tugraz.ist.compiler.interpreter;
 
-import at.tugraz.ist.compiler.rule.*;
 import at.tugraz.ist.compiler.generator.ModelGenerator;
+import at.tugraz.ist.compiler.rule.Predicate;
+import at.tugraz.ist.compiler.rule.Rule;
+import at.tugraz.ist.compiler.rule.RuleAction;
 import fr.uga.pddl4j.parser.Message;
 import fr.uga.pddl4j.parser.Parser;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static org.junit.Assert.assertTrue;
 
 public class Executor {
 

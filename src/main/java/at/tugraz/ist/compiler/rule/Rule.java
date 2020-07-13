@@ -4,7 +4,8 @@ import at.tugraz.ist.compiler.interpreter.Memory;
 import at.tugraz.ist.compiler.interpreter.Model;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Map;
+import java.util.SortedSet;
 
 public class Rule extends Atom implements Comparable<Rule> {
 
@@ -53,7 +54,7 @@ public class Rule extends Atom implements Comparable<Rule> {
         StringBuilder string = new StringBuilder();
 
         string.append(actionName + " ");
-        for (Map.Entry<String,String> entry : getParameters().entrySet()) {
+        for(Map.Entry<String, String> entry : getParameters().entrySet()) {
             string.append(entry.getKey());
             string.append(" - ");
             string.append(entry.getValue());
@@ -66,7 +67,7 @@ public class Rule extends Atom implements Comparable<Rule> {
         }
 
         string.append(": ");
-        for (Predicate precondition : getPreconditions()) {
+        for(Predicate precondition : getPreconditions()) {
             string.append(precondition.toString()).append(", ");
         }
 
@@ -77,7 +78,7 @@ public class Rule extends Atom implements Comparable<Rule> {
 
         string.append(" -> ");
 
-        for (Predicate postCond : this.getPostConditions()) {
+        for(Predicate postCond : this.getPostConditions()) {
             string.append(postCond.toString()).append(", ");
         }
 
@@ -112,51 +113,46 @@ public class Rule extends Atom implements Comparable<Rule> {
     }
 
     public BigDecimal getWeight() {
-        double fe = fail_executed; //.isEmpty() ? 0 : fail_executed.stream().reduce((a,b)->a+b).get();
-        double fn = fail_not_executed; //.isEmpty() ? 0 : fail_not_executed.stream().reduce((a,b)->a+b).get();
-        double pe = pass_executed; //.isEmpty() ? 0 : pass_executed.stream().reduce((a,b)->a+b).get();
-        double pn = pass_not_executed; //.isEmpty() ? 0 : pass_not_executed.stream().reduce((a,b)->a+b).get();
+        double fe = fail_executed;
+        double fn = fail_not_executed;
+        double pe = pass_executed;
+        double pn = pass_not_executed;
 
-        //try {
-            // Ochiai
-            //return new BigDecimal((1.0 * pe) / (Math.sqrt((fe + fn) * (fe + pe))));
+        // Ochiai
+        //return new BigDecimal((1.0 * pe) / (Math.sqrt((fe + fn) * (fe + pe))));
 
-            //Tarantula
-            //return new BigDecimal(((1.0 * fe) / 1.0 *(fe + fn)) /
-            //        ((1.0 * fe / 1.0 *(fe + fn)) + (1.0 * pe / 1.0 *(pe + pn))));
+        //Tarantula
+        //return new BigDecimal(((1.0 * fe) / 1.0 *(fe + fn)) /
+        //        ((1.0 * fe / 1.0 *(fe + fn)) + (1.0 * pe / 1.0 *(pe + pn))));
 
-            // Jaccard
-            if(fe == 0)
-                return new BigDecimal(0.00001);
-            return new BigDecimal((1.0 * fe) / (fe + fn + pe));
+        // Jaccard
+        if (fe == 0)
+            return new BigDecimal(0.00001);
+        return new BigDecimal((1.0 * fe) / (fe + fn + pe));
 
-            // SMC
-            //if(fe + pn == 0)
-            //    return new BigDecimal(0.00001);
-            //return new BigDecimal((1.0 * (fe + pn)) / 1.0 * (fe + fn + pe + pn));
-        //}
-        //catch (NumberFormatException e) {
-        //    return new BigDecimal(0.5);
-        //}
+        // SMC
+        //if(fe + pn == 0)
+        //    return new BigDecimal(0.00001);
+        //return new BigDecimal((1.0 * (fe + pn)) / 1.0 * (fe + fn + pe + pn));
     }
 
     public void updateRule(boolean failed, boolean executed, boolean last) {
-        if(failed  && executed)
+        if (failed && executed)
             fail_executed += last ? 1 : 1;
         else
             fail_executed += 0;
 
-        if(failed  && !executed)
+        if (failed && !executed)
             fail_not_executed += 1;
         else
             fail_not_executed += 0;
 
-        if(!failed  && executed)
+        if (!failed && executed)
             pass_executed += last ? 1 : 1;
         else
             pass_executed += 0;
 
-        if(!failed  && !executed)
+        if (!failed && !executed)
             pass_not_executed += 1;
         else
             pass_not_executed += 0;

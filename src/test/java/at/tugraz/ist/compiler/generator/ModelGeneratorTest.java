@@ -10,7 +10,6 @@ import fr.uga.pddl4j.parser.Parser;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -29,8 +28,8 @@ public class ModelGeneratorTest {
 
         Parser parser = new Parser();
         parser.parse(pddlDomainfile.toString(), pddlProblemfile.toString());
-        if(!parser.getErrorManager().isEmpty()) {
-            for (Message msg : parser.getErrorManager().getMessages()) {
+        if (!parser.getErrorManager().isEmpty()) {
+            for(Message msg : parser.getErrorManager().getMessages()) {
                 System.out.println(msg.toString());
             }
         }
@@ -65,9 +64,9 @@ public class ModelGeneratorTest {
         SortedSet<AtomicFormula> preconditions = new TreeSet<>();
         List<String> variables = new ArrayList<>();
         variables.add("?from");
-        preconditions.add( new AtomicFormula(new Predicate("at ?from"), variables));
+        preconditions.add(new AtomicFormula(new Predicate("at ?from"), variables));
         variables.add("?to");
-        preconditions.add( new AtomicFormula(new Predicate("connected ?from ?to"), variables));
+        preconditions.add(new AtomicFormula(new Predicate("connected ?from ?to"), variables));
 
         SortedSet<AtomicFormula> effects = new TreeSet<>();
         variables = new ArrayList<>();

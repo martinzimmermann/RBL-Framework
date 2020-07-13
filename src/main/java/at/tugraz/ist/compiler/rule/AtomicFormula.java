@@ -49,7 +49,7 @@ public class AtomicFormula implements Comparable<AtomicFormula> {
 
     public boolean canBeGrounded(HashMap<String, String> parameters) {
         for(String var : variables) {
-            if(parameters.get(var) == null)
+            if (parameters.get(var) == null)
                 return false;
         }
         return true;
