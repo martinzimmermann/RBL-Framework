@@ -12,6 +12,7 @@ public class Model {
     private final List<String> objects;
     private final List<Action> actions;
     private final List<Node> roots = new ArrayList<>();
+
     public Model(List<String> objects, List<Action> actions) {
         this.objects = objects;
         this.actions = actions;

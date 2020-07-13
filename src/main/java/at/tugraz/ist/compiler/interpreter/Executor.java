@@ -15,8 +15,8 @@ public class Executor {
 
     private final PlanFinder planFinder;
     private final Map<String, RuleAction> ruleActions;
-    private Model model;
-    private Memory currentMemory;
+    private final Model model;
+    private final Memory currentMemory;
 
     public Executor(String pddlDomainfile, String pddlProblemfile) {
         this(pddlDomainfile, pddlProblemfile, new DijkstraPlanFinder());
@@ -29,8 +29,8 @@ public class Executor {
         try {
             Parser parser = new Parser();
             parser.parse(pddlDomainfile, pddlProblemfile);
-            if(!parser.getErrorManager().isEmpty()) {
-                for (Message msg : parser.getErrorManager().getMessages()) {
+            if (!parser.getErrorManager().isEmpty()) {
+                for(Message msg : parser.getErrorManager().getMessages()) {
                     System.out.println(msg.toString());
                 }
                 throw new IllegalStateException("Error while parsing PDDL File");
@@ -56,9 +56,11 @@ public class Executor {
         currentMemory.removePredicate(predicate);
     }
 
-    public Set<String> getPredicates() { return currentMemory.getPredicates().stream().map(p -> p.toString()).collect(Collectors.toSet());}
+    public Set<String> getPredicates() {
+        return currentMemory.getPredicates().stream().map(p -> p.toString()).collect(Collectors.toSet());
+    }
 
-    public void registerAction(String action, RuleAction ruleAction){
+    public void registerAction(String action, RuleAction ruleAction) {
         ruleActions.put(action, ruleAction);
     }
 
@@ -68,7 +70,7 @@ public class Executor {
 
     public boolean execute(List<String> goalState) throws NoPlanFoundException {
         List<Predicate> goalCond = new ArrayList<>();
-        for (String pre : goalState) {
+        for(String pre : goalState) {
             goalCond.add(new Predicate(pre));
         }
 
@@ -82,7 +84,7 @@ public class Executor {
         List<Rule> plan_complement = model.getRules();
         plan_complement.removeAll(plan);
 
-        for (Rule rule : plan_complement) {
+        for(Rule rule : plan_complement) {
             rule.updateRule(!success, false, false);
         }
 
@@ -92,15 +94,15 @@ public class Executor {
     private boolean interpretRules(List<Rule> plan) {
         boolean success = true;
         int failed_rule = 0;
-        for (Rule rule : plan) {
-            if(!ruleActions.containsKey(rule.getAction()))
+        for(Rule rule : plan) {
+            if (!ruleActions.containsKey(rule.getAction()))
                 throw new NoSuchElementException("Nothing registered for action: " + rule.getAction());
             RuleAction action = ruleActions.get(rule.getAction());
             boolean result = rule.execute(model, action);
             if (result) {
                 currentMemory.update(rule);
             } else {
-                rule.repairMemory(currentMemory, action) ;
+                rule.repairMemory(currentMemory, action);
                 success = false;
                 break;
             }
@@ -108,14 +110,13 @@ public class Executor {
         }
 
         int count = 0;
-        for (Rule rule : plan) {
+        for(Rule rule : plan) {
             if (success)
                 rule.updateRule(false, true, true);
+            else if (count <= failed_rule)
+                rule.updateRule(true, true, count == failed_rule);
             else
-                if (count <= failed_rule)
-                    rule.updateRule(true, true, count == failed_rule ? true : false);
-                else
-                    rule.updateRule(true, false, false);
+                rule.updateRule(true, false, false);
             count++;
         }
 

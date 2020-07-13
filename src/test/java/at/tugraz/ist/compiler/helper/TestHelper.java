@@ -12,40 +12,6 @@ public class TestHelper {
     private TestHelper() {
     }
 
-    public static class TestAction implements RuleAction {
-
-        public boolean executed = false;
-        public boolean repair = false;
-
-        @Override
-        public boolean execute(Model model, Map<String, String> parameters) {
-            executed = true;
-            return true;
-        }
-
-        @Override
-        public void repair(Memory model, Map<String, String> parameters) {
-            repair = true;
-        }
-    }
-
-    public static class TestActionFail implements RuleAction {
-
-        public boolean executed = false;
-        public boolean repair = false;
-
-        @Override
-        public boolean execute(Model model, Map<String, String> parameters) {
-            executed = true;
-            return false;
-        }
-
-        @Override
-        public void repair(Memory model, Map<String, String> parameters) {
-            repair = true;
-        }
-    }
-
     public static List<String> getAllFilesInPath(String path) {
         List<String> paths = new ArrayList<>();
 
@@ -158,5 +124,39 @@ public class TestHelper {
         );
 
         return act;
+    }
+
+    public static class TestAction implements RuleAction {
+
+        public boolean executed = false;
+        public boolean repair = false;
+
+        @Override
+        public boolean execute(Model model, Map<String, String> parameters) {
+            executed = true;
+            return true;
+        }
+
+        @Override
+        public void repair(Memory model, Map<String, String> parameters) {
+            repair = true;
+        }
+    }
+
+    public static class TestActionFail implements RuleAction {
+
+        public boolean executed = false;
+        public boolean repair = false;
+
+        @Override
+        public boolean execute(Model model, Map<String, String> parameters) {
+            executed = true;
+            return false;
+        }
+
+        @Override
+        public void repair(Memory model, Map<String, String> parameters) {
+            repair = true;
+        }
     }
 }
