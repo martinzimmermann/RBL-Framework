@@ -137,10 +137,8 @@ public class Rule extends Atom implements Comparable<Rule> {
     }
 
     public void updateRule(boolean failed, boolean executed, boolean last) {
-        if (failed && executed) {
-            fail_executed += last ? 1 : 0.75;
-            fail_not_executed += last ? 0 : 0.25;
-        }
+        if (failed && executed)
+            fail_executed += 1;
         else
             fail_executed += 0;
 
@@ -150,7 +148,7 @@ public class Rule extends Atom implements Comparable<Rule> {
             fail_not_executed += 0;
 
         if (!failed && executed)
-            pass_executed += last ? 1 : 1;
+            pass_executed += 1;
         else
             pass_executed += 0;
 
