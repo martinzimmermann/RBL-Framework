@@ -1,74 +1,48 @@
 package at.tugraz.ist.compiler.rule;
 
+import at.tugraz.ist.compiler.interpreter.Memory;
+import at.tugraz.ist.compiler.interpreter.Model;
+
 import java.math.BigDecimal;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Queue;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.SortedSet;
 
 public class Rule extends Atom implements Comparable<Rule> {
 
-
-    private final List<Predicate> preconditions;
-    private final List<Predicate> postConditions;
-    private final String goal;
+    private final SortedSet<Predicate> preconditions;
+    private final SortedSet<Predicate> postConditions;
     private final String actionName;
+    private final Map<String, String> parameters;
 
-    private Queue<Integer> pass_not_executed = new LinkedList<>();
-    private Queue<Integer> fail_not_executed = new LinkedList<>();
-    private Queue<Integer> pass_executed = new LinkedList<>();
-    private Queue<Integer> fail_executed = new LinkedList<>();
+    private double pass_not_executed = 0;
+    private double fail_not_executed = 0;
+    private double pass_executed = 0;
+    private double fail_executed = 0;
 
-    private DiagnosticPosition diagnosticPosition;
-
-    public Rule(String action, String goal, List<Predicate> postConditions, List<Predicate> preconditions, DiagnosticPosition diagnosticPosition) {
-        if (action == null)
-            throw new IllegalArgumentException("action can not be null");
-
-        if (postConditions == null)
-            throw new IllegalArgumentException("postConditions can not be null");
-
-        if (preconditions == null)
-            throw new IllegalArgumentException("preconditions can not be null");
-
+    public Rule(String action, SortedSet<Predicate> postConditions, SortedSet<Predicate> preconditions, Map<String, String> parameters) {
         this.postConditions = postConditions;
-        this.goal = goal;
         this.preconditions = preconditions;
+        this.parameters = parameters;
         this.actionName = action;
-        this.diagnosticPosition = diagnosticPosition;
     }
 
     public Rule(Rule rule) {
         preconditions = rule.preconditions;
         postConditions = rule.postConditions;
-        goal = rule.goal;
+        parameters = rule.parameters;
         actionName = rule.actionName;
-        diagnosticPosition = rule.diagnosticPosition;
     }
 
-    public List<Predicate> getPreconditions() {
+    public SortedSet<Predicate> getPreconditions() {
         return preconditions;
     }
 
-    public List<Predicate> getPostConditions() {
+    public SortedSet<Predicate> getPostConditions() {
         return postConditions;
     }
 
-    public List<Predicate> getWorldAdditions() {
-        return postConditions.stream().filter(p -> p.isAddition()).collect(Collectors.toList());
-    }
-
-    public String getGoal() {
-        return goal;
-    }
-
-    public boolean hasGoal() {
-        return goal != null;
-    }
-
-    public List<Predicate> getWorldDeletions() {
-        return postConditions.stream().filter(p -> p.isDeletion()).collect(Collectors.toList());
+    public Map<String, String> getParameters() {
+        return parameters;
     }
 
     public String getAction() {
@@ -79,28 +53,40 @@ public class Rule extends Atom implements Comparable<Rule> {
     public String toString() {
         StringBuilder string = new StringBuilder();
 
-        for (Predicate precondition : getPreconditions()) {
-            string.append(precondition.getName()).append(",");
+        string.append(actionName + " ");
+        for(Map.Entry<String, String> entry : getParameters().entrySet()) {
+            string.append(entry.getKey());
+            string.append(" - ");
+            string.append(entry.getValue());
+            string.append(", ");
         }
 
-        if (getPreconditions().size() != 0)
+        if (getParameters().size() != 0) {
             string.deleteCharAt(string.length() - 1);
+            string.deleteCharAt(string.length() - 1);
+        }
+
+        string.append(": ");
+        for(Predicate precondition : getPreconditions()) {
+            string.append(precondition.toString()).append(", ");
+        }
+
+        if (getPreconditions().size() != 0) {
+            string.deleteCharAt(string.length() - 1);
+            string.deleteCharAt(string.length() - 1);
+        }
 
         string.append(" -> ");
 
-        if (hasGoal())
-            string.append("#").append(getGoal()).append(" ");
-
-        for (Predicate deletion : this.getPostConditions()) {
-            string.append(deletion.toString()).append(" ");
+        for(Predicate postCond : this.getPostConditions()) {
+            string.append(postCond.toString()).append(", ");
         }
 
-        if (getWorldDeletions().size() != 0)
+        if (getPostConditions().size() != 0) {
             string.deleteCharAt(string.length() - 1);
+            string.deleteCharAt(string.length() - 1);
+        }
 
-        string.append((string.charAt(string.length()-1) == ' ' ? "" : " ") + actionName);
-
-        string.append(".");
 
         return string.toString();
     }
@@ -114,23 +100,8 @@ public class Rule extends Atom implements Comparable<Rule> {
 
         if (!preconditions.equals(rule.preconditions)) return false;
         if (!postConditions.equals(rule.postConditions)) return false;
-        if (!Objects.equals(goal, rule.goal)) return false;
         return actionName.equals(rule.actionName);
     }
-
-    /*
-    @Override
-    public int hashCode() {
-        int result;
-        long temp = 0;
-        result = preconditions.hashCode();
-        result = 31 * result + postConditions.hashCode();
-        result = 31 * result + (goal != null ? goal.hashCode() : 0);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + actionName.hashCode();
-        return result;
-    }
-    */
 
     @Override
     public int compareTo(Rule o) {
@@ -142,78 +113,56 @@ public class Rule extends Atom implements Comparable<Rule> {
     }
 
     public BigDecimal getWeight() {
-        int fe = fail_executed.isEmpty() ? 0 : fail_executed.stream().reduce((a,b)->a+b).get();
-        int fn = fail_not_executed.isEmpty() ? 0 : fail_not_executed.stream().reduce((a,b)->a+b).get();
-        int pe = pass_executed.isEmpty() ? 0 : pass_executed.stream().reduce((a,b)->a+b).get();
-        int pn = pass_not_executed.isEmpty() ? 0 : pass_not_executed.stream().reduce((a,b)->a+b).get();
+        double fe = fail_executed;
+        double fn = fail_not_executed;
+        double pe = pass_executed;
+        double pn = pass_not_executed;
 
-        try {
-            // Ochiai
-            //return new BigDecimal((1.0 * pe) / (Math.sqrt((fe + fn) * (fe + pe))));
+        // Ochiai
+        //return new BigDecimal((1.0 * pe) / (Math.sqrt((fe + fn) * (fe + pe))));
 
-            //Tarantula
-            //return new BigDecimal(((1.0 * fe) / 1.0 *(fe + fn)) /
-            //        ((1.0 * fe / 1.0 *(fe + fn)) + (1.0 * pe / 1.0 *(pe + pn))));
+        //Tarantula
+        //return new BigDecimal(((1.0 * fe) / 1.0 *(fe + fn)) /
+        //        ((1.0 * fe / 1.0 *(fe + fn)) + (1.0 * pe / 1.0 *(pe + pn))));
 
-            // Jaccard
-            return new BigDecimal((1.0 * fe) / (fe + fn + pe));
+        // Jaccard
+        if (fe == 0)
+            return new BigDecimal(0.00001);
+        return new BigDecimal((1.0 * fe) / (fe + fn + pe));
 
-            // SMC
-            //return new BigDecimal((1.0 * (fe + pn)) / 1.0 * (fe + fn + pe + pn));
-        }
-        catch (NumberFormatException e) {
-            return new BigDecimal(0.00000000001);
-        }
+        // SMC
+        //if(fe + pn == 0)
+        //    return new BigDecimal(0.00001);
+        //return new BigDecimal((1.0 * (fe + pn)) / 1.0 * (fe + fn + pe + pn));
     }
 
-    public void updateRule(boolean failed, boolean executed) {
-        if(failed  && executed)
-            fail_executed.add(1);
+    public void updateRule(boolean failed, boolean executed, boolean last) {
+        if (failed && executed)
+            fail_executed += 1;
         else
-            fail_executed.add(0);
+            fail_executed += 0;
 
-        if(failed  && !executed)
-            fail_not_executed.add(1);
+        if (failed && !executed)
+            fail_not_executed += 1;
         else
-            fail_not_executed.add(0);
+            fail_not_executed += 0;
 
-        if(!failed  && executed)
-            pass_executed.add(1);
+        if (!failed && executed)
+            pass_executed += 1;
         else
-            pass_executed.add(0);
+            pass_executed += 0;
 
-        if(!failed  && !executed)
-            pass_not_executed.add(1);
+        if (!failed && !executed)
+            pass_not_executed += 1;
         else
-            pass_not_executed.add(0);
-
-        /*if(fail_executed.size() > 20) {
-            fail_executed.remove();
-            fail_not_executed.remove();
-            pass_executed.remove();
-            pass_not_executed.remove();
-        }*/
+            pass_not_executed += 0;
     }
 
-    public String getConstructor() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("new Rule(");
-        builder.append("\"" + actionName + "\", ");
-        builder.append((goal == null ? "null" : "\"" + goal + "\"") + ", ");
-        String params = postConditions.stream().map(p -> p.getConstructor()).collect(Collectors.joining(", "));
-        builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "})), ");
-        params = preconditions.stream().map(p -> p.getConstructor()).collect(Collectors.joining(", "));
-        builder.append("new ArrayList<Predicate>(Arrays.asList(new Predicate[]{" + params + "})), ");
-        builder.append("new DiagnosticPosition(" + diagnosticPosition.getConstructorParameters() + "))");
-        return builder.toString();
+    public boolean execute(Model model, RuleAction action) {
+        return action.execute(model, this.getParameters());
     }
 
-    public DiagnosticPosition getDiagnosticPosition() {
-        return diagnosticPosition;
+    public void repairMemory(Memory memory, RuleAction action) {
+        action.repair(memory, this.getParameters());
     }
-
-    public String getActionConstructor() {
-        return "new " + actionName + "()";
-    }
-
 }

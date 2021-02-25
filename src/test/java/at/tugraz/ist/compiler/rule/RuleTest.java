@@ -1,98 +1,187 @@
 package at.tugraz.ist.compiler.rule;
 
-import at.tugraz.ist.compiler.interpreter.ClassCompiler;
-import at.tugraz.ist.compiler.parser.RuleLexer;
-import at.tugraz.ist.compiler.parser.RuleParser;
-import at.tugraz.ist.compiler.ruleGenerator.RuleGenerator;
+import at.tugraz.ist.compiler.helper.TestHelper;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.Assert.*;
 
 public class RuleTest {
 
-    @Test(expected = ClassNotFoundException.class)
-    public void noValidaction_test() throws IOException, ClassNotFoundException {
-        Rule rule = new InterpreterRule(new Rule("notanaction", null, new ArrayList<Predicate>(Arrays.asList(new Predicate[]{})), new ArrayList<Predicate>(Arrays.asList(new Predicate[]{new Predicate("pre", false)})), new DiagnosticPosition(1, 0, 1, 7, "pre->action")));
+    @Test
+    public void Ctr_test() {
+        Predicate pred = new Predicate("pred a b");
+        Predicate pred2 = new Predicate("pred2 b c");
 
-    }
+        SortedSet<Predicate> preconditions = new TreeSet<>();
+        preconditions.add(pred);
+        preconditions.add(pred2);
 
-    @Test(expected = IllegalArgumentException.class)
-    public void Constructor_noAction_test() throws IOException {
-        Rule rule = new Rule(null, null, new ArrayList<Predicate>(Arrays.asList(new Predicate[]{})), new ArrayList<Predicate>(Arrays.asList(new Predicate[]{new Predicate("pre", false)})), new DiagnosticPosition(1, 0, 1, 7, "pre->action"));
+        Predicate pred3 = new Predicate("pred a b", true);
+        Predicate pred4 = new Predicate("pred2 a b", false);
+        SortedSet<Predicate> postconditions = new TreeSet<>();
+        postconditions.add(pred3);
+        postconditions.add(pred4);
 
-    }
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("?a", "a");
+        parameters.put("?b", "b");
+        parameters.put("?c", "c");
 
-    @Test(expected = IllegalArgumentException.class)
-    public void Constructor_PreCondition_null_test() throws IOException {
-        Rule rule = new Rule("action", null, null, new ArrayList<Predicate>(Arrays.asList(new Predicate[]{new Predicate("pre", false)})), new DiagnosticPosition(1, 0, 1, 7, "pre->action"));
+        Rule rule = TestHelper.getRule();
+        assertEquals("action", rule.getAction());
+        assertEquals(preconditions, rule.getPreconditions());
+        assertEquals(postconditions, rule.getPostConditions());
+        assertEquals(parameters, rule.getParameters());
 
-    }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void Constructor_PostCondition_null_test() throws IOException {
-        Rule rule = new Rule("action", null, new ArrayList<Predicate>(Arrays.asList(new Predicate[]{})), null, new DiagnosticPosition(1, 0, 1, 7, "pre->action"));
-
+        Rule rule2 = new Rule(rule);
+        assertEquals("action", rule2.getAction());
+        assertEquals(preconditions, rule2.getPreconditions());
+        assertEquals(postconditions, rule2.getPostConditions());
+        assertEquals(parameters, rule2.getParameters());
     }
 
     @Test
-    public void ToString1_test() throws IOException {
-        String source = "pre -> action.";
-        Rule rule = checkRule(source);
+    public void Equals_test() {
+        Rule rule = TestHelper.getRule();
 
-        assertEquals("pre -> action.", rule.toString());
+        assertTrue(rule.equals(rule));
+        assertFalse(rule.equals(null));
+        assertFalse(rule.equals(new Object()));
+
+        Predicate pred = new Predicate("pred a b");
+        Predicate pred2 = new Predicate("pred2 b c");
+
+        SortedSet<Predicate> preconditions = new TreeSet<>();
+        preconditions.add(pred);
+
+        Predicate pred3 = new Predicate("pred a b", true);
+        Predicate pred4 = new Predicate("pred2 a b", false);
+        SortedSet<Predicate> postconditions = new TreeSet<>();
+        postconditions.add(pred3);
+        postconditions.add(pred4);
+
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("?a", "a");
+        parameters.put("?b", "b");
+        parameters.put("?c", "c");
+
+        Rule rule2 = new Rule(
+                "action",
+                postconditions,
+                preconditions,
+                parameters
+        );
+
+        assertFalse(rule.equals(rule2));
+
+        preconditions = new TreeSet<>();
+        preconditions.add(pred);
+        preconditions.add(pred2);
+
+        postconditions = new TreeSet<>();
+        rule2 = new Rule(
+                "action",
+                postconditions,
+                preconditions,
+                parameters
+        );
+
+        assertFalse(rule.equals(rule2));
+
+        postconditions = new TreeSet<>();
+        postconditions.add(pred3);
+        postconditions.add(pred4);
+
+        rule2 = new Rule(
+                "action2",
+                postconditions,
+                preconditions,
+                parameters
+        );
+        assertFalse(rule.equals(rule2));
+
+        rule2 = new Rule(
+                "action",
+                postconditions,
+                preconditions,
+                parameters
+        );
+        assertTrue(rule.equals(rule2));
     }
 
     @Test
-    public void ToString2_test() throws IOException {
-        String source = "pre -> #goal +pos -neg action.";
-        Rule rule = checkRule(source);
+    public void compareTo_test() {
+        Rule rule = TestHelper.getRule();
+        Rule rule2 = TestHelper.getRule();
 
-        assertEquals("pre -> #goal +pos -neg action.", rule.toString());
+        rule.updateRule(false, true, true);
+        rule2.updateRule(true, true, true);
+
+        assertEquals(-1, rule.compareTo(rule2));
+        assertEquals(0, rule.compareTo(rule));
+        assertEquals(1, rule2.compareTo(rule));
     }
 
     @Test
-    public void GetConstructor_test() throws IOException {
-        String source = "pre -> action.";
-        Rule rule = checkRule(source);
+    public void updateTest_test() {
+        Rule rule = TestHelper.getRule();
+        Rule rule2 = TestHelper.getRule();
+        Rule rule3 = TestHelper.getRule();
+        Rule rule4 = TestHelper.getRule();
 
-        assertEquals("new Rule(\"action\", null, new ArrayList<Predicate>(Arrays.asList(new Predicate[]{})), new ArrayList<Predicate>(Arrays.asList(new Predicate[]{new Predicate(\"pre\", false)})), new DiagnosticPosition(1, 0, 1, 7, \"pre->action\"))", rule.getConstructor());
+        rule.updateRule(false, true, true);
+        rule2.updateRule(true, true, true);
+        rule3.updateRule(false, false, true);
+        rule4.updateRule(true, false, true);
+
+        // if executed succeeding rule should be better
+        assertEquals(-1, rule.compareTo(rule2));
+
+        // if not executed both rules should be the same
+        assertEquals(0, rule3.compareTo(rule4));
+
+        // if succeeded both rule should be the same
+        assertEquals(0, rule.compareTo(rule3));
+
+        // if failed executed rule should be worse
+        assertEquals(1, rule2.compareTo(rule4));
     }
 
     @Test
-    public void GetActionConstructor_test() throws IOException {
-        String source = "pre -> action.";
-        Rule rule = checkRule(source);
-
-        assertEquals("new action()", rule.getActionConstructor());
+    public void getWeight_test() {
+        Rule rule = TestHelper.getRule();
+        assertEquals(new BigDecimal(0.00001), rule.getWeight());
     }
 
     @Test
-    public void GetDiagnosticPosition_test() throws IOException {
-        String source = "pre -> action.";
-        Rule rule = checkRule(source);
-        DiagnosticPosition diag = rule.getDiagnosticPosition();
-
-        assertNotNull(diag);
-        assertEquals("1:0: pre->action", diag.getPrettyPrint());
+    public void toString_test() {
+        Rule rule = TestHelper.getRule();
+        assertEquals("action ?a - a, ?b - b, ?c - c: pred a b, pred2 b c -> -pred a b, pred2 a b", rule.toString());
     }
 
-    private Rule checkRule(String source) throws IOException {
-        RuleLexer ruleLexer = new RuleLexer(source);
-        assertEquals("Should be no Error", 0, ruleLexer.getErrorCount());
-        RuleParser ruleParser = new RuleParser(ruleLexer.getTokenStream());
-        assertEquals("Should be no Error", 0, ruleParser.getErrorCount());
-        ClassCompiler.compileClasses("src/test/resources/Actions");
-        RuleGenerator gen = new RuleGenerator(ruleParser.getParseTree());
-        List<Rule> rules = gen.getRules();
-        assertNotNull(rules);
-        assertEquals("Should contain one rule", 1,  rules.size());
-        return rules.get(0);
+    @Test
+    public void exeution_test() {
+        Rule rule = TestHelper.getRule();
+        TestHelper.TestAction action = new TestHelper.TestAction();
+
+        assertFalse(action.executed);
+        assertTrue(rule.execute(null, action));
+        assertTrue(action.executed);
+    }
+
+    @Test
+    public void repair_test() {
+        Rule rule = TestHelper.getRule();
+        TestHelper.TestAction action = new TestHelper.TestAction();
+
+        assertFalse(action.repair);
+        rule.repairMemory(null, action);
+        assertTrue(action.repair);
     }
 }

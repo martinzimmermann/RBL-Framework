@@ -1,7 +1,7 @@
 package Actions;
 
-import at.tugraz.ist.compiler.interpreter.Model;
 import at.tugraz.ist.compiler.interpreter.Memory;
+import at.tugraz.ist.compiler.interpreter.Model;
 import at.tugraz.ist.compiler.rule.RuleAction;
 
 public class action1 implements RuleAction {

@@ -1,39 +1,103 @@
 package at.tugraz.ist.compiler.interpreter;
 
-import at.tugraz.ist.compiler.ErrorHandler;
-import at.tugraz.ist.compiler.rule.InterpreterRule;
+import at.tugraz.ist.compiler.rule.Action;
+import at.tugraz.ist.compiler.rule.AtomicFormula;
+import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class Model {
 
-    private final Memory memory;
-    private final List<InterpreterRule> rules;
+    private final List<String> objects;
+    private final List<Action> actions;
+    private final List<Node> roots = new ArrayList<>();
 
-    public Model(Memory memory, List<Rule> rules) {
-        this.memory = memory;
-        if(rules.stream().allMatch(r -> r instanceof InterpreterRule))
-            this.rules = rules.stream().map(r -> (InterpreterRule)r).collect(Collectors.toList());
-        else {
-            this.rules = new ArrayList<>();
-            for (Rule rule : rules) {
-                try {
-                    this.rules.add(new InterpreterRule(rule));
-                } catch (ClassNotFoundException e) {
-                    ErrorHandler.Instance().reportError(ErrorHandler.Type.Interpreter, rule.getDiagnosticPosition(), "Class for action \"" + rule.getAction() + "\" could not be found");
-                }
-            }
+    public Model(List<String> objects, List<Action> actions) {
+        this.objects = objects;
+        this.actions = actions;
+        for(Action a : actions) {
+            roots.add(new Node(a));
         }
     }
 
-    public Memory getMemory() {
-        return memory;
+    public List<Rule> getRules() {
+        List<Rule> rules = new ArrayList<>();
+        Queue<Node> queue = new LinkedList<>();
+        queue.addAll(roots);
+
+        while (!queue.isEmpty()) {
+            Node current = queue.poll();
+            if (current.preconditionsFulfilled())
+                rules.add(current.getRule());
+
+            queue.addAll(current.nextNodes.values());
+        }
+        return rules;
     }
 
-    public List<InterpreterRule> getRules() {
+    public List<Rule> getPossibleRules(Memory memory) {
+        List<Node> horizond = new ArrayList<>();
+        horizond.addAll(roots);
+
+        for(Predicate pred : memory.getPredicates()) {
+            List<Node> toAdd = new ArrayList<>();
+            for(Node node : horizond) {
+                if (node.action.preconditionsFulfilled())
+                    continue;
+                Node new_node = node.getNextNode(pred);
+                if (new_node != null)
+                    toAdd.add(new_node);
+            }
+            horizond.addAll(toAdd);
+        }
+
+        List<Rule> rules = new ArrayList<>();
+        for(Node node : horizond) {
+            if (node.preconditionsFulfilled()) {
+                rules.add(node.getRule());
+            }
+        }
         return rules;
+    }
+
+    class Node {
+
+        HashMap<Predicate, Node> nextNodes = new HashMap<>();
+        Action action;
+        Rule rule;
+
+        public Node(Action action) {
+            this.action = action;
+        }
+
+        public AtomicFormula canBeConsumedBy(Predicate pred) {
+            return action.canBeConsumedBy(pred);
+        }
+
+        public Rule getRule() {
+            if (rule == null)
+                rule = action.createRule();
+            return rule;
+        }
+
+        public Node getNextNode(Predicate pred) {
+            if (nextNodes.containsKey(pred)) {
+                return nextNodes.get(pred);
+            }
+            AtomicFormula a = canBeConsumedBy(pred);
+            if (a != null) {
+                Action newAction = new Action(this.action);
+                newAction.consume(a, pred);
+                Node node = new Node(newAction);
+                nextNodes.put(pred, node);
+                return node;
+            }
+            return null;
+        }
+
+        public boolean preconditionsFulfilled() {
+            return action.preconditionsFulfilled();
+        }
     }
 }

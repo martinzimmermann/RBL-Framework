@@ -3,54 +3,70 @@ package at.tugraz.ist.compiler.interpreter;
 import at.tugraz.ist.compiler.rule.Predicate;
 import at.tugraz.ist.compiler.rule.Rule;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class Memory {
 
-    private final Set<Predicate> start_predicates;
-    private Set<Predicate> predicates;
+    private final SortedSet<Predicate> predicates;
 
-    public Memory(List<Predicate> predicates) {
-
-        this.predicates = new HashSet<>(predicates);
-        this.start_predicates = new HashSet<>(this.predicates);
+    public Memory(SortedSet<Predicate> predicates) {
+        this.predicates = new TreeSet<>(predicates);
     }
 
     public Memory(Memory memory) {
-        this.predicates = new HashSet<>(memory.predicates);
-        this.start_predicates = new HashSet<>(memory.start_predicates);
+        this.predicates = new TreeSet<>(memory.predicates);
     }
 
-    public boolean contains(Predicate precondition) {
-        return predicates.contains(precondition);
-    }
-
-    public boolean containsAll(List<Predicate> preconditions) {
-        return predicates.containsAll(preconditions);
-    }
-
-    public Set<Predicate> getAllPredicates() {
+    public SortedSet<Predicate> getPredicates() {
         return predicates;
     }
 
     public void update(Rule rule) {
         for(Predicate pred : rule.getPostConditions()) {
-            if(pred.isAddition())
+            if (pred.isAddition())
                 predicates.add(pred);
             else
-                predicates.remove(pred);
+                predicates.remove(new Predicate(pred.getExpression()));
         }
     }
 
-    public void reset() {
-        this.predicates = new HashSet<>(start_predicates);
+    public void addPredicate(String predicate) {
+        predicates.add(new Predicate(predicate));
     }
 
-    public void remove(String predicate) {
+    public void removePredicate(String predicate) {
         predicates.remove(new Predicate(predicate));
+    }
+
+    public boolean equals(Object anObject) {
+        if (this == anObject) {
+            return true;
+        }
+        if (anObject instanceof Memory) {
+            Iterator thisIt = predicates.iterator();
+            Iterator otherIt = ((Memory) anObject).predicates.iterator();
+            while (true) {
+                if (!thisIt.hasNext() && !otherIt.hasNext())
+                    return true;
+                if (!(thisIt.hasNext() && otherIt.hasNext()))
+                    return false;
+                if (!thisIt.next().equals(otherIt.next()))
+                    return false;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Memory{" + predicates.stream().map(p -> p.toString()).collect(Collectors.joining(", ")) + "}";
+    }
+
+    @Override
+    public int hashCode() {
+        return predicates.hashCode();
     }
 }

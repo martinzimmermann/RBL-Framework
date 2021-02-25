@@ -1,25 +1,42 @@
 package at.tugraz.ist.compiler.rule;
 
-public class Predicate extends Atom {
+public class Predicate extends Atom implements Comparable<Predicate> {
 
-    private final String name;
+    private final String identifier;
+    private final String expression;
     private final Boolean deletion;
+    private final String[] expressionSplit;
 
     public Predicate(String name) {
         this(name, false);
     }
 
-    public Predicate(String name, Boolean deletion) {
-        this.name = name;
+    public Predicate(String expresion, Boolean deletion) {
+        this.identifier = expresion.split(" ")[0];
+        this.expression = expresion;
+        this.expressionSplit = expresion.split(" ");
         this.deletion = deletion;
     }
 
-    public String getName() {
-        return name;
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public Boolean isDeletion() {return deletion;}
-    public Boolean isAddition() {return !deletion;}
+    public String getExpression() {
+        return expression;
+    }
+
+    public String[] getExpressionSplit() {
+        return expressionSplit;
+    }
+
+    public Boolean isDeletion() {
+        return deletion;
+    }
+
+    public Boolean isAddition() {
+        return !deletion;
+    }
 
     @Override
     public boolean equals(Object other) {
@@ -33,20 +50,21 @@ public class Predicate extends Atom {
             return false;
 
         Predicate otherPredicate = (Predicate) other;
-        return name.equals(otherPredicate.getName());
+        return expression.equals(otherPredicate.getExpression());
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return expression.hashCode() ^ deletion.hashCode();
     }
 
     @Override
     public String toString() {
-        return (deletion ? "-" : "+") + name;
+        return (deletion ? "-" : "") + expression;
     }
 
-    public String getConstructor() {
-        return "new Predicate(\"" + name + "\", " + deletion + ")";
+    @Override
+    public int compareTo(Predicate o) {
+        return this.toString().compareTo(o.toString());
     }
 }

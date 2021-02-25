@@ -1,8 +1,0 @@
-window_open.
-door_closed.
-
-window_closed -> +window_open -window_closed actions.openWindow.
-door_closed -> +door_open -door_closed actions.openDoor .
-
-door_open -> #exit actions.goThroughDoor.
-window_open -> #exit actions.goThroughWindow.
